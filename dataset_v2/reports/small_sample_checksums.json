@@ -1,6 +1,6 @@
 {
   "algorithm": "sha256",
-  "config_version": "2.0.0",
+  "config_version": "2.1.0",
   "files": {
     "profile_A/documents.jsonl": {
       "bytes": 36108,
@@ -28,7 +28,7 @@
       "sha256": "dbe925411b442996a40cca17f82b8e14f594efb082d5bae1d515eca95ab9bda3"
     }
   },
-  "generated_at_utc": "2026-11-02T13:08:44Z",
+  "generated_at_utc": "2026-11-02T16:42:55Z",
   "index_sqlite3": {
     "bytes": 4096,
     "sha256": "e813cf28f78ff968647090578dc849b72dbf564d72186251a8bf0a7239e048d5"

@@ -16,9 +16,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "dataset_v2" / "pipeline"))
 import extract_sources as EX  # noqa: E402
-from common import load_config  # noqa: E402
+from common import config_policy, load_config  # noqa: E402
 
 CFG = load_config(ROOT / "dataset_v2" / "configs" / "dataset_config.json")
+POLICY = json.loads(config_policy(CFG).read_text(encoding="utf-8"))
 
 
 class DummyLogger:
@@ -35,21 +36,29 @@ def source(**kw):
         "domain": "encyclopedia", "license_content": "CC0-1.0 test fixture",
         "copyright_holder": "unit test", "content_rights_verified": True,
         "url": "https://fa.wikipedia.org/",
+        "page_base_url": "https://fa.wikipedia.org/wiki/",
     }
     base.update(kw)
     return base
 
 
-def context(tmp: Path, paths, options, src=None):
+def context(tmp: Path, paths, options, src=None, policy=None):
     return EX.ExtractContext(
         source=src or source(), options=options, raw_paths=list(paths),
-        parts_dir=None, workdir=tmp, logger=DummyLogger())
+        parts_dir=None, workdir=tmp, logger=DummyLogger(),
+        policy=policy or POLICY)
 
 
 def add_tar_member(tf: tarfile.TarFile, name: str, data: bytes) -> None:
     info = tarfile.TarInfo(name)
     info.size = len(data)
     tf.addfile(info, io.BytesIO(data))
+
+
+def mediawiki_xml(title: str, text: str, page_id: str = "101") -> str:
+    return f"""<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.11/">
+<page><title>{title}</title><ns>0</ns><id>{page_id}</id><revision><text>{text}</text></revision></page>
+</mediawiki>"""
 
 
 class TestExtraction(unittest.TestCase):
@@ -80,28 +89,52 @@ class TestExtraction(unittest.TestCase):
             f.write(xml)
         ctx = context(self.tmp, [path], {
             "require_free_license_template": True, "min_raw_chars": 10,
-            "namespace": 0, "include_title": True, "exclude_disambiguation": True})
+            "namespace": 0, "include_title": True, "exclude_disambiguation": True,
+            "page_base_url": "https://fa.wikisource.org/wiki/"})
         docs = list(EX.extract_mediawiki_xml_bz2(ctx))
         self.assertEqual(len(docs), 1)
         self.assertIn("پایتخت ایران", docs[0]["text"])
         self.assertTrue(docs[0]["meta"]["free_license_template"])
-        self.assertIn("no_free_license_template", ctx.stats["skipped_by_reason"])
+        self.assertEqual(docs[0]["meta"]["license_template"], "PD-old")
+        self.assertIn("license_template_no_template:none:no_verified_license_template",
+                      ctx.stats["skipped_by_reason"])
+        self.assertTrue(docs[0]["meta"]["page_url"].startswith(
+            "https://fa.wikisource.org/wiki/"))
 
-    def test_tar_tsv_tatoeba_attribution_only_in_metadata(self):
-        path = self.tmp / "sentences_detailed.tar.bz2"
-        data = ("1\tfas\tسلام، امروز هوا خوب است.\tali\t2020-01-01\t2020-01-01\n"
-                "2\teng\tHello, the weather is fine.\tbob\t2020-01-01\t2020-01-01\n").encode("utf-8")
-        with tarfile.open(path, "w:bz2") as tf:
-            add_tar_member(tf, "fas_sentences_detailed.tsv", data)
-        ctx = context(self.tmp, [path], {
-            "member_pattern": "*fas*sentences*.tsv", "lang_code": "fas",
-            "columns": ["id", "lang", "text", "username", "date_added", "date_modified"]})
-        docs = list(EX.extract_tar_tsv(ctx))
-        self.assertEqual(len(docs), 1)
-        self.assertEqual(docs[0]["text"], "سلام، امروز هوا خوب است.")
-        self.assertEqual(docs[0]["meta"]["username_for_attribution_only"], "ali")
-        self.assertIn("Tatoeba contributor ali", docs[0]["meta"]["attribution"])
-        self.assertNotIn("ali", docs[0]["text"])
+    def test_mediawiki_page_base_urls_for_four_projects(self):
+        domains = {
+            "wikipedia": "https://fa.wikipedia.org/wiki/",
+            "wikibooks": "https://fa.wikibooks.org/wiki/",
+            "wikisource": "https://fa.wikisource.org/wiki/",
+            "wikinews": "https://fa.wikinews.org/wiki/",
+        }
+        for project, base in domains.items():
+            with self.subTest(project=project):
+                path = self.tmp / f"{project}.xml.bz2"
+                xml = mediawiki_xml(
+                    "صفحه آزمایشی",
+                    "این یک متن فارسی آزمایشی کافی برای استخراج است و هیچ الگوی پروانه ندارد.")
+                with bz2.open(path, "wt", encoding="utf-8") as f:
+                    f.write(xml)
+                ctx = context(self.tmp, [path], {
+                    "namespace": 0, "min_raw_chars": 10, "include_title": True,
+                    "exclude_disambiguation": True, "page_base_url": base})
+                docs = list(EX.extract_mediawiki_xml_bz2(ctx))
+                self.assertEqual(len(docs), 1)
+                self.assertEqual(docs[0]["meta"]["page_base_url"], base)
+                self.assertTrue(docs[0]["meta"]["page_url"].startswith(base))
+                if project != "wikipedia":
+                    self.assertFalse(docs[0]["meta"]["page_url"].startswith(
+                        "https://fa.wikipedia.org/wiki/"))
+
+    def test_mediawiki_refuses_missing_page_base_url(self):
+        path = self.tmp / "missing-base.xml.bz2"
+        with bz2.open(path, "wt", encoding="utf-8") as f:
+            f.write(mediawiki_xml("صفحه", "این متن فارسی آزمایشی است."))
+        src = source(page_base_url=None)
+        ctx = context(self.tmp, [path], {"namespace": 0, "min_raw_chars": 10}, src=src)
+        with self.assertRaisesRegex(RuntimeError, "no page_base_url"):
+            list(EX.extract_mediawiki_xml_bz2(ctx))
 
     def test_txt_lines_one_document_per_natural_sentence(self):
         path = self.tmp / "sentences.txt"
@@ -145,7 +178,7 @@ class TestExtraction(unittest.TestCase):
             import pyarrow as pa  # type: ignore
             import pyarrow.parquet as pq  # type: ignore
         except ImportError:
-            self.skipTest("pyarrow not installed")
+            self.skipTest("optional pyarrow not installed")
         path = self.tmp / "rows.parquet"
         table = pa.table({
             "id": ["1", "2"],

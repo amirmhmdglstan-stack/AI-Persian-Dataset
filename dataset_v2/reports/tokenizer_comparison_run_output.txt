@@ -1,30 +1,35 @@
+Command: /tmp/v2auditvenv/bin/python dataset_v2/pipeline/compare_tokenizers.py --config dataset_v2/configs/dataset_config.json --sample dataset_v2/tests/fixtures/representative_persian_sample.txt --tokenizer-baseline dataset_v2/tokenizer/persian-bpe-32k.json --max-chars 20000 --scope small_sample
+Platform: Linux / Python 3.11.2 / tokenizers 0.23.3; bounded small sample only
+
 {
   "scope": "small_sample",
-  "sample_documents": 728,
-  "sample_characters": 935924,
+  "sample_documents": 71,
+  "sample_characters": 3612,
+  "sample_cap_characters": 20000,
+  "process_peak_rss_mb": 51.64,
   "vocabularies": [
     {
       "label": "V1_baseline_32k",
       "actual_vocab_size": 32000,
-      "chars_per_token": 3.9643,
+      "chars_per_token": 3.7276,
       "roundtrip": 1.0
     },
     {
       "label": "from_scratch_8k",
-      "actual_vocab_size": 8000,
-      "chars_per_token": 3.6354,
+      "actual_vocab_size": 638,
+      "chars_per_token": 2.4128,
       "roundtrip": 1.0
     },
     {
       "label": "from_scratch_16k",
-      "actual_vocab_size": 15958,
-      "chars_per_token": 3.9728,
+      "actual_vocab_size": 638,
+      "chars_per_token": 2.4128,
       "roundtrip": 1.0
     },
     {
       "label": "from_scratch_32k",
-      "actual_vocab_size": 15958,
-      "chars_per_token": 3.9728,
+      "actual_vocab_size": 638,
+      "chars_per_token": 2.4128,
       "roundtrip": 1.0
     }
   ],

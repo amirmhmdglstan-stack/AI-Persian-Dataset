@@ -1,0 +1,5 @@
+# OPTIONAL: V1 2021 Wikipedia 7z mirror recovery only.
+# Not needed for default Profile A; the mirror is an optional source.
+# Install explicitly before using download_sources.py --include-optional:
+#   D:\GPT\venv\Scripts\python.exe -m pip install -r dataset_v2\requirements-7z.txt
+py7zr>=0.20,<2

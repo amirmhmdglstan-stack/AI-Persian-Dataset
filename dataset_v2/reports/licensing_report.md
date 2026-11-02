@@ -18,27 +18,27 @@ A public download link is not a license. A repository's MIT/GPL/ODC-BY/CC label 
 
 | Profile | Name | Default | Output | Training | Redistribution |
 |---|---|---|---|---|---|
-| A | PERMISSIVE CORE | yes | `profile_A/` | yes | only under each upstream license's conditions |
+| A | RIGHTS-CLEARED CORE (LICENSE CONDITIONS APPLY) | yes | `profile_A/` | yes | only under each upstream licence's attribution / share-alike / source-specific conditions |
 | B | RESEARCH ONLY | no | `profile_B/` | yes, non-commercial research | only under NC / SA terms |
 | C | QUARANTINE | n/a | manifest only, **no text** | **no** | not granted |
 
 `build_corpus.py` refuses `--profiles C` and writes a `profile_C_quarantine_manifest_only/quarantine_manifest.json` listing quarantined sources with reasons. A and B are physically separate directories and every final document has a `documents.jsonl` provenance record containing `source_id`, `license`, `domain`, `profile`, `cluster_id`, quality score and source metadata.
 
-## 3. PROFILE A — approved, with conditions
+## 3. PROFILE A — rights-cleared, with conditions
 
 | Source | Compilation license | Actual text rights | Conditions / risk |
 |---|---|---|---|
 | Persian Wikipedia 2026-10-01 official dump | CC BY-SA 4.0 / GFDL | CC BY-SA 4.0 / GFDL [7](https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use), [8](https://dumps.wikimedia.org/legal.html) | attribute Wikipedia contributors; indicate modifications; share-alike for redistributed adaptations; keep attribution in manifest |
 | Persian Wikibooks 2026-11-01 | CC BY-SA 4.0 / GFDL | same | same |
-| Persian Wikisource 2026-11-01 | CC BY-SA 4.0 / GFDL wiki contributions | per-work public domain or compatible free license [12](https://en.wikisource.org/wiki/Wikisource:COPY) | extractor keeps only pages with explicit PD/free-license template; unlabeled pages skipped and counted |
+| Persian Wikisource 2026-11-01 | CC BY-SA 4.0 / GFDL wiki contributions | per-work public domain or compatible free licence [12](https://en.wikisource.org/wiki/Wikisource:COPY) | exact configurable allowlist: PD, CC BY, CC BY-SA, GFDL and other verified templates accepted; NC/ND/incompatible, generic Copyright/مجوز/پروانه, ambiguous and unknown licence-like templates rejected with exact reason; matched template stored in metadata |
 | Persian Wikinews 2026-11-01 | CC BY 2.5 | CC BY 2.5 [8](https://dumps.wikimedia.org/legal.html), [31](https://en.wikipedia.org/wiki/Wikinews) | attribution; **no** share-alike, keep license distinct |
 | Common Voice Persian sentence text | MPL-2.0 repository code | CC0 1.0 sentence text [5](https://www.mozillafoundation.org/en/blog/common-voice-18-dataset-release/), [6](https://github.com/common-voice/common-voice) | no audio, no speaker metadata; one natural sentence per document |
-| Tatoeba Persian sentences | CC BY 2.0 FR | CC BY 2.0 FR by default [10](https://tatoeba.org/en/downloads), [11](https://tatoeba.org/en/terms_of_use) | author attribution required; usernames stored in provenance manifest, not training text; CC0-only export lacks Persian |
+| Tatoeba Persian sentences | CC BY 2.0 FR weekly export | CC BY 2.0 FR by default [10](https://tatoeba.org/en/downloads), [11](https://tatoeba.org/en/terms_of_use), [32](https://downloads.tatoeba.org/exports/per_language/pes/) | verified `pes_sentences_detailed.tsv.bz2` (695,149 bytes, 2026-10-31) keeps sentence ID, Persian text, `pes` language code, contributor username, dates and source filename in metadata; CC BY 2.0 FR author attribution and licence notice retained for every row; usernames never enter training text; mutable weekly snapshot SHA-256/size recorded in download manifest |
 | Ganjoor classical subset | GPL-3.0 data files ([LICENSE](https://github.com/ganjoor/ganjoor-tex/blob/master/LICENSE)) | classical works public domain; transcription/typesetting may be GPL-3.0 [9](https://en.wikipedia.org/wiki/Template:PD-Iran), [25](https://www.harakenzo.com/en/service/iran/) | only 12 classical directories at pinned commit; keep GPL/PD notices; no modern poets |
 | Chronological Persian Poetry | CC BY-SA 4.0 ([repo](https://github.com/aghasemi/ChronologicalPersianPoetryDataset)) | public-domain classical poems | attribution + share-alike for compilation; one poem per document |
 | V1 Wikipedia 2021 mirror (optional) | no repository license | Wikipedia text CC BY-SA 4.0 / GFDL | same as Wikipedia; used only for V1 recovery audit |
 
-**Share-alike caveat:** CC BY-SA 4.0 and GPL-3.0 can impose obligations on redistributed *derived data*. V2 keeps per-document license tags and an attribution manifest, but whether a trained model's weights or a redistributed cleaned corpus count as an adaptation is a legal question we do not answer.
+**Share-alike / model-weights caveat:** CC BY-SA 4.0 and GPL-3.0 can impose obligations on redistributed *derived data*. V2 keeps per-document licence tags, source-specific attribution and a provenance manifest. Trained model weights are **NOT** assumed to be automatically free of upstream attribution, share-alike, source-specific or redistribution obligations; whether weights or a redistributed cleaned corpus count as an adaptation is a legal question we do not answer. Review provenance and licence terms before distributing any model.
 
 ## 4. PROFILE B — research-only, non-commercial
 

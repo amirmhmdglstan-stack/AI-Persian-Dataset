@@ -1,0 +1,16 @@
+Command: /tmp/v2auditvenv/bin/python dataset_v2/pipeline/extract_sources.py --config <temp>/config.json --metadata dataset_v2/sources/source_metadata.json --workdir <temp> --profiles A --only-sources tatoeba_fa_cc_by --min-free-gb 0 --skip-missing
+Platform: Linux / Python 3.11.2 / tokenizers 0.23.3; synthetic bzip2 TSV only
+
+2026-11-02 16:42:42,456Z INFO disk check: 19.2 GiB free at /tmp/v2_extract_HhT5ZK (required 0.0 GiB)
+2026-11-02 16:42:42,457Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-02 16:42:42,458Z WARNING skipping missing optional raw file /tmp/v2_extract_HhT5ZK/raw/tatoeba_fa_cc_by/sentences_detailed.tar.bz2
+2026-11-02 16:42:42,458Z INFO [extract] tatoeba_fa_cc_by -> /tmp/v2_extract_HhT5ZK/extracted/A/tatoeba_fa_cc_by.jsonl
+2026-11-02 16:42:42,458Z INFO Tatoeba Persian-only bzip2 TSV: pes_sentences_detailed.tsv.bz2
+2026-11-02 16:42:42,460Z INFO   tatoeba_fa_cc_by: 1 docs / 24 chars / sha256=c55471c84f7c
+2026-11-02 16:42:42,460Z INFO extract manifest: /tmp/v2_extract_HhT5ZK/extract_manifest.json
+Extraction complete: 1 source entries.
+
+Extracted documents:
+documents 1
+{"attribution": "Tatoeba contributor ali; sentence 101; CC BY 2.0 FR by default; some CC0; attribution retained for every row; https://tatoeba.org/sentences/show/101; source file pes_sentences_detailed.tsv.bz2", "language": "pes", "sentence_id": "101", "source_filename": "pes_sentences_detailed.tsv.bz2", "text": "سلام، امروز هوا خوب است.", "username": "ali"}
+manifest {"characters": 24, "decision": "include", "documents": 1, "extracted_at_utc": "2026-11-02T16:42:42Z", "extractor": "tatoeba_detailed", "license_allowlist_version": "2.1.0", "license_content": "CC BY 2.0 FR by default; some CC0; attribution retained for every row", "license_template_rejections": {}, "options": {"archive_member_format": "tab-separated MySQL OUTFILE data in a CSV-named member", "columns": ["id", "lang", "text", "username", "date_added", "date_last_modified"], "detailed_fields_note": "Official detailed fields: Sentence id [tab] Lang [tab] Text [tab] Username [tab] Date added [tab] Date last modified.", "fallback_member": "sentences_detailed.csv", "language_code": "pes", "one_doc_per_line": true}, "output": "/tmp/v2_extract_HhT5ZK/extracted/A/tatoeba_fa_cc_by.jsonl", "parts_dir": null, "profile": "A", "raw_files": ["/tmp/v2_extract_HhT5ZK/raw/tatoeba_fa_cc_by/pes_sentences_detailed.tsv.bz2"], "raw_records": 3, "sha256": "c55471c84f7c9213e206247b7a2c827aae8ed8ee215b653f50bcaba3386422b4", "skipped_by_reason": {"other_language": 2}, "status": "complete", "truncated_by_max_docs": false}

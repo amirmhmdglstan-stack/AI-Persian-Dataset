@@ -9,9 +9,15 @@ short natural sentences stay one document each and unrelated works are NOT
 stitched together.
 
 Supported extractors (all pure Python / stdlib unless noted):
-  mediawiki_xml_bz2, txt_lines, csv, tsv, jsonl, jsonl_gz, tar_tsv,
+  mediawiki_xml_bz2, txt_lines, csv, tsv, jsonl, jsonl_gz,
+  tatoeba_detailed (Persian-only `pes_sentences_detailed.tsv.bz2`, or the real
+  all-language `sentences_detailed.tar.bz2` -> `sentences_detailed.csv` member),
   zip_txt_tree (commit-pinned GitHub tarball), parsinlu_suite,
   csv_from_7z (py7zr optional), parquet (pyarrow optional).
+
+Wikisource pages are accepted only through an exact configurable licence
+template allowlist. Tatoeba rows use MySQL OUTFILE tab-separated escapes;
+contributor usernames stay in provenance metadata and never enter training text.
 """
 from __future__ import annotations
 
@@ -35,16 +41,144 @@ from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    config_source_metadata, configure_logging, load_config, now_utc,
-    require_free_space, sha256_file, stable_hash,
+    config_policy, config_source_metadata, configure_logging, load_config,
+    now_utc, require_free_space, sha256_file, stable_hash,
 )
 
 csv.field_size_limit(min(sys.maxsize, 2 ** 31 - 1))
 
-RE_FREE_LICENSE = re.compile(
-    r"\{\{\s*(?:PD|CC[-\s]|GFDL|Public\s+domain|پروانه|مجوز|Copyright|حق\s*نشر)",
-    re.IGNORECASE)
+# Template names are only *candidates* for classification; acceptance uses an
+# exact normalised allowlist from configs/source_policy.json.  There is no broad
+# "free licence" prefix regex: NC/ND, generic Copyright/مجوز and unknown
+# licence-like templates must be rejected with an exact reason.
+RE_TEMPLATE_NAME = re.compile(r"\{\{\s*([^{}|}]+?)\s*(?:\||\}\})")
 RE_DISAMBIG = re.compile(r"\{\{\s*(?:ابهام\u200c?زدایی|disambig)", re.IGNORECASE)
+
+TATOEBA_DETAILED_FIELDS = (
+    "id", "lang", "text", "username", "date_added", "date_last_modified",
+)
+TATOEBA_ALL_LANGUAGE_MEMBER = "sentences_detailed.csv"
+
+
+def _normalize_template_name(name: str) -> str:
+    n = name.strip()
+    if n.lower().startswith("subst:"):
+        n = n[6:]
+    n = n.lower().replace("\u200c", "-").replace("_", "-").replace(" ", "-")
+    return re.sub(r"-+", "-", n).strip("-")
+
+
+def _iter_template_names(raw: str) -> Iterator[str]:
+    for match in RE_TEMPLATE_NAME.finditer(raw):
+        name = (match.group(1) or "").strip()
+        if name:
+            yield name
+
+
+def classify_wikisource_license(raw: str, policy: dict) -> tuple[str, dict]:
+    """Return ("accepted"/"rejected"/"no_template", details).
+
+    Conservative order: ignore non-licence container templates, identify
+    licence-like template names, reject any NC/ND/incompatible/generic marker,
+    then accept only an exact allowlist match.  Unknown licence-like templates
+    are rejected with ``unverified_template``.  This is intentionally not
+    relaxed when the corpus is small.
+    """
+    cfg = policy.get("license_allowlist", {})
+    allow = {_normalize_template_name(t["name"]): t
+             for t in cfg.get("templates", [])}
+    ignored = {_normalize_template_name(x)
+               for x in cfg.get("ignored_template_names", [])}
+    candidate_patterns = [re.compile(p, re.IGNORECASE)
+                          for p in cfg.get("candidate_name_patterns", [])]
+    reject_patterns = [(re.compile(r["pattern"], re.IGNORECASE), r["reason"])
+                       for r in cfg.get("reject_patterns", [])]
+
+    license_like: list[tuple[str, str]] = []
+    for original in _iter_template_names(raw):
+        norm = _normalize_template_name(original)
+        if norm in ignored:
+            continue
+        if candidate_patterns and not any(p.search(norm) for p in candidate_patterns):
+            continue
+        license_like.append((original, norm))
+
+    if not license_like:
+        return "no_template", {
+            "template": "", "normalized_template": "none",
+            "reason": "no_verified_license_template", "license_id": "",
+        }
+    for original, norm in license_like:
+        for rx, reason in reject_patterns:
+            if rx.search(norm):
+                return "rejected", {
+                    "template": original, "normalized_template": norm,
+                    "reason": reason, "license_id": "",
+                }
+    for original, norm in license_like:
+        if norm in allow:
+            return "accepted", {
+                "template": original, "normalized_template": norm,
+                "reason": "exact_allowlist_match",
+                "license_id": allow[norm]["license"],
+                "allowlist_version": cfg.get("version", "unknown"),
+            }
+    original, norm = license_like[0]
+    return "rejected", {
+        "template": original, "normalized_template": norm,
+        "reason": "unverified_template", "license_id": "",
+    }
+
+
+def parse_mysql_outfile_fields(line: str) -> list[str | None]:
+    """Parse one Tatoeba tab-separated MySQL OUTFILE record.
+
+    Tatoeba's weekly export is written by MySQL ``SELECT ... INTO OUTFILE``:
+    fields end at a tab, records at a line feed; ``\\\\``, ``\\t`` and ``\\n``
+    are backslash escapes, ``\\0`` is NUL and ``\\N`` is SQL NULL.  Any other
+    escape is rejected rather than silently mis-parsed.  This is NOT Python's
+    :mod:`csv` quoting format.
+    """
+    fields: list[str | None] = []
+    buf: list[str] = []
+    null_field = False
+    field_start = True
+    i = 0
+    escapes = {"\\": "\\", "t": "\t", "n": "\n", "0": "\x00"}
+    while i < len(line):
+        c = line[i]
+        if null_field and c != "\t":
+            raise ValueError("\\N must occupy a whole field")
+        if c == "\\":
+            if i + 1 >= len(line):
+                raise ValueError("unterminated MySQL OUTFILE escape")
+            nxt = line[i + 1]
+            if nxt == "N":
+                if not field_start:
+                    raise ValueError("\\N must occupy a whole field")
+                null_field = True
+                field_start = False
+                i += 2
+                continue
+            if nxt not in escapes:
+                raise ValueError(f"invalid MySQL OUTFILE escape \\{nxt}")
+            buf.append(escapes[nxt])
+            field_start = False
+            i += 2
+            continue
+        if c == "\t":
+            fields.append(None if null_field else "".join(buf))
+            buf = []
+            null_field = False
+            field_start = True
+            i += 1
+            continue
+        buf.append(c)
+        field_start = False
+        i += 1
+    fields.append(None if null_field else "".join(buf))
+    return fields
+
 RE_POEM_HEADER = re.compile(r"^(?:رباعی|غزل|قصیده|مثنوی|قطعه|شماره|بیت)\b.{0,80}$")
 RE_REF = re.compile(r"<ref[^>]{0,200}>.*?</ref>|<ref[^>]{0,200}/>", re.DOTALL | re.IGNORECASE)
 RE_HTML_COMMENT = re.compile(r"<!--.*?-->", re.DOTALL)
@@ -126,15 +260,30 @@ class ExtractContext:
     parts_dir: Path | None
     workdir: Path
     logger: Any
+    policy: dict | None = None
     max_docs: int | None = None
     stats: dict = field(default_factory=lambda: {
         "raw_records": 0, "documents": 0, "characters": 0,
-        "skipped_by_reason": {},
+        "skipped_by_reason": {}, "license_template_rejections": {},
     })
 
     def skip(self, reason: str) -> None:
         d = self.stats["skipped_by_reason"]
         d[reason] = d.get(reason, 0) + 1
+
+    def record_license_rejection(self, status: str, info: dict) -> str:
+        """Return an exact skip key and retain the actual matched template."""
+        template = info.get("normalized_template") or "none"
+        reason = info.get("reason") or "unverified_template"
+        key = f"license_template_{status}:{template}:{reason}"
+        d = self.stats.setdefault("license_template_rejections", {})
+        entry = d.setdefault(key, {
+            "count": 0, "status": status,
+            "template": info.get("template", ""),
+            "normalized_template": template, "reason": reason,
+        })
+        entry["count"] += 1
+        return key
 
     def record(self, raw_id: str, text: str, *, title: str = "",
                meta: dict | None = None) -> dict:
@@ -210,11 +359,19 @@ def _delimited_rows(lines: Iterator[str], options: dict, ctx: ExtractContext):
 
 def extract_mediawiki_xml_bz2(ctx: ExtractContext) -> Iterator[dict]:
     opts = ctx.options
+    policy = ctx.policy or {}
     require_license = bool(opts.get("require_free_license_template", False))
+    page_base = opts.get("page_base_url") or ctx.source.get("page_base_url")
+    if not page_base:
+        raise RuntimeError(
+            f"MediaWiki source {ctx.source['id']} has no page_base_url. "
+            "Refusing to assume https://fa.wikipedia.org/wiki/ for Wikibooks, "
+            "Wikisource or Wikinews pages.")
+    page_base = str(page_base).rstrip("/") + "/"
     for path in ctx.raw_paths:
         if not path.exists():
             raise FileNotFoundError(f"Missing MediaWiki dump: {path}")
-        ctx.logger.info("streaming MediaWiki XML: %s", path.name)
+        ctx.logger.info("streaming MediaWiki XML: %s (pages: %s)", path.name, page_base)
         with bz2.open(path, "rt", encoding="utf-8", errors="replace") as f:
             context = ET.iterparse(f, events=("start", "end"))
             root = None
@@ -229,7 +386,14 @@ def extract_mediawiki_xml_bz2(ctx: ExtractContext) -> Iterator[dict]:
                 page_id = _find_text(elem, "{*}id").strip()
                 text_el = elem.find("{*}revision/{*}text")
                 raw = (text_el.text or "") if text_el is not None else ""
-                license_hit = bool(RE_FREE_LICENSE.search(raw)) if require_license else None
+                license_status = "not_required"
+                license_info: dict = {}
+                license_rejection = None
+                if require_license:
+                    license_status, license_info = classify_wikisource_license(raw, policy)
+                    if license_status != "accepted":
+                        license_rejection = ctx.record_license_rejection(
+                            license_status, license_info)
                 skip = None
                 if ns and ns != str(opts.get("namespace", 0)):
                     skip = "non_article_namespace"
@@ -239,8 +403,8 @@ def extract_mediawiki_xml_bz2(ctx: ExtractContext) -> Iterator[dict]:
                     skip = "non_article_title"
                 elif opts.get("exclude_disambiguation", True) and RE_DISAMBIG.search(raw):
                     skip = "disambiguation"
-                elif require_license and not license_hit:
-                    skip = "no_free_license_template"
+                elif license_rejection:
+                    skip = license_rejection
                 elif len(raw) < int(opts.get("min_raw_chars", 120)):
                     skip = "raw_too_short"
                 if skip:
@@ -251,21 +415,32 @@ def extract_mediawiki_xml_bz2(ctx: ExtractContext) -> Iterator[dict]:
                         ctx.skip("cleaned_too_short")
                     else:
                         full = f"{title}\n\n{body}" if opts.get("include_title", True) else body
-                        wiki_base = ctx.source.get("url", "").rstrip("/")
+                        page_url = f"{page_base}{quote(title.replace(' ', '_'))}"
+                        meta = {
+                            "page_id": page_id, "namespace": ns or "0",
+                            "raw_file": path.name,
+                            "free_license_template": (license_status == "accepted"
+                                                      if require_license else None),
+                            "license_template": license_info.get("template", ""),
+                            "license_template_normalized": license_info.get("normalized_template", ""),
+                            "license_template_license_id": license_info.get("license_id", ""),
+                            "license_verification_method": ("explicit_allowlist"
+                                                           if require_license else "source_catalog"),
+                            "license_allowlist_version": license_info.get("allowlist_version", ""),
+                            "source_url": ctx.source.get("url", ""),
+                            "dump_index_url": ctx.source.get("url", ""),
+                            "page_base_url": page_base,
+                            "page_url": page_url,
+                            "attribution": ctx.source.get("copyright_holder", ""),
+                        }
                         yield ctx.record(
                             f"{path.name}:{page_id or stable_hash(title, 'wiki')}",
-                            full, title=title,
-                            meta={"page_id": page_id, "namespace": ns or "0",
-                                  "raw_file": path.name, "free_license_template": license_hit,
-                                  "source_url": wiki_base.split("/2026")[0] if wiki_base else "",
-                                  "page_url": f"https://fa.wikipedia.org/wiki/{quote(title)}",
-                                  "attribution": ctx.source.get("copyright_holder", "")})
+                            full, title=title, meta=meta)
                 elem.clear()
                 if root is not None:
                     while len(root) and _local(root[0].tag) == "page":
                         del root[0]
     ctx.logger.info("MediaWiki pages skipped: %s", ctx.stats["skipped_by_reason"])
-
 
 def extract_txt_lines(ctx: ExtractContext) -> Iterator[dict]:
     opts = ctx.options
@@ -346,36 +521,151 @@ def extract_tsv(ctx: ExtractContext) -> Iterator[dict]:
                 fileobj.close()
 
 
-def extract_tar_tsv(ctx: ExtractContext) -> Iterator[dict]:
-    """Tatoeba detailed export: keep attribution in metadata, never in text."""
-    opts = ctx.options
-    pattern = opts.get("member_pattern", "*fas*sentences*.tsv")
-    lang_code = opts.get("lang_code", "fas")
-    for path in ctx.raw_paths:
-        if not path.exists():
-            raise FileNotFoundError(f"Missing Tatoeba archive: {path}")
-        for member_name, fileobj in _iter_tar_files(path):
-            if not fnmatch.fnmatch(PurePosixPath(member_name).name, pattern):
-                continue
-            ctx.logger.info("Tatoeba member: %s", member_name)
-            for lineno, d, row in _delimited_rows(_lines_from_binary(fileobj), opts, ctx):
-                if d.get("lang") and d["lang"] != lang_code:
-                    ctx.skip("other_language")
-                    continue
-                text = str(d.get("text", "")).strip()
-                if not text:
-                    ctx.skip("empty_text")
-                    continue
-                rid = str(d.get("id", lineno))
-                username = str(d.get("username", "")).strip()
-                meta = {
-                    "raw_file": path.name, "member": member_name, "line": lineno,
-                    "tatoeba_sentence_id": rid,
-                    "attribution": f"Tatoeba contributor {username or 'unknown'}, CC BY 2.0 FR",
-                    "username_for_attribution_only": username,
-                }
-                yield ctx.record(f"{member_name}:{rid}", text, meta=meta)
+def _tatoeba_columns(opts: dict) -> list[str]:
+    columns = [("date_last_modified" if c == "date_modified" else c)
+               for c in (opts.get("columns") or list(TATOEBA_DETAILED_FIELDS))]
+    if len(columns) != 6 or set(columns) != set(TATOEBA_DETAILED_FIELDS):
+        raise RuntimeError(
+            "Tatoeba detailed exporter requires the six official columns: "
+            + ", ".join(TATOEBA_DETAILED_FIELDS))
+    return columns
 
+
+def _tatoeba_language_code(opts: dict) -> str:
+    code = opts.get("language_code") or opts.get("lang_code") or "pes"
+    if code == "fas":
+        raise RuntimeError(
+            "Tatoeba's verified Persian export uses ISO 639-3 'pes', not 'fas'. "
+            "Refusing to filter the obsolete 'fas' code.")
+    if code != "pes":
+        raise RuntimeError(f"Unsupported Tatoeba Persian language code {code!r}; expected 'pes'.")
+    return code
+
+
+def _tatoeba_record_from_line(line: str, lineno: int, ctx: ExtractContext,
+                              opts: dict, path: Path, member_name: str) -> dict | None:
+    ctx.stats["raw_records"] += 1
+    line = line.rstrip("\r\n")
+    if not line:
+        ctx.skip("empty_row")
+        return None
+    try:
+        fields = parse_mysql_outfile_fields(line)
+    except ValueError:
+        ctx.skip("invalid_mysql_outfile_escape")
+        return None
+    columns = _tatoeba_columns(opts)
+    if len(fields) != len(columns):
+        ctx.skip("tatoeba_field_count")
+        return None
+    row = {columns[i]: fields[i] for i in range(len(columns))}
+    lang_code = _tatoeba_language_code(opts)
+    lang = (row.get("lang") or "").strip()
+    if lang != lang_code:
+        ctx.skip("other_language")
+        return None
+    text = (row.get("text") or "").strip()
+    if not text:
+        ctx.skip("empty_text")
+        return None
+    sentence_id = (row.get("id") or str(lineno)).strip()
+    username = (row.get("username") or "").strip() or "unknown"
+    date_added = (row.get("date_added") or "").strip()
+    date_last_modified = (row.get("date_last_modified") or "").strip()
+    license_label = ctx.source.get("license_content", "CC BY 2.0 FR")
+    sentence_url = f"https://tatoeba.org/sentences/show/{sentence_id}"
+    meta = {
+        "raw_file": path.name,
+        "source_filename": path.name,
+        "member": member_name,
+        "line": lineno,
+        "tatoeba_sentence_id": sentence_id,
+        "tatoeba_language_code": lang,
+        "tatoeba_username_for_attribution_only": username,
+        "username_for_attribution_only": username,
+        "tatoeba_date_added": date_added,
+        "tatoeba_date_last_modified": date_last_modified,
+        "attribution": (f"Tatoeba contributor {username}; sentence {sentence_id}; "
+                        f"{license_label}; {sentence_url}; source file {path.name}"),
+        "attribution_url": sentence_url,
+        "attribution_required": True,
+        "license_terms_url": "https://creativecommons.org/licenses/by/2.0/fr/",
+        "terms_of_use_url": "https://tatoeba.org/en/terms_of_use",
+        "attribution_policy": ("CC BY 2.0 FR author attribution required; contributor "
+                               "usernames stay in provenance metadata and are never "
+                               "written into training text. Some sentences may be CC0; "
+                               "the detailed export does not mark them, so attribution "
+                               "is conservatively retained for every row."),
+        "attribution_in_training_text": False,
+    }
+    # text is ONLY the Persian sentence; no username, ID or licence boilerplate.
+    return ctx.record(f"{path.name}:{sentence_id}", text, meta=meta)
+
+
+def extract_tatoeba_detailed(ctx: ExtractContext) -> Iterator[dict]:
+    """Stream the verified Persian-only detailed export, or the real all-language CSV archive.
+
+    Preferred: ``pes_sentences_detailed.tsv.bz2`` from
+    ``downloads.tatoeba.org/exports/per_language/pes/`` (bzip2 TSV, language
+    code ``pes``).  Fallback: the all-language
+    ``sentences_detailed.tar.bz2`` archive contains ONE tab-separated MySQL
+    OUTFILE member named ``sentences_detailed.csv`` -- it is NOT a collection of
+    imaginary per-language ``*fas*sentences*.tsv`` members.
+    """
+    opts = ctx.options
+    lang_code = _tatoeba_language_code(opts)
+    _tatoeba_columns(opts)
+    per_language = [p for p in ctx.raw_paths
+                    if p.name.endswith("_sentences_detailed.tsv.bz2")]
+    fallback = [p for p in ctx.raw_paths
+                if p.name.endswith("sentences_detailed.tar.bz2")]
+    if per_language:
+        chosen = per_language
+        if fallback:
+            ctx.logger.warning("preferring Persian-only %s; ignoring all-language fallback",
+                               ", ".join(p.name for p in per_language))
+    elif fallback:
+        chosen = fallback
+        ctx.logger.warning("using all-language fallback %s; filtering %s rows only",
+                           ", ".join(p.name for p in fallback), lang_code)
+    else:
+        raise FileNotFoundError(
+            "No verified Tatoeba detailed export found. Expected "
+            "pes_sentences_detailed.tsv.bz2 or sentences_detailed.tar.bz2.")
+
+    for path in chosen:
+        if not path.exists():
+            raise FileNotFoundError(f"Missing Tatoeba export: {path}")
+        if path.name.endswith(".tsv.bz2"):
+            ctx.logger.info("Tatoeba Persian-only bzip2 TSV: %s", path.name)
+            with bz2.open(path, "rt", encoding="utf-8", errors="replace", newline="") as f:
+                for lineno, line in enumerate(f, 1):
+                    rec = _tatoeba_record_from_line(
+                        line, lineno, ctx, opts, path, path.name)
+                    if rec:
+                        yield rec
+        elif path.name.endswith(".tar.bz2"):
+            found = False
+            for member_name, fileobj in _iter_tar_files(path):
+                if PurePosixPath(member_name).name != TATOEBA_ALL_LANGUAGE_MEMBER:
+                    continue
+                found = True
+                ctx.logger.info("Tatoeba all-language CSV member: %s", member_name)
+                for lineno, line in enumerate(_lines_from_binary(fileobj), 1):
+                    rec = _tatoeba_record_from_line(
+                        line, lineno, ctx, opts, path, member_name)
+                    if rec:
+                        yield rec
+                if hasattr(fileobj, "close"):
+                    fileobj.close()
+            if not found:
+                ctx.skip("missing_sentences_detailed_csv_member")
+                raise RuntimeError(
+                    f"{path.name} does not contain {TATOEBA_ALL_LANGUAGE_MEMBER}. "
+                    "Refusing to search for imaginary per-language TSV members "
+                    "inside a CSV archive.")
+        else:
+            raise RuntimeError(f"Unsupported Tatoeba detailed export file: {path.name}")
 
 def extract_jsonl(ctx: ExtractContext) -> Iterator[dict]:
     opts = ctx.options
@@ -580,6 +870,12 @@ def extract_csv_from_7z(ctx: ExtractContext) -> Iterator[dict]:
             "7z extraction needs py7zr. Install with: "
             "D:\\GPT\\venv\\Scripts\\python.exe -m pip install py7zr") from e
     opts = ctx.options
+    page_base = opts.get("page_base_url") or ctx.source.get("page_base_url")
+    if not page_base:
+        raise RuntimeError(
+            f"7z mirror source {ctx.source['id']} has no page_base_url; "
+            "refusing to assume a Wikipedia domain.")
+    page_base = str(page_base).rstrip("/") + "/"
     parts_dir = ctx.parts_dir
     if parts_dir is None or not parts_dir.exists():
         raise FileNotFoundError(f"Missing split 7z parts directory: {parts_dir}")
@@ -621,7 +917,8 @@ def extract_csv_from_7z(ctx: ExtractContext) -> Iterator[dict]:
             yield ctx.record(f"{inner.name}:{rid}", full, title=title,
                              meta={"raw_file": inner.name, "line": lineno,
                                    "attribution": "Wikipedia contributors, CC BY-SA 4.0",
-                                   "page_url": f"https://fa.wikipedia.org/wiki/{quote(title)}"})
+                                   "page_base_url": page_base,
+                                   "page_url": f"{page_base}{quote(title.replace(' ', '_'))}"})
 
 
 EXTRACTORS = {
@@ -631,7 +928,7 @@ EXTRACTORS = {
     "tsv": extract_tsv,
     "jsonl": extract_jsonl,
     "jsonl_gz": extract_jsonl,
-    "tar_tsv": extract_tar_tsv,
+    "tatoeba_detailed": extract_tatoeba_detailed,
     "parquet": extract_parquet,
     "zip_txt_tree": extract_zip_txt_tree,
     "parsinlu_suite": extract_parsinlu_suite,
@@ -693,14 +990,17 @@ def main() -> None:
     min_free = args.min_free_gb if args.min_free_gb is not None else float(cfg.get("min_free_gb", 20))
     require_free_space(workdir, min_free, logger)
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    policy = json.loads((Path(__file__).resolve().parents[1] / "configs" / "source_policy.json").read_text(encoding="utf-8"))
+    policy_path = config_policy(cfg)
+    policy = json.loads(policy_path.read_text(encoding="utf-8"))
     profiles = args.profiles or cfg.get("default_profiles", ["A"])
     for p in profiles:
         if p not in policy["profiles"]:
             raise ValueError(f"Unknown profile {p!r}")
     manifest_path = workdir / "extract_manifest.json"
     manifest = (json.loads(manifest_path.read_text(encoding="utf-8"))
-                if manifest_path.exists() else {"version": "2.0.0", "sources": {}})
+                if manifest_path.exists() else {"version": "2.1.0", "sources": {}})
+    manifest["version"] = "2.1.0"
+    manifest["license_allowlist_version"] = policy.get("license_allowlist", {}).get("version")
 
     selected = [s for s in meta["sources"]
                 if s["profile"] in profiles and s.get("download")
@@ -730,7 +1030,7 @@ def main() -> None:
             options.update(f.get("options", {}))
         ctx = ExtractContext(source=s, options=options, raw_paths=paths,
                              parts_dir=parts_dir, workdir=workdir, logger=logger,
-                             max_docs=args.max_docs)
+                             policy=policy, max_docs=args.max_docs)
         tmp = out_path.with_name(out_path.name + ".part")
         docs = chars = 0
         logger.info("[extract] %s -> %s", s["id"], out_path)
@@ -760,6 +1060,8 @@ def main() -> None:
             "parts_dir": str(parts_dir) if parts_dir else None,
             "extractor": extractor, "options": options,
             "skipped_by_reason": ctx.stats["skipped_by_reason"],
+            "license_template_rejections": ctx.stats.get("license_template_rejections", {}),
+            "license_allowlist_version": policy.get("license_allowlist", {}).get("version"),
             "raw_records": ctx.stats["raw_records"],
             "truncated_by_max_docs": bool(args.max_docs and docs >= args.max_docs),
             "extracted_at_utc": now_utc(),

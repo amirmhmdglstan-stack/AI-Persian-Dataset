@@ -138,8 +138,19 @@ def iter_extracted_files(root: Path) -> list[Path]:
     return unique
 
 
-def apply_balance(index: SQLiteCorpusIndex, config: dict, logger) -> dict:
-    """Deterministic soft caps by source and domain; never duplicates documents."""
+def apply_balance(index: SQLiteCorpusIndex, config: dict, logger,
+                  scope: str = "full_run") -> dict:
+    """Deterministic soft caps by source and domain; never duplicates documents.
+
+    For ``scope="full_run"`` the configured source/domain caps are ALWAYS
+    applied, including when the accepted corpus is smaller than the configured
+    target.  The effective budget is the lesser of the configured target and the
+    actual available characters; unfilled capacity is reported, not padded.
+    ``scope="small_sample"`` is the only scope allowed to bypass caps for small
+    synthetic integration tests.  Intended source percentages are unchanged.
+    """
+    if scope not in ("full_run", "small_sample"):
+        raise ValueError(f"Unknown balance scope {scope!r}")
     conn = index.conn
     available = conn.execute(
         "SELECT COUNT(*) AS n, COALESCE(SUM(chars),0) AS c FROM docs WHERE status='kept'").fetchone()
@@ -147,9 +158,13 @@ def apply_balance(index: SQLiteCorpusIndex, config: dict, logger) -> dict:
     target_budget = int(config.get("target_char_budget", 480_000_000))
     budget = min(target_budget, available_chars)
     caps = config.get("source_caps", {})
-    if available_chars <= target_budget:
-        # No budget pressure: keep every quality-approved, deduplicated
-        # document.  Caps are for a full-size corpus, not for small tests.
+    domains = config.get("domain_targets", {})
+    default_cap = float(config.get("default_source_cap", 0.05))
+    default_domain = float(config.get("default_domain_target", 0.02))
+
+    if scope == "small_sample":
+        # Explicit small-test scope only: keep every quality-approved,
+        # deduplicated document. Production full runs must not use this branch.
         conn.execute("UPDATE docs SET selected=1 WHERE status='kept'")
         conn.commit()
         sel = conn.execute("SELECT COUNT(*) AS n, COALESCE(SUM(chars),0) AS c "
@@ -158,40 +173,47 @@ def apply_balance(index: SQLiteCorpusIndex, config: dict, logger) -> dict:
         for row in conn.execute(
                 "SELECT source_id, COUNT(*) AS n, SUM(chars) AS c FROM docs "
                 "WHERE status='kept' AND selected=1 GROUP BY source_id"):
-            by_source[row["source_id"]] = {
+            sid = row["source_id"]
+            by_source[sid] = {
                 "available_documents": int(row["n"]), "available_characters": int(row["c"]),
                 "selected_documents": int(row["n"]), "selected_characters": int(row["c"]),
-                "cap_share": caps.get(row["source_id"], 0.05),
-                "cap_characters": int(target_budget * float(caps.get(row["source_id"], 0.05))),
+                "cap_share": caps.get(sid, default_cap),
+                "cap_characters": int(budget * float(caps.get(sid, default_cap))),
+                "caps_applied": False,
             }
         selected_by_source = {r[0]: r[1] for r in conn.execute(
             "SELECT source_id, COUNT(*) FROM docs WHERE status='kept' AND selected=1 GROUP BY source_id")}
         selected_by_domain = {r[0]: r[1] for r in conn.execute(
             "SELECT domain, COUNT(*) FROM docs WHERE status='kept' AND selected=1 GROUP BY domain")}
-        logger.info("balance: budget not binding; selected all %s docs / %s chars",
-                    f"{int(sel['n']):,}", f"{int(sel['c']):,}")
+        selected_docs, selected_chars = int(sel["n"]), int(sel["c"])
+        logger.info("balance scope=small_sample: selected all %s docs / %s chars; caps bypassed for test scope only",
+                    f"{selected_docs:,}", f"{selected_chars:,}")
         return {
-            "method": "no budget pressure: all quality-approved deduplicated documents kept; caps NOT applied",
+            "method": "small_sample: all quality-approved deduplicated documents kept; caps NOT applied",
+            "scope": scope,
+            "balance_scope_behavior": "small_sample_caps_bypassed_for_synthetic_tests_only",
+            "caps_applied": False,
+            "source_percentages_changed": False,
             "target_char_budget": target_budget,
             "effective_budget_characters": budget,
             "available_documents": available_docs,
             "available_characters": available_chars,
-            "selected_documents": int(sel["n"]),
-            "selected_characters": int(sel["c"]),
-            "unfilled_characters": 0,
+            "selected_documents": selected_docs,
+            "selected_characters": selected_chars,
+            "unfilled_characters": max(0, budget - selected_chars),
             "skipped_by_cap": {},
-            "caps_applied": False,
+            "source_cap_shares": dict(caps),
+            "domain_target_shares": dict(domains),
             "selected_by_source": dict(selected_by_source),
             "selected_by_domain": dict(selected_by_domain),
             "by_source": by_source,
-            "note": "Small-sample or sub-budget run. On the full corpus, source/domain caps are applied; no document is duplicated or padded.",
+            "note": ("Small synthetic test scope. A full_run ALWAYS applies source/domain caps, "
+                     "even below the configured target. No document is duplicated or padded."),
         }
-    default_cap = 0.05
-    domains = config.get("domain_targets", {})
-    default_domain = 0.02
+
+    # full_run: caps are applied regardless of budget pressure.
     conn.execute("UPDATE docs SET selected=0 WHERE status='kept'")
     conn.commit()
-
     used_source: Counter = Counter()
     used_domain: Counter = Counter()
     selected_by_source: Counter = Counter()
@@ -240,26 +262,36 @@ def apply_balance(index: SQLiteCorpusIndex, config: dict, logger) -> dict:
             "selected_documents": int(sel["n"]), "selected_characters": int(sel["c"]),
             "cap_share": caps.get(sid, default_cap),
             "cap_characters": int(budget * float(caps.get(sid, default_cap))),
+            "caps_applied": True,
         }
     report = {
         "method": "streaming deterministic soft caps applied after global quality filtering and deduplication",
-        "target_char_budget": int(config.get("target_char_budget", 480_000_000)),
+        "scope": scope,
+        "balance_scope_behavior": "full_run_caps_always_applied_even_when_available_chars_below_target",
+        "caps_applied": True,
+        "source_percentages_changed": False,
+        "target_char_budget": target_budget,
         "effective_budget_characters": budget,
         "available_documents": available_docs,
         "available_characters": available_chars,
         "selected_documents": selected_docs,
         "selected_characters": selected_chars,
-        "unfilled_characters": budget - selected_chars,
+        "unfilled_characters": max(0, budget - selected_chars),
         "skipped_by_cap": dict(skipped),
+        "source_cap_shares": dict(caps),
+        "domain_target_shares": dict(domains),
         "selected_by_source": dict(selected_by_source),
         "selected_by_domain": dict(selected_by_domain),
         "by_source": by_source,
-        "note": "Targets are investigation settings, not mandatory quotas. No document was duplicated or padded. Unfilled capacity is reported rather than filled with quarantined text.",
+        "note": ("Effective budget = min(configured target, actual available chars). Caps are "
+                 "investigation settings, not mandatory quotas. No document was duplicated or "
+                 "padded. Unfilled capacity is reported rather than filled with quarantined text; "
+                 "the configured source percentages were not changed."),
     }
-    logger.info("balance: selected %s docs / %s chars of %s available chars",
-                f"{selected_docs:,}", f"{selected_chars:,}", f"{available_chars:,}")
+    logger.info("balance scope=full_run: selected %s docs / %s chars of %s available chars; caps applied, unfilled %s",
+                f"{selected_docs:,}", f"{selected_chars:,}", f"{available_chars:,}",
+                f"{report['unfilled_characters']:,}")
     return report
-
 
 def document_text(index: SQLiteCorpusIndex, doc_id: str) -> str:
     row = index.conn.execute(
@@ -676,7 +708,7 @@ def main() -> None:
     writer.close()
     index.commit()
 
-    balance_report = apply_balance(index, cfg, logger)
+    balance_report = apply_balance(index, cfg, logger, scope=args.scope)
     split_report = assign_splits(index, cfg, logger=logger)
     outputs = write_final_outputs(index, outdir, profiles, catalog_meta, cfg, logger)
     audit_report = write_audit_samples(index, reports_dir / "sample_audit.txt", cfg)
@@ -763,6 +795,14 @@ def main() -> None:
         "by_source": {k: dict(v) for k, v in by_source.items()},
         "rejection_reasons": dict(rejection_reasons),
         "balance": balance_report,
+        "balance_scope_policy": {
+            "scope": args.scope,
+            "full_run_caps_always_applied": True,
+            "small_sample_caps_bypassed_for_synthetic_tests": True,
+            "effective_budget": "min(target_char_budget, actual_available_characters)",
+            "source_percentages_changed": False,
+            "no_duplication_or_padding": True,
+        },
         "split": split_report,
         "outputs": outputs,
         "quality_report": str(reports_dir / "quality_report.json"),

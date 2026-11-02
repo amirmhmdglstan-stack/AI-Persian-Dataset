@@ -1,15 +1,25 @@
 {
-  "policy_version": "2.0.0",
-  "description": "Enforced data-separation policy for Persian Dataset V2. This is an engineering policy, not legal advice.",
+  "policy_version": "2.1.0",
+  "description": "Enforced data-separation and rights-verification policy for Persian Dataset V2. This is an engineering policy, not legal advice.",
   "profiles": {
     "A": {
-      "name": "PERMISSIVE_CORE",
+      "name": "RIGHTS_CLEARED_CORE_LICENSE_CONDITIONS_APPLY",
+      "display_name": "RIGHTS-CLEARED CORE (LICENSE CONDITIONS APPLY)",
       "default": true,
       "allowed_decisions": ["include"],
       "require_content_rights_verified": true,
       "separate_output_dir": "profile_A",
       "may_train": true,
-      "may_redistribute": "yes_if_upstream_conditions_met"
+      "may_redistribute": "yes_if_upstream_conditions_met",
+      "obligations": [
+        "Retain attribution and source-specific licence conditions for every document.",
+        "Respect CC BY-SA 4.0 / GFDL share-alike conditions for redistributed adaptations of Wikimedia text.",
+        "Keep Tatoeba contributor names and CC BY 2.0 FR notices in provenance metadata, never in training text.",
+        "Keep Wikinews CC BY 2.5 distinct from CC BY-SA 4.0; respect its attribution requirement.",
+        "Respect GPL-3.0 notices that may apply to redistributed Ganjoor data files; underlying classical works are public domain.",
+        "Do not treat a compilation licence as a grant over the underlying text."
+      ],
+      "model_weights_note": "Trained model weights are NOT assumed to be automatically free of upstream licensing, attribution, share-alike or redistribution obligations. Review the per-document provenance and applicable licence terms before distributing a model."
     },
     "B": {
       "name": "RESEARCH_ONLY",
@@ -47,7 +57,94 @@
     "v1_root_filenames": ["train.txt", "validation.txt", "README.txt", "README.md", "sources.json", "dataset_statistics.json"],
     "large_outputs_outside_git": true,
     "max_single_git_object_mb": 100,
-    "estimated_not_measured_label_required": true
+    "estimated_not_measured_label_required": true,
+    "require_explicit_license_allowlist_for_wikisource": true,
+    "do_not_weaken_license_checks_for_corpus_size": true,
+    "repository_root_discovery": "Relative config paths resolve from the actual V2 checkout, never from a configured V1 repo_root."
   },
-  "license_review_rule": "A public URL, MIT/ODC-BY/CC compilation license, or empty license field is NOT evidence that the underlying text is licensed. Classify as UNVERIFIED and quarantine unless authoritative documentation is found."
+  "license_review_rule": "A public URL, MIT/ODC-BY/CC compilation label, generic Copyright/مجوز marker, or empty licence field is NOT evidence that underlying text is usable. Wikisource pages require an exact allowlisted template; NC/ND, generic, ambiguous and unverified licence-like templates are rejected with an exact reason. Other unverified sources are quarantined.",
+  "license_allowlist": {
+    "version": "2.1.0",
+    "applies_to": "Wikisource pages with require_free_license_template=true. Other Wikimedia dumps are governed by their dated dump licence, not by this per-page allowlist.",
+    "verification_date": "2026-11-02",
+    "method": "Exact normalised template names only; no broad free-licence prefix regex. First reject-rule match wins; a page is accepted only if no licence-like template is rejected and at least one template is in the allowlist.",
+    "references": [
+      "https://en.wikisource.org/wiki/Help:Copyright_tags",
+      "https://wikisource.org/wiki/Wikisource:Copyright_policy",
+      "https://fa.wikipedia.org/wiki/%D9%88%DB%8C%DA%A9%DB%8C%E2%80%8C%D9%BE%D8%AF%DB%8C%D8%A7:%D8%A7%D9%84%DA%AF%D9%88%D9%87%D8%A7%DB%8C_%D8%AD%D9%82_%D8%AA%DA%A9%D8%AB%DB%8C%D8%B1",
+      "https://foundation.wikimedia.org/wiki/Policy:Terms_of_Use"
+    ],
+    "normalisation": "lowercase; trim; remove a leading subst:; replace spaces, underscores and ZWNJ with hyphens; collapse repeated hyphens.",
+    "candidate_name_patterns": [
+      "^(?:pd[-_\\s]|pd$|public[-_\\s]?domain|مالکیت[-_\\s]?عمومی|cc[-_\\s]|cc0|creativecommons|gfdl|fal|copyright|copy[-_\\s]?right|حق[-_\\s]?(?:نشر|تکثیر)|کپی[-_\\s]?رایت|مجوز|پروانه|license|licence|permission|free|آزاد|unknown|ناشناخته)"
+    ],
+    "ignored_template_names": [
+      "license-container-begin",
+      "license-container-end",
+      "license-container",
+      "licence-container-begin",
+      "licence-container-end"
+    ],
+    "reject_patterns": [
+      {
+        "name": "non_commercial",
+        "pattern": "(?:^|[-_\\s])(?:nc|non[-_\\s]?commercial|غیر[-_\\s]?تجاری|غیرتجاری)(?:$|[-_\\s])",
+        "reason": "non_commercial"
+      },
+      {
+        "name": "no_derivatives",
+        "pattern": "(?:^|[-_\\s])(?:nd|no[-_\\s]?deriv(?:ative)?s?|بدون[-_\\s]?اشتقاق|عدم[-_\\s]?اشتقاق)(?:$|[-_\\s])",
+        "reason": "no_derivatives"
+      },
+      {
+        "name": "all_rights_reserved_or_other_incompatible",
+        "pattern": "(?:all[-_\\s]?rights[-_\\s]?reserved|تمام[-_\\s]?حقوق[-_\\s]?محفوظ|commercial[-_\\s]?use[-_\\s]?only|fair[-_\\s]?use)",
+        "reason": "incompatible_or_unverified"
+      },
+      {
+        "name": "generic_copyright",
+        "pattern": "^(?:copyright|copy[-_]?right|حق[-_\\s]?(?:نشر|تکثیر)|کپی[-_\\s]?رایت|کپی[-_]?رایت)$",
+        "reason": "generic_copyright"
+      },
+      {
+        "name": "generic_permission",
+        "pattern": "^(?:مجوز|پروانه|license|licence|permission)$",
+        "reason": "generic_permission"
+      }
+    ],
+    "templates": [
+      {"name": "PD-old", "license": "Public domain (author died >100 years ago)"},
+      {"name": "PD-old-auto", "license": "Public domain (automatic expiry)"},
+      {"name": "PD-US", "license": "Public domain in the USA (old publication)"},
+      {"name": "PD-USGov", "license": "Public domain (US federal government work)"},
+      {"name": "PD-Iran", "license": "Public domain in Iran (verified template terms apply)"},
+      {"name": "PD-Afghanistan", "license": "Public domain (Afghanistan terms apply)"},
+      {"name": "PD-self", "license": "Public-domain dedication by the copyright holder"},
+      {"name": "PD-release", "license": "Public-domain release by the copyright holder"},
+      {"name": "PD-author-release", "license": "Public-domain release by the author"},
+      {"name": "PD-ineligible", "license": "Public domain (ineligible for copyright)"},
+      {"name": "PD-anon-US", "license": "Public domain in the USA (anonymous old work)"},
+      {"name": "PD-1923", "license": "Public domain (pre-1930 publication)"},
+      {"name": "PD-textlogo", "license": "Public domain (simple text logo)"},
+      {"name": "CC0", "license": "CC0 1.0"},
+      {"name": "Cc-zero", "license": "CC0 1.0"},
+      {"name": "CC-BY-4.0", "license": "CC BY 4.0 (attribution required)"},
+      {"name": "CC-BY-3.0", "license": "CC BY 3.0 (attribution required)"},
+      {"name": "CC-BY-2.5", "license": "CC BY 2.5 (attribution required)"},
+      {"name": "CC-BY-SA-4.0", "license": "CC BY-SA 4.0 (attribution and share-alike required)"},
+      {"name": "CC-BY-SA-3.0", "license": "CC BY-SA 3.0 (attribution and share-alike required)"},
+      {"name": "CC-BY-SA-2.5", "license": "CC BY-SA 2.5 (attribution and share-alike required)"},
+      {"name": "cc-by-sa-all", "license": "CC BY-SA all versions (attribution and share-alike required)"},
+      {"name": "GFDL", "license": "GNU Free Documentation License (attribution / licence-text conditions apply)"},
+      {"name": "GFDL-self", "license": "GNU Free Documentation License, author-released"},
+      {"name": "FAL", "license": "Free Art License (attribution / copyleft conditions apply)"}
+    ],
+    "notes": [
+      "PD, CC BY, CC BY-SA, GFDL and the other listed templates are accepted only with their stated licence conditions.",
+      "CC BY-NC / NC-SA, CC BY-ND / ND and all-rights-reserved markers are rejected regardless of corpus-size pressure.",
+      "Generic Copyright, generic مجوز, generic پروانه and unverified licence-like templates are quarantined with an exact reason.",
+      "GFDL is accepted as a free-compatible template where applicable; Wikisource's own policy may require CC BY-SA for new original contributions. This is not a legal determination.",
+      "Add a new template only after verifying its exact licence text; do not add a broad prefix or regex to increase corpus size."
+    ]
+  }
 }

@@ -46,33 +46,42 @@ def _is_windows_drive_path(p: Path) -> bool:
     return len(p.parts) > 1 and ":" in p.parts[0]
 
 
+def config_repo_root(config: dict | None = None) -> Path:
+    """Return the actual V2 checkout root, ignoring machine-specific settings.
+
+    ``dataset_config.json`` deliberately has no ``repo_root``.  A stale
+    ``D:/GPT/dataset/repo`` value would resolve against V1 and is unsafe.  All
+    repository-relative configuration is therefore discovered from this file's
+    location: ``.../dataset_v2/pipeline/common.py`` -> two parents up.
+    ``config`` is accepted for call-site compatibility but intentionally unused.
+    """
+    return repo_root_from_here()
+
+
 def resolve_config_path(value: str | Path, repo_root: str | Path | None = None) -> Path:
     """Resolve a config path.
 
-    Relative paths are resolved against the repository root.  On a non-Windows
-    test machine, a configured ``D:/...`` repo root is replaced by the actual
-    checkout root so that relative config entries (metadata, policy,
-    tokenizer) still resolve.  On Windows the configured drive path is used.
+    Relative paths always resolve against the actual checkout root returned by
+    :func:`repo_root_from_here`.  A supplied ``repo_root`` is ignored: it may be
+    a stale V1 path from an older config.  Absolute paths are returned as-is;
+    catalog/config paths in this repository are relative.
     """
     p = Path(value)
     if p.is_absolute() or _is_windows_drive_path(p):
         return p
-    base = Path(repo_root) if repo_root else repo_root_from_here()
-    if os.name != "nt" and (_is_windows_drive_path(base) or str(base).startswith("D:")):
-        base = repo_root_from_here()
-    return base / p
+    return config_repo_root() / p
 
 
 def config_source_metadata(config: dict) -> Path:
-    return resolve_config_path(config["source_metadata"], config.get("repo_root"))
+    return resolve_config_path(config["source_metadata"])
 
 
 def config_policy(config: dict) -> Path:
-    return resolve_config_path(config["source_policy"], config.get("repo_root"))
+    return resolve_config_path(config["source_policy"])
 
 
 def config_tokenizer(config: dict) -> Path:
-    return resolve_config_path(config["tokenizer_baseline"], config.get("repo_root"))
+    return resolve_config_path(config["tokenizer_baseline"])
 
 
 def assert_safe_output_dir(outdir: str | Path, repo_root: str | Path,

@@ -2,7 +2,7 @@
   "checks": [
     {
       "check": "output_dir_is_not_repo_root",
-      "detail": "/home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final",
+      "detail": "dataset_v2/.smoke_work/final",
       "status": "PASS"
     },
     {
@@ -184,7 +184,7 @@
     {
       "check": "quarantine_has_manifest_but_no_text",
       "detail": {
-        "manifest": "/home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final/profile_C_quarantine_manifest_only/quarantine_manifest.json",
+        "manifest": "dataset_v2/.smoke_work/final/profile_C_quarantine_manifest_only/quarantine_manifest.json",
         "text_files": []
       },
       "status": "PASS"
@@ -249,7 +249,7 @@
       "zwnj": 0
     }
   },
-  "generated_at_utc": "2026-11-02T13:08:44Z",
+  "generated_at_utc": "2026-11-02T16:42:55Z",
   "measurement_scope": "small_sample",
   "passed": 26,
   "split_document_ratios": {

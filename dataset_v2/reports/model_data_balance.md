@@ -90,5 +90,5 @@ The separator line is not tokenized as ordinary text. If the training loader app
 1. Finalize and **measure** the dataset before fixing the architecture.
 2. Start with a small ~30 M-parameter GPT, 32K baseline tokenizer, 97/2/1 splits and strict early stopping on `validation.txt`; reserve `test.txt` for the final report only.
 3. If measured strict-A tokens are below ~50 M, prioritize **rights-cleared modern Persian prose, educational text and dialogue** over a larger model.
-4. Reconsider 8K/16K vocabularies only after a full-corpus tokenizer comparison shows the embedding savings outweigh extra tokens.
+4. Reconsider 8K/16K vocabularies only after a bounded 8–10 M-character tokenizer comparison on the final corpus shows the embedding savings outweigh extra tokens; review measured peak RSS rather than claiming full-corpus memory.
 5. Do not begin model training until `verify_dataset.py` exits zero and the manual audit samples are reviewed.

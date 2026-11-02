@@ -1,8 +1,8 @@
 {
-  "config_version": "2.0.0",
-  "description": "Persian Dataset V2 reproducible configuration. All large paths are on D: for the user's Windows 11 PC. CLI --workdir/--outdir override these defaults for testing.",
+  "config_version": "2.1.0",
+  "description": "Persian Dataset V2 reproducible configuration. Repository-relative config paths are discovered from the actual V2 checkout; large outputs remain on D: for the user's Windows 11 PC. CLI --workdir/--outdir override these defaults for testing.",
   "seed": "persian-dataset-v2-2026-11-02",
-  "repo_root": "D:/GPT/dataset/repo",
+  "repository_root_policy": "Discovered from dataset_v2/pipeline/common.py; no machine-specific repo_root is stored here. The V2 checkout is D:/GPT/dataset/repo_v2_review on the user's PC; D:/GPT/dataset/repo is V1 and must not be used.",
   "project_root": "D:/GPT/project",
   "workdir": "D:/GPT/dataset/v2_work",
   "outdir": "D:/GPT/dataset/v2_final",
@@ -10,6 +10,17 @@
   "source_policy": "dataset_v2/configs/source_policy.json",
   "tokenizer_baseline": "dataset_v2/tokenizer/persian-bpe-32k.json",
   "default_profiles": ["A"],
+  "dependency_policy": {
+    "core_requirements": "dataset_v2/requirements.txt",
+    "optional_parquet_requirements": "dataset_v2/requirements-parquet.txt",
+    "optional_7z_requirements": "dataset_v2/requirements-7z.txt",
+    "optional_all_requirements": "dataset_v2/requirements-optional.txt",
+    "requirements_check": "dataset_v2/pipeline/check_requirements.py",
+    "default_launcher_installs_optional_packages": false,
+    "tokenizers_supported_range": ">=0.20,<0.24 (supports the user's 0.23.3; never downgrade with <0.23)",
+    "forbidden_heavyweight_installs": ["torch", "numpy", "pandas", "tensorflow", "datasets"],
+    "note": "Default Profile A needs only tokenizers. pyarrow is needed only for Parquet sources; py7zr only for the optional V1 2021 Wikipedia 7z mirror. Optional packages are never auto-installed by the default launchers."
+  },
   "doc_separator": "<|endoftext|>",
   "split_ratios": {
     "train": 0.97,
@@ -108,6 +119,9 @@
     "special_token": "<|endoftext|>",
     "special_token_id": 0,
     "comparison_vocab_sizes": [8000, 16000, 32000],
-    "model_embedding_dimensions": [512, 768, 1024]
+    "model_embedding_dimensions": [512, 768, 1024],
+    "bounded_memory_default_sample_chars": 8000000,
+    "bounded_memory_max_sample_chars": 10000000,
+    "bounded_memory_note": "compare_tokenizers.py streams documents and aggregates statistics. BPE training input is hard-capped at 10M chars; 40M chars is NOT treated as bounded-memory. Process peak RSS is measured, not extrapolated to a full corpus."
   }
 }

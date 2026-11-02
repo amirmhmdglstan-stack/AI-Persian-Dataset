@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 """Discover remote source metadata without downloading data.
 
-Makes HEAD (or a 1-byte ranged GET fallback) requests, records Content-Length
-and availability, then regenerates the CSV catalog exports.  Use ``--offline``
-to skip all network access (e.g. on a restricted build machine).  This script
-never downloads a corpus file.
+Makes HEAD (or a 1-byte ranged GET fallback) requests and records
+Content-Length and availability under ``--workdir``.  Probe results are written
+to ``<workdir>/source_metadata_probe.json``; the tracked ``source_metadata.json``
+and derived CSVs are NOT modified by normal launcher runs.  ``--export-only`` is
+the explicit opt-in that regenerates the derived CSVs.  Use ``--offline`` to
+skip all network access.  This script never downloads a corpus file.
 """
 from __future__ import annotations
 
@@ -35,7 +37,7 @@ def _load_builder():
 
 def probe_url(url: str, timeout: float = 12.0) -> dict:
     """Return {status, size_bytes, final_url, error} using HEAD/Range only."""
-    headers = {"User-Agent": "PersianDatasetV2/2.0 (metadata-only probe)"}
+    headers = {"User-Agent": "PersianDatasetV2/2.1 (metadata-only probe)"}
     for method, extra in (("HEAD", {}), ("GET", {"Range": "bytes=0-0"})):
         h = {**headers, **extra}
         req = urllib.request.Request(url, headers=h, method=method)
@@ -91,7 +93,6 @@ def main() -> None:
     min_free = args.min_free_gb if args.min_free_gb is not None else float(cfg.get("min_free_gb", 20))
     require_free_space(workdir, min_free, logger)
     meta = json.loads(meta_path.read_text(encoding="utf-8"))
-    builder = _load_builder()
 
     checked = 0
     skipped = 0
@@ -119,8 +120,12 @@ def main() -> None:
     meta["discovery_mode"] = ("export_only" if args.export_only else
                               "offline" if args.offline else
                               "remote_probe" if args.probe else "no_probe")
-    atomic_write_text(meta_path, json_dumps(meta))
-    builder.export_csvs(meta)
+    # Keep the tracked source catalog immutable during normal launcher runs.
+    probe_path = workdir / "source_metadata_probe.json"
+    probe_path.parent.mkdir(parents=True, exist_ok=True)
+    atomic_write_text(probe_path, json_dumps(meta))
+    if args.export_only:
+        _load_builder().export_csvs(meta)
 
     report = {
         "generated_at_utc": now_utc(),
@@ -129,7 +134,10 @@ def main() -> None:
         "urls_skipped": skipped,
         "sources": len(meta["sources"]),
         "downloadable_sources": sum(1 for s in meta["sources"] if s.get("download")),
-        "note": "Metadata-only. No corpus file was downloaded by this script.",
+        "probe_output": str(probe_path),
+        "note": ("Metadata-only. No corpus file was downloaded. Probe results are written "
+                 "under --workdir; tracked source_metadata.json is not overwritten. "
+                 "Derived CSVs are regenerated only with --export-only."),
     }
     out = workdir / "discovery_report.json"
     out.parent.mkdir(parents=True, exist_ok=True)

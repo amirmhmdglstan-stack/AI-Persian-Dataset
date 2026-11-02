@@ -1,12 +1,16 @@
-# Persian Dataset V2 dependencies.
-# Tested on the agent machine with Python 3.11.2 / Linux:
-#   tokenizers 0.22.2, pyarrow 21.0.0, py7zr 1.1.4
-# Target machine: Windows 11 / Python 3.12 (not executed on the agent machine).
+# Persian Dataset V2 CORE requirements for default Profile A.
+# Windows 11 / Python 3.12 target; the agent machine tests on Linux only.
+# This file intentionally contains NO optional packages and NO heavyweight ML stack.
 #
-# tokenizers: REQUIRED for exact token counts and 8K/16K/32K comparison.
-# pyarrow:    OPTIONAL, only for Parquet sources (quarantined by default).
-# py7zr:      OPTIONAL, only for the optional V1 2021 Wikipedia 7z mirror.
-# No GPU, PyTorch, TensorFlow, pandas, numpy or datasets library is required.
-tokenizers>=0.20,<0.23
-pyarrow>=17,<22
-py7zr>=0.20,<2
+# tokenizers is required for exact measured token counts and from-scratch BPE
+# comparison. The range supports the user's installed tokenizers 0.23.3;
+# do NOT downgrade it with tokenizers<0.23.
+#
+# Optional packages live in separate files and are NEVER auto-installed by the
+# default launchers:
+#   requirements-parquet.txt  -> pyarrow, only for Parquet sources
+#   requirements-7z.txt       -> py7zr, only for the optional V1 2021 7z mirror
+#   requirements-optional.txt -> both, for an explicit opt-in install
+#
+# No torch, numpy, pandas, tensorflow, datasets, GPU packages or model weights.
+tokenizers>=0.20,<0.24

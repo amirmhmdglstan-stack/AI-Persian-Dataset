@@ -51,6 +51,9 @@ RESEARCH_REFS = {
     "26": "https://groups.google.com/g/common-crawl/c/wZwjDoxEilw",
     "27": "https://www.researchgate.net/publication/398476043_Persian-Phi_Efficient_Cross-Lingual_Adaptation_of_Compact_LLMs_via_Curriculum_Learning",
     "28": "https://huggingface.co/datasets/shekar-ai/Shiraz",
+    "32": "https://downloads.tatoeba.org/exports/per_language/pes/",
+    "33": "https://github.com/ai-pipestream/turboembed/releases/tag/data-tatoeba-2026-10-10",
+    "34": "https://raw.githubusercontent.com/ai-pipestream/turboembed/36930780a93e2ea0a647b56f69d5e0cfaa554091/analysis/train-recipes/src/tatoeba.rs",
 }
 
 DIRECT_REFS = {
@@ -71,6 +74,9 @@ DIRECT_REFS = {
     "persian_raw_text_repo": "https://github.com/persiannlp/persian-raw-text",
     "common_voice_repo": "https://github.com/common-voice/common-voice",
     "tatoeba_downloads": "https://tatoeba.org/en/downloads",
+    "tatoeba_pes_index": "https://downloads.tatoeba.org/exports/per_language/pes/",
+    "tatoeba_all_language_csv_member": "https://github.com/ai-pipestream/turboembed/releases/tag/data-tatoeba-2026-10-10",
+    "tatoeba_outfile_reader": "https://raw.githubusercontent.com/ai-pipestream/turboembed/36930780a93e2ea0a647b56f69d5e0cfaa554091/analysis/train-recipes/src/tatoeba.rs",
     "v1_sources_json": "https://github.com/amirmhmdglstan-stack/AI-Persian-Dataset/blob/arena/f01a4e1e-ai-persian-dataset/sources.json",
     "v1_readme": "https://github.com/amirmhmdglstan-stack/AI-Persian-Dataset/blob/arena/f01a4e1e-ai-persian-dataset/README.txt",
 }
@@ -91,7 +97,10 @@ def github_tarball(repo: str, sha: str) -> str:
 
 
 def file_entry(url: str, filename: str, fmt: str, extractor: str, *, size: int | None = None,
-               sha1: str | None = None, options: dict | None = None, required: bool = True) -> dict:
+               sha1: str | None = None, options: dict | None = None, required: bool = True,
+               snapshot_date: str | None = None, mutable_weekly_snapshot: bool = False,
+               observed_size_bytes: int | None = None,
+               checksum_policy: str | None = None, extra: dict | None = None) -> dict:
     d = {
         "url": url,
         "filename": filename,
@@ -101,7 +110,13 @@ def file_entry(url: str, filename: str, fmt: str, extractor: str, *, size: int |
         "sha1": sha1,
         "required": required,
         "options": options or {},
+        "snapshot_date": snapshot_date,
+        "mutable_weekly_snapshot": mutable_weekly_snapshot,
+        "observed_size_bytes": observed_size_bytes,
+        "checksum_policy": checksum_policy,
     }
+    if extra:
+        d.update(extra)
     return d
 
 
@@ -119,6 +134,8 @@ def source(**kw) -> dict:
         "license_compilation": "unknown",
         "license_content": "unknown",
         "content_rights_verified": False,
+        "page_base_url": None,
+        "license_verification_method": "source_catalog",
         "copyright_holder": "unknown",
         "attribution_required": "unknown",
         "share_alike": "unknown",
@@ -144,7 +161,7 @@ def source(**kw) -> dict:
 
 
 SOURCES = [
-    # ---------------- PROFILE A: verified / permissive core ----------------
+    # -------- PROFILE A: rights-cleared core, licence conditions apply --------
     source(
         id="wikipedia_fa_official_20261001",
         name="Persian Wikipedia official articles dump (2026-10-01)",
@@ -152,6 +169,7 @@ SOURCES = [
         domain="encyclopedia",
         description="Official Wikimedia current-revisions dump; primary modern factual Persian prose.",
         url=f"{WIKI}/fawiki/20261001/",
+        page_base_url="https://fa.wikipedia.org/wiki/",
         format="MediaWiki XML bz2", approx_size="1.456 GB compressed",
         doc_count_estimate=1100753, availability="public HTTP, dated dump",
         update_date="2026-10-01",
@@ -172,7 +190,8 @@ SOURCES = [
             "fawiki-20261001-pages-articles.xml.bz2", "bz2", "mediawiki_xml_bz2",
             size=1456390218, sha1="9b49c6e5988cf28ff9b618574e997cabd0df57f4",
             options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 200,
-                     "include_title": True, "exclude_disambiguation": True})],
+                     "include_title": True, "exclude_disambiguation": True,
+                     "page_base_url": "https://fa.wikipedia.org/wiki/"})],
     ),
     source(
         id="fawikibooks_20261101",
@@ -180,6 +199,7 @@ SOURCES = [
         profile="A", decision="include", domain="educational",
         description="Free textbooks/how-to prose; small but genuinely educational modern Persian.",
         url=f"{WIKI}/fawikibooks/20261101/",
+        page_base_url="https://fa.wikibooks.org/wiki/",
         format="MediaWiki XML bz2", approx_size="7.09 MB compressed",
         availability="public HTTP, dated dump", update_date="2026-11-01",
         license_compilation="CC BY-SA 4.0 / GFDL", license_content="CC BY-SA 4.0 / GFDL",
@@ -194,7 +214,8 @@ SOURCES = [
             f"{WIKI}/fawikibooks/20261101/fawikibooks-20261101-pages-articles.xml.bz2",
             "fawikibooks-20261101-pages-articles.xml.bz2", "bz2", "mediawiki_xml_bz2",
             size=7086756, sha1="ce11959c5edc617641760bff7574b7777889b5d8",
-            options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 120, "include_title": True})],
+            options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 120,
+                     "include_title": True, "page_base_url": "https://fa.wikibooks.org/wiki/"})],
     ),
     source(
         id="fawikisource_20261101",
@@ -202,6 +223,8 @@ SOURCES = [
         profile="A", decision="include", domain="literary",
         description="Public-domain or freely licensed source texts; literary/historical prose and verse.",
         url=f"{WIKI}/fawikisource/20261101/",
+        page_base_url="https://fa.wikisource.org/wiki/",
+        license_verification_method="configs/source_policy.json exact template allowlist",
         format="MediaWiki XML bz2", approx_size="47.72 MB compressed",
         availability="public HTTP, dated dump", update_date="2026-11-01",
         license_compilation="CC BY-SA 4.0 / GFDL",
@@ -213,13 +236,14 @@ SOURCES = [
         language_purity="Persian, some Arabic religious quotations", lm_suitability="yes_conditional",
         rights_verification="official Wikisource copyright policy and dump index",
         refs=["7", "8", "12", "wikimedia_source_index"],
-        notes="Extractor keeps only pages with an explicit PD/CC/GPL-compatible license template; unlabeled pages are skipped and counted. Classical register, not modern prose.",
+        notes="Extractor accepts ONLY exact verified template names from configs/source_policy.json. NC/ND/incompatible, generic Copyright/مجوز/پروانه, unknown licence-like templates and unlabeled pages are rejected with an exact reason; the matched template is stored in metadata. No corpus-size weakening. Classical register, not modern prose.",
         files=[file_entry(
             f"{WIKI}/fawikisource/20261101/fawikisource-20261101-pages-articles.xml.bz2",
             "fawikisource-20261101-pages-articles.xml.bz2", "bz2", "mediawiki_xml_bz2",
             size=47719980, sha1="6408e20973ff086a49d31b215d7242a0d76cc76b",
             options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 120,
-                     "include_title": True, "require_free_license_template": True})],
+                     "include_title": True, "require_free_license_template": True,
+                     "page_base_url": "https://fa.wikisource.org/wiki/"})],
     ),
     source(
         id="fawikinews_20261101",
@@ -227,6 +251,7 @@ SOURCES = [
         profile="A", decision="include", domain="news",
         description="Collaboratively written news-style Persian prose; small, modern register.",
         url=f"{WIKI}/fawikinews/20261101/",
+        page_base_url="https://fa.wikinews.org/wiki/",
         format="MediaWiki XML bz2", approx_size="2.63 MB compressed",
         availability="public HTTP, dated dump", update_date="2026-11-01",
         license_compilation="CC BY 2.5", license_content="CC BY 2.5",
@@ -242,7 +267,8 @@ SOURCES = [
             f"{WIKI}/fawikinews/20261101/fawikinews-20261101-pages-articles.xml.bz2",
             "fawikinews-20261101-pages-articles.xml.bz2", "bz2", "mediawiki_xml_bz2",
             size=2627858, sha1="263fa26c8655f63a6e0481d86147e1a2aec709a7",
-            options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 120, "include_title": True})],
+            options={"skip_redirects": True, "namespace": 0, "min_raw_chars": 120,
+                     "include_title": True, "page_base_url": "https://fa.wikinews.org/wiki/"})],
     ),
     source(
         id="common_voice_fa_sentences",
@@ -270,26 +296,82 @@ SOURCES = [
     ),
     source(
         id="tatoeba_fa_cc_by",
-        name="Tatoeba Persian sentences (CC BY 2.0 FR, author attribution)",
+        name="Tatoeba Persian detailed sentences (CC BY 2.0 FR, author attribution)",
         profile="A", decision="include", domain="dialogue",
-        description="Crowd-sourced natural Persian example sentences; detailed export retains author name for attribution.",
-        url="https://tatoeba.org/en/downloads",
-        format="tar.bz2 containing per-language TSV", approx_size="weekly all-language export (tens of MB)",
-        availability="public weekly export; not immutable", update_date="weekly (record download date)",
-        license_compilation="CC BY 2.0 FR", license_content="CC BY 2.0 FR by default; some CC0",
-        content_rights_verified=True, copyright_holder="individual Tatoeba contributors",
-        attribution_required="yes: author name must be retained",
-        share_alike="no", non_commercial="no", commercial_use="yes with attribution",
-        redistribution="yes with author attribution", privacy_risk="low (public pseudonyms in manifest only)",
-        language_purity="Persian short sentences, some translated phrasing", lm_suitability="yes_small_sentences",
-        rights_verification="official Tatoeba downloads and terms of use",
-        refs=["10", "11", "tatoeba_downloads"],
-        notes="The CC0-only export does NOT include Persian; use detailed export and store usernames in the manifest (not in training text). One sentence per document.",
-        files=[file_entry("https://downloads.tatoeba.org/exports/sentences_detailed.tar.bz2",
-                          "sentences_detailed.tar.bz2", "tar.bz2", "tar_tsv",
-                          options={"member_pattern": "*fas*sentences*.tsv", "lang_code": "fas",
-                                   "columns": ["id", "lang", "text", "username", "date_added", "date_modified"],
-                                   "one_doc_per_line": True})],
+        description="Verified Persian-only Tatoeba weekly detailed export; contributor names retained only in provenance metadata.",
+        url="https://downloads.tatoeba.org/exports/per_language/pes/",
+        format="Persian-only .tsv.bz2; optional all-language .tar.bz2 fallback",
+        approx_size="695,149 bytes observed for primary file on 2026-10-31; weekly mutable",
+        doc_count_estimate=None,
+        availability="public weekly export; Persian-only per_language/pes preferred; mutable snapshot",
+        update_date="2026-10-31 (official index observation; weekly export)",
+        license_compilation="CC BY 2.0 FR weekly sentence export",
+        license_content="CC BY 2.0 FR by default; some CC0; attribution retained for every row",
+        content_rights_verified=True,
+        copyright_holder="individual Tatoeba contributors",
+        attribution_required="yes: contributor username and CC BY 2.0 FR notice in metadata",
+        share_alike="no", non_commercial="no",
+        commercial_use="yes with author attribution and licence conditions",
+        redistribution="yes with author attribution and licence notice",
+        privacy_risk="low (public contributor pseudonyms in provenance metadata only)",
+        language_purity="Persian short sentences, some translated phrasing",
+        lm_suitability="yes_small_sentences",
+        rights_verification="official Tatoeba downloads/terms, per_language/pes index and detailed-field documentation",
+        refs=["10", "11", "32", "33", "34", "tatoeba_downloads", "tatoeba_pes_index",
+              "tatoeba_all_language_csv_member", "tatoeba_outfile_reader"],
+        notes=(
+            "Official per_language/pes index lists pes_sentences_detailed.tsv.bz2, 695,149 bytes, dated "
+            "2026-10-31. The detailed fields are id, lang, text, username, date_added, date_last_modified "
+            "(tab-separated MySQL OUTFILE). Language code is ISO 639-3 `pes`, NOT `fas`. Usernames, "
+            "sentence IDs, dates, source filename and Tatoeba CC BY 2.0 FR attribution stay in metadata; "
+            "training text is only the Persian sentence. The export is mutable weekly: download_manifest.json "
+            "records the observed snapshot date, actual SHA-256 and size; ordinary resume does not refresh "
+            "a verified snapshot and --force is the explicit refresh. A real all-language fallback parses "
+            "sentences_detailed.csv inside sentences_detailed.tar.bz2; it does NOT search for imaginary "
+            "per-language TSV members. Some sentences may be CC0, but the detailed export does not mark them, "
+            "so attribution is conservatively retained for every row."),
+        files=[
+            file_entry(
+                "https://downloads.tatoeba.org/exports/per_language/pes/pes_sentences_detailed.tsv.bz2",
+                "pes_sentences_detailed.tsv.bz2", "tsv.bz2", "tatoeba_detailed",
+                required=True, snapshot_date="2026-10-31",
+                mutable_weekly_snapshot=True, observed_size_bytes=695149,
+                checksum_policy=("Actual SHA-256 + size recorded in download_manifest.json; "
+                                 "ordinary resume skips the verified snapshot; --force refreshes it."),
+                options={
+                    "language_code": "pes",
+                    "columns": ["id", "lang", "text", "username", "date_added", "date_last_modified"],
+                    "one_doc_per_line": True,
+                    "detailed_fields_note": ("Official detailed fields: Sentence id [tab] Lang [tab] Text "
+                                             "[tab] Username [tab] Date added [tab] Date last modified."),
+                },
+                extra={
+                    "catalog_observed_filename": "pes_sentences_detailed.tsv.bz2",
+                    "catalog_observed_size_bytes": 695149,
+                    "catalog_observed_snapshot_date": "2026-10-31",
+                    "catalog_observed_index_url": "https://downloads.tatoeba.org/exports/per_language/pes/",
+                    "format_note": "bzip2-compressed TSV, no tar member, no header; MySQL OUTFILE escapes.",
+                }),
+            file_entry(
+                "https://downloads.tatoeba.org/exports/sentences_detailed.tar.bz2",
+                "sentences_detailed.tar.bz2", "tar.bz2", "tatoeba_detailed",
+                required=False, snapshot_date="2026-10-31",
+                mutable_weekly_snapshot=True,
+                checksum_policy=("Fallback only; actual SHA-256 + size recorded in download_manifest.json "
+                                 "when downloaded with --include-optional."),
+                options={
+                    "language_code": "pes",
+                    "columns": ["id", "lang", "text", "username", "date_added", "date_last_modified"],
+                    "fallback_member": "sentences_detailed.csv",
+                    "one_doc_per_line": True,
+                    "archive_member_format": "tab-separated MySQL OUTFILE data in a CSV-named member",
+                },
+                extra={
+                    "fallback_only": True,
+                    "fallback_note": ("Use only if per_language/pes detailed export is unavailable. The real "
+                                      "archive contains sentences_detailed.csv, NOT per-language TSV members."),
+                }),
+        ],
     ),
     source(
         id="ganjoor_classics_pd",
@@ -344,6 +426,7 @@ SOURCES = [
         profile="A", decision="include", domain="encyclopedia",
         description="The 865k-article cleaned CSV used by V1; recoverable from split 7z parts in a GitHub mirror.",
         url="https://github.com/hsmirzaie/fawiki",
+        page_base_url="https://fa.wikipedia.org/wiki/",
         format="split 7z -> CSV", approx_size="about 186 MB repository; about 1.1 GB 7z",
         doc_count_estimate=864889, availability="public GitHub API; py7zr needed", update_date="2021-02-14",
         license_compilation="no repository license", license_content="CC BY-SA 4.0 / GFDL Wikipedia text",
@@ -354,10 +437,11 @@ SOURCES = [
         rights_verification="Wikimedia ToU; V1 sources.json; mirror README",
         refs=["7", "fawiki_mirror_repo", "v1_sources_json"],
         v1_filtered_chars=457109769, v1_shipped_chars=35298596, v1_shipped_docs=26850,
-        notes="Optional. Prefer the official 2026 dump for modern Persian. This source is included to audit V1's claim that 538M filtered characters were recoverable.",
+        notes="OPTIONAL and disabled by default: download_sources.py needs --include-optional, and py7zr must be installed explicitly with requirements-7z.txt. Prefer the official 2026 dump for modern Persian. This source is included to audit V1's claim that 538M filtered characters were recoverable.",
         files=[file_entry(f"https://api.github.com/repos/hsmirzaie/fawiki/contents?ref={FAWIKI_MIRROR_SHA}",
                           "fawiki.7z", "github_api_7z", "csv_from_7z", required=False,
                           options={"filename_pattern": "fawiki.7z.0*", "inner_member": "fawiki.csv",
+                                   "page_base_url": "https://fa.wikipedia.org/wiki/",
                                    "delimiter": ",", "columns": ["id", "title", "article"],
                                    "title_column": "title", "text_column": "article", "id_column": "id"})],
     ),
@@ -583,12 +667,12 @@ SOURCES = [
 
 def catalog() -> dict:
     return {
-        "catalog_version": "2.0.0",
+        "catalog_version": "2.1.0",
         "research_date_utc": "2026-11-02",
         "generated_at_utc": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "description": "Persian Dataset V2 source and licensing catalog. Rights describe the actual text, not merely a repository/compilation. Not legal advice.",
+        "description": "Persian Dataset V2 source and licensing catalog. Rights describe the actual text, not merely a repository/compilation. Profile A is rights-cleared with licence conditions, not obligation-free. Not legal advice.",
         "profiles": {
-            "A": "PERMISSIVE CORE - only sources with verified underlying content rights",
+            "A": "RIGHTS-CLEARED CORE (LICENSE CONDITIONS APPLY) - verified underlying text rights with attribution/share-alike/source-specific obligations",
             "B": "RESEARCH ONLY - clearly documented non-commercial sources, physically separate output",
             "C": "QUARANTINE - unknown/conflicting rights, provenance or privacy concerns; do not train",
         },
@@ -602,7 +686,8 @@ CATALOG_COLUMNS = [
     "id", "name", "profile", "decision", "domain", "format", "approx_size",
     "doc_count_estimate", "availability", "update_date", "license_compilation",
     "license_content", "content_rights_verified", "commercial_use", "privacy_risk",
-    "lm_suitability", "rights_verification", "url", "v1_filtered_chars",
+    "lm_suitability", "rights_verification", "url", "page_base_url",
+    "license_verification_method", "v1_filtered_chars",
     "v1_shipped_chars", "v1_shipped_docs", "notes",
 ]
 

@@ -2,52 +2,71 @@
   "balance": {
     "available_characters": 6681,
     "available_documents": 30,
+    "balance_scope_behavior": "small_sample_caps_bypassed_for_synthetic_tests_only",
     "by_source": {
       "smoke_dialogue": {
         "available_characters": 731,
         "available_documents": 14,
-        "cap_characters": 24000000,
+        "cap_characters": 334,
         "cap_share": 0.05,
+        "caps_applied": false,
         "selected_characters": 731,
         "selected_documents": 14
       },
       "smoke_encyclopedia": {
         "available_characters": 3244,
         "available_documents": 7,
-        "cap_characters": 24000000,
+        "cap_characters": 334,
         "cap_share": 0.05,
+        "caps_applied": false,
         "selected_characters": 3244,
         "selected_documents": 7
       },
       "smoke_literary": {
         "available_characters": 1511,
         "available_documents": 5,
-        "cap_characters": 24000000,
+        "cap_characters": 334,
         "cap_share": 0.05,
+        "caps_applied": false,
         "selected_characters": 1511,
         "selected_documents": 5
       },
       "smoke_news": {
         "available_characters": 1151,
         "available_documents": 3,
-        "cap_characters": 24000000,
+        "cap_characters": 334,
         "cap_share": 0.05,
+        "caps_applied": false,
         "selected_characters": 1151,
         "selected_documents": 3
       },
       "smoke_qa": {
         "available_characters": 44,
         "available_documents": 1,
-        "cap_characters": 24000000,
+        "cap_characters": 334,
         "cap_share": 0.05,
+        "caps_applied": false,
         "selected_characters": 44,
         "selected_documents": 1
       }
     },
     "caps_applied": false,
+    "domain_target_shares": {
+      "dialogue": 0.08,
+      "educational": 0.15,
+      "encyclopedia": 0.45,
+      "legal": 0.0,
+      "literary": 0.15,
+      "mixed_web": 0.0,
+      "news": 0.1,
+      "qa": 0.05,
+      "reference": 0.0,
+      "speech": 0.0
+    },
     "effective_budget_characters": 6681,
-    "method": "no budget pressure: all quality-approved deduplicated documents kept; caps NOT applied",
-    "note": "Small-sample or sub-budget run. On the full corpus, source/domain caps are applied; no document is duplicated or padded.",
+    "method": "small_sample: all quality-approved deduplicated documents kept; caps NOT applied",
+    "note": "Small synthetic test scope. A full_run ALWAYS applies source/domain caps, even below the configured target. No document is duplicated or padded.",
+    "scope": "small_sample",
     "selected_by_domain": {
       "dialogue": 14,
       "encyclopedia": 7,
@@ -65,8 +84,29 @@
     "selected_characters": 6681,
     "selected_documents": 30,
     "skipped_by_cap": {},
+    "source_cap_shares": {
+      "common_voice_fa_sentences": 0.04,
+      "fawikibooks_20261101": 0.08,
+      "fawikinews_20261101": 0.05,
+      "fawikisource_20261101": 0.15,
+      "ganjoor_classics_pd": 0.1,
+      "parsinlu_suite_nc": 0.05,
+      "persian_poetry_ccbysa": 0.1,
+      "tatoeba_fa_cc_by": 0.04,
+      "wikipedia_fa_2021_mirror_recovery": 0.1,
+      "wikipedia_fa_official_20261001": 0.5
+    },
+    "source_percentages_changed": false,
     "target_char_budget": 480000000,
     "unfilled_characters": 0
+  },
+  "balance_scope_policy": {
+    "effective_budget": "min(target_char_budget, actual_available_characters)",
+    "full_run_caps_always_applied": true,
+    "no_duplication_or_padding": true,
+    "scope": "small_sample",
+    "small_sample_caps_bypassed_for_synthetic_tests": true,
+    "source_percentages_changed": false
   },
   "by_source": {
     "smoke_dialogue": {
@@ -104,8 +144,8 @@
       "seen": 9
     }
   },
-  "config_version": "2.0.0",
-  "generated_at_utc": "2026-11-02T13:08:44Z",
+  "config_version": "2.1.0",
+  "generated_at_utc": "2026-11-02T16:42:55Z",
   "measurement_scope": "small_sample",
   "outputs": {
     "files": {
@@ -142,7 +182,7 @@
           "train": 6595,
           "validation": 44
         },
-        "directory": "/home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final/profile_A",
+        "directory": "dataset_v2/.smoke_work/final/profile_A",
         "documents_by_split": {
           "test": 1,
           "train": 28,
@@ -150,10 +190,10 @@
         }
       }
     },
-    "quarantine_manifest": "/home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final/profile_C_quarantine_manifest_only/quarantine_manifest.json"
+    "quarantine_manifest": "dataset_v2/.smoke_work/final/profile_C_quarantine_manifest_only/quarantine_manifest.json"
   },
   "platform": "linux",
-  "processing_duration_seconds": 0.073,
+  "processing_duration_seconds": 0.074,
   "profiles": [
     "A"
   ],
