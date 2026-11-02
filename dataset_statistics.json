@@ -2,102 +2,102 @@
   "dataset": {
     "name": "Persian Pretraining Corpus (GPT-100M)",
     "version": "1.0",
-    "generated_at_utc": "2026-11-02T01:49:47Z",
+    "generated_at_utc": "2026-11-02T02:13:35Z",
     "files": {
       "train": {
         "path": "train.txt",
-        "bytes": 80401681,
+        "bytes": 80400899,
         "size_mb": 80.4,
-        "documents": 35859,
-        "characters": 44064615,
-        "characters_mean_per_doc": 1228.8,
+        "documents": 35864,
+        "characters": 44064049,
+        "characters_mean_per_doc": 1228.6,
         "characters_min_doc": 51,
         "characters_max_doc": 45682,
-        "lines": 203821,
-        "words": 8315627,
-        "persian_words": 8158010,
-        "sentences": 343280,
-        "persian_letters": 33901165,
+        "lines": 204336,
+        "words": 8315642,
+        "persian_words": 8157915,
+        "sentences": 343225,
+        "persian_letters": 33901221,
         "latin_letters": 0,
-        "digits": 372729,
-        "zwnj": 561517,
+        "digits": 372378,
+        "zwnj": 561515,
         "persian_letter_share_of_chars": 0.7694,
         "persian_letter_share_of_letters": 1.0,
-        "unique_documents": 35859,
+        "unique_documents": 35864,
         "exact_duplicate_documents_in_file": 0,
         "bytes_per_character": 1.825,
-        "scan_seconds": 10.6
+        "scan_seconds": 10.3
       },
       "validation": {
         "path": "validation.txt",
-        "bytes": 1705524,
+        "bytes": 1706558,
         "size_mb": 1.71,
-        "documents": 727,
-        "characters": 935374,
-        "characters_mean_per_doc": 1286.6,
+        "documents": 728,
+        "characters": 935924,
+        "characters_mean_per_doc": 1285.6,
         "characters_min_doc": 59,
         "characters_max_doc": 21710,
-        "lines": 4293,
-        "words": 177805,
-        "persian_words": 174680,
-        "sentences": 6995,
-        "persian_letters": 719559,
+        "lines": 4305,
+        "words": 177913,
+        "persian_words": 174776,
+        "sentences": 6999,
+        "persian_letters": 719960,
         "latin_letters": 0,
-        "digits": 8479,
-        "zwnj": 11411,
+        "digits": 8489,
+        "zwnj": 11438,
         "persian_letter_share_of_chars": 0.7693,
         "persian_letter_share_of_letters": 1.0,
-        "unique_documents": 727,
+        "unique_documents": 728,
         "exact_duplicate_documents_in_file": 0,
         "bytes_per_character": 1.823,
         "scan_seconds": 0.2
       }
     },
     "totals": {
-      "documents": 36586,
-      "unique_documents": 36586,
-      "persian_characters": 34620724,
-      "characters": 44999989,
-      "words": 8493432,
-      "persian_words": 8332690,
-      "lines": 208114,
-      "sentences": 350275,
-      "size_bytes": 82107205,
+      "documents": 36592,
+      "unique_documents": 36592,
+      "persian_characters": 34621181,
+      "characters": 44999973,
+      "words": 8493555,
+      "persian_words": 8332691,
+      "lines": 208641,
+      "sentences": 350224,
+      "size_bytes": 82107457,
       "size_mb": 82.11,
       "size_gib": 0.076,
       "persian_letter_share_of_letters": 1.0,
-      "persian_letter_share_of_characters": 0.7693,
-      "zwnj_occurrences": 572928
+      "persian_letter_share_of_characters": 0.7694,
+      "zwnj_occurrences": 572953
     },
     "split": {
-      "train_documents": 35859,
-      "validation_documents": 727,
-      "train_characters": 44064615,
-      "validation_characters": 935374,
-      "train_share_of_characters": 0.97921,
-      "validation_share_of_characters": 0.02079,
+      "train_documents": 35864,
+      "validation_documents": 728,
+      "train_characters": 44064049,
+      "validation_characters": 935924,
+      "train_share_of_characters": 0.9792,
+      "validation_share_of_characters": 0.0208,
       "method": "deterministic SHA-1 bucket of the document id, applied after deduplication (so the two splits are disjoint)"
     },
     "source_distribution": {
       "by_source": {
         "wikipedia_fa": {
-          "documents": 26853,
-          "characters": 35298800,
-          "train_documents": 26316,
-          "validation_documents": 537,
-          "train_characters": 34578598,
-          "validation_characters": 720202,
+          "documents": 26850,
+          "characters": 35298596,
+          "train_documents": 26312,
+          "validation_documents": 538,
+          "train_characters": 34577840,
+          "validation_characters": 720756,
           "share_of_characters": 0.7844,
           "name": "Persian Wikipedia — cleaned article dump (fa.wikipedia.org)",
           "type": "encyclopedia / factual articles",
           "license": "CC BY-SA 4.0"
         },
         "parsinlu_entailment": {
-          "documents": 4072,
-          "characters": 1124992,
-          "train_documents": 3991,
+          "documents": 4073,
+          "characters": 1125118,
+          "train_documents": 3992,
           "validation_documents": 81,
-          "train_characters": 1103266,
+          "train_characters": 1103392,
           "validation_characters": 21726,
           "share_of_characters": 0.025,
           "name": "ParsiNLU / FarsTail — textual entailment pairs",
@@ -105,11 +105,11 @@
           "license": "CC BY-NC-SA 4.0"
         },
         "persian_news": {
-          "documents": 1749,
-          "characters": 4500151,
-          "train_documents": 1714,
+          "documents": 1757,
+          "characters": 4499846,
+          "train_documents": 1722,
           "validation_documents": 35,
-          "train_characters": 4387130,
+          "train_characters": 4386825,
           "validation_characters": 113021,
           "share_of_characters": 0.1,
           "name": "Persian News Dataset (5 Iranian news agencies)",
@@ -118,10 +118,10 @@
         },
         "parsinlu_mc": {
           "documents": 807,
-          "characters": 139403,
+          "characters": 139406,
           "train_documents": 795,
           "validation_documents": 12,
-          "train_characters": 137105,
+          "train_characters": 137108,
           "validation_characters": 2298,
           "share_of_characters": 0.0031,
           "name": "ParsiNLU — multiple-choice questions (educational)",
@@ -142,11 +142,11 @@
         },
         "peqa_dialogue": {
           "documents": 791,
-          "characters": 1124338,
+          "characters": 1124702,
           "train_documents": 777,
           "validation_documents": 14,
-          "train_characters": 1104773,
-          "validation_characters": 19565,
+          "train_characters": 1105141,
+          "validation_characters": 19561,
           "share_of_characters": 0.025,
           "name": "PeQa — Persian chat/dialogue pairs",
           "type": "everyday conversations and dialogue",
@@ -154,10 +154,10 @@
         },
         "parsinlu_qa": {
           "documents": 699,
-          "characters": 71481,
+          "characters": 71480,
           "train_documents": 684,
           "validation_documents": 15,
-          "train_characters": 69749,
+          "train_characters": 69748,
           "validation_characters": 1732,
           "share_of_characters": 0.0016,
           "name": "ParsiNLU — reading comprehension question/answer pairs",
@@ -166,10 +166,10 @@
         },
         "parsinlu_rc_passage": {
           "documents": 808,
-          "characters": 491224,
+          "characters": 491225,
           "train_documents": 792,
           "validation_documents": 16,
-          "train_characters": 482829,
+          "train_characters": 482830,
           "validation_characters": 8395,
           "share_of_characters": 0.0109,
           "name": "ParsiNLU — reading-comprehension passages (news prose)",
@@ -192,47 +192,47 @@
       "note": "document and character counts per source of the SHIPPED corpus come from the selection manifest written by build_dataset.py; they are consistent with the totals counted in the files (manifest_matches_files=True)"
     },
     "deduplication": {
-      "input_docs": 274771,
+      "input_docs": 274860,
       "exact_duplicates": 317,
-      "near_duplicates": 4518,
+      "near_duplicates": 4521,
       "empty": 0,
-      "output_docs": 269936
+      "output_docs": 270022
     },
     "collection_and_cleaning": {
       "raw_documents_extracted": 925316,
       "raw_characters_extracted": null,
-      "documents_after_quality_filters": 274771,
-      "characters_after_quality_filters": 538769440,
-      "documents_after_dedup": 269936,
-      "documents_shipped_after_budget": 36586,
+      "documents_after_quality_filters": 274860,
+      "characters_after_quality_filters": 538849962,
+      "documents_after_dedup": 270022,
+      "documents_shipped_after_budget": 36592,
       "per_source_pipeline": [
         {
           "source": "ganjoor_classics",
           "raw_docs": 2292,
           "kept_after_quality": 2290,
-          "kept_chars": 6342368,
+          "kept_chars": 6342366,
           "dropped_by_reason": {
             "too_short": 2
           },
-          "seconds": 11.5
+          "seconds": 10.6
         },
         {
           "source": "parsinlu_entailment",
           "raw_docs": 12168,
           "kept_after_quality": 11836,
-          "kept_chars": 3324324,
+          "kept_chars": 3324316,
           "dropped_by_reason": {
             "too_short": 208,
             "excessive_quotes": 101,
             "no_sentence_end": 23
           },
-          "seconds": 7.3
+          "seconds": 6.8
         },
         {
           "source": "parsinlu_mc",
           "raw_docs": 1271,
           "kept_after_quality": 844,
-          "kept_chars": 144757,
+          "kept_chars": 144760,
           "dropped_by_reason": {
             "fragmented": 181,
             "too_short": 105,
@@ -247,7 +247,7 @@
           "source": "parsinlu_qa",
           "raw_docs": 1170,
           "kept_after_quality": 702,
-          "kept_chars": 71953,
+          "kept_chars": 71952,
           "dropped_by_reason": {
             "repetitive_ngrams": 364,
             "too_short": 101,
@@ -260,7 +260,7 @@
           "source": "parsinlu_rc_passage",
           "raw_docs": 1170,
           "kept_after_quality": 856,
-          "kept_chars": 520825,
+          "kept_chars": 520826,
           "dropped_by_reason": {
             "too_short": 298,
             "too_few_sentences": 9,
@@ -273,40 +273,40 @@
           "source": "peqa_dialogue",
           "raw_docs": 3368,
           "kept_after_quality": 3362,
-          "kept_chars": 4777092,
+          "kept_chars": 4778181,
           "dropped_by_reason": {
             "repeated_lines": 5,
             "no_sentence_end": 1
           },
-          "seconds": 8.1
+          "seconds": 7.8
         },
         {
           "source": "persian_news",
           "raw_docs": 13455,
-          "kept_after_quality": 9771,
-          "kept_chars": 25245851,
+          "kept_after_quality": 9789,
+          "kept_chars": 25251850,
           "dropped_by_reason": {
-            "too_short": 3618,
+            "too_short": 3617,
             "bad_sentence_length": 31,
-            "too_few_sentences": 20,
             "excessive_quotes": 8,
             "no_sentence_end": 5,
+            "too_few_sentences": 3,
             "fragmented": 1,
             "repeated_lines": 1
           },
-          "seconds": 55.0
+          "seconds": 51.7
         },
         {
           "source": "persian_poetry",
           "raw_docs": 14348,
           "kept_after_quality": 14316,
-          "kept_chars": 41305928,
+          "kept_chars": 41305942,
           "dropped_by_reason": {
             "too_short": 19,
             "too_long": 9,
             "excessive_quotes": 4
           },
-          "seconds": 71.2
+          "seconds": 66.1
         },
         {
           "source": "pn_summary_news",
@@ -314,33 +314,33 @@
           "kept_after_quality": 0,
           "kept_chars": 0,
           "dropped_by_reason": {
-            "bad_sentence_length": 10718,
+            "bad_sentence_length": 10753,
             "too_short": 322,
             "no_sentence_end": 99,
-            "too_few_sentences": 45,
+            "too_few_sentences": 10,
             "high_digit_ratio": 1
           },
-          "seconds": 28.8
+          "seconds": 26.5
         },
         {
           "source": "wikipedia_fa",
           "raw_docs": 864889,
-          "kept_after_quality": 230794,
-          "kept_chars": 457036342,
+          "kept_after_quality": 230865,
+          "kept_chars": 457109769,
           "dropped_by_reason": {
-            "too_short": 621379,
-            "too_few_sentences": 7369,
-            "high_digit_ratio": 1568,
-            "bad_sentence_length": 1178,
-            "fragmented": 1057,
+            "too_short": 621500,
+            "too_few_sentences": 7356,
+            "high_digit_ratio": 1521,
+            "bad_sentence_length": 1171,
+            "fragmented": 984,
             "excessive_quotes": 591,
-            "no_sentence_end": 574,
-            "few_persian_letters": 189,
+            "no_sentence_end": 580,
+            "few_persian_letters": 131,
             "too_long": 123,
             "repeated_lines": 37,
             "repetitive_ngrams": 30
           },
-          "seconds": 1123.0
+          "seconds": 1056.7
         }
       ],
       "filters": {
@@ -373,27 +373,27 @@
       },
       "train": {
         "path": "train.txt",
-        "documents": 35859,
-        "characters": 44362820,
-        "tokens": 11115035,
+        "documents": 35864,
+        "characters": 44361809,
+        "tokens": 11114710,
         "characters_per_token": 3.991,
         "bytes_per_token": 7.234
       },
       "validation": {
         "path": "validation.txt",
-        "documents": 727,
-        "characters": 941259,
-        "tokens": 235919,
-        "characters_per_token": 3.99,
-        "bytes_per_token": 7.229
+        "documents": 728,
+        "characters": 941811,
+        "tokens": 236091,
+        "characters_per_token": 3.989,
+        "bytes_per_token": 7.228
       },
       "total": {
-        "tokens": 11350954,
-        "characters": 45304079,
+        "tokens": 11350801,
+        "characters": 45303620,
         "characters_per_token": 3.991
       },
       "method": "exact: encode_batch() over every document, no sampling",
-      "generated_at_utc": "2026-11-02T01:49:36Z"
+      "generated_at_utc": "2026-11-02T02:13:24Z"
     },
     "methodology": {
       "count_units": "documents are separated by a line containing <|endoftext|>",
@@ -404,7 +404,7 @@
     }
   },
   "pipeline_report": {
-    "generated_at_utc": "2026-11-02T01:48:04Z",
+    "generated_at_utc": "2026-11-02T02:12:43Z",
     "pipeline": {
       "budget_chars": 45000000,
       "val_fraction": 0.02,
@@ -433,29 +433,29 @@
         "source": "ganjoor_classics",
         "raw_docs": 2292,
         "kept_after_quality": 2290,
-        "kept_chars": 6342368,
+        "kept_chars": 6342366,
         "dropped_by_reason": {
           "too_short": 2
         },
-        "seconds": 11.5
+        "seconds": 10.6
       },
       {
         "source": "parsinlu_entailment",
         "raw_docs": 12168,
         "kept_after_quality": 11836,
-        "kept_chars": 3324324,
+        "kept_chars": 3324316,
         "dropped_by_reason": {
           "too_short": 208,
           "excessive_quotes": 101,
           "no_sentence_end": 23
         },
-        "seconds": 7.3
+        "seconds": 6.8
       },
       {
         "source": "parsinlu_mc",
         "raw_docs": 1271,
         "kept_after_quality": 844,
-        "kept_chars": 144757,
+        "kept_chars": 144760,
         "dropped_by_reason": {
           "fragmented": 181,
           "too_short": 105,
@@ -470,7 +470,7 @@
         "source": "parsinlu_qa",
         "raw_docs": 1170,
         "kept_after_quality": 702,
-        "kept_chars": 71953,
+        "kept_chars": 71952,
         "dropped_by_reason": {
           "repetitive_ngrams": 364,
           "too_short": 101,
@@ -483,7 +483,7 @@
         "source": "parsinlu_rc_passage",
         "raw_docs": 1170,
         "kept_after_quality": 856,
-        "kept_chars": 520825,
+        "kept_chars": 520826,
         "dropped_by_reason": {
           "too_short": 298,
           "too_few_sentences": 9,
@@ -496,40 +496,40 @@
         "source": "peqa_dialogue",
         "raw_docs": 3368,
         "kept_after_quality": 3362,
-        "kept_chars": 4777092,
+        "kept_chars": 4778181,
         "dropped_by_reason": {
           "repeated_lines": 5,
           "no_sentence_end": 1
         },
-        "seconds": 8.1
+        "seconds": 7.8
       },
       {
         "source": "persian_news",
         "raw_docs": 13455,
-        "kept_after_quality": 9771,
-        "kept_chars": 25245851,
+        "kept_after_quality": 9789,
+        "kept_chars": 25251850,
         "dropped_by_reason": {
-          "too_short": 3618,
+          "too_short": 3617,
           "bad_sentence_length": 31,
-          "too_few_sentences": 20,
           "excessive_quotes": 8,
           "no_sentence_end": 5,
+          "too_few_sentences": 3,
           "fragmented": 1,
           "repeated_lines": 1
         },
-        "seconds": 55.0
+        "seconds": 51.7
       },
       {
         "source": "persian_poetry",
         "raw_docs": 14348,
         "kept_after_quality": 14316,
-        "kept_chars": 41305928,
+        "kept_chars": 41305942,
         "dropped_by_reason": {
           "too_short": 19,
           "too_long": 9,
           "excessive_quotes": 4
         },
-        "seconds": 71.2
+        "seconds": 66.1
       },
       {
         "source": "pn_summary_news",
@@ -537,78 +537,78 @@
         "kept_after_quality": 0,
         "kept_chars": 0,
         "dropped_by_reason": {
-          "bad_sentence_length": 10718,
+          "bad_sentence_length": 10753,
           "too_short": 322,
           "no_sentence_end": 99,
-          "too_few_sentences": 45,
+          "too_few_sentences": 10,
           "high_digit_ratio": 1
         },
-        "seconds": 28.8
+        "seconds": 26.5
       },
       {
         "source": "wikipedia_fa",
         "raw_docs": 864889,
-        "kept_after_quality": 230794,
-        "kept_chars": 457036342,
+        "kept_after_quality": 230865,
+        "kept_chars": 457109769,
         "dropped_by_reason": {
-          "too_short": 621379,
-          "too_few_sentences": 7369,
-          "high_digit_ratio": 1568,
-          "bad_sentence_length": 1178,
-          "fragmented": 1057,
+          "too_short": 621500,
+          "too_few_sentences": 7356,
+          "high_digit_ratio": 1521,
+          "bad_sentence_length": 1171,
+          "fragmented": 984,
           "excessive_quotes": 591,
-          "no_sentence_end": 574,
-          "few_persian_letters": 189,
+          "no_sentence_end": 580,
+          "few_persian_letters": 131,
           "too_long": 123,
           "repeated_lines": 37,
           "repetitive_ngrams": 30
         },
-        "seconds": 1123.0
+        "seconds": 1056.7
       }
     ],
     "dedup": {
-      "input_docs": 274771,
+      "input_docs": 274860,
       "exact_duplicates": 317,
-      "near_duplicates": 4518,
+      "near_duplicates": 4521,
       "empty": 0,
-      "output_docs": 269936
+      "output_docs": 270022
     },
     "selection": {
       "wikipedia_fa": {
-        "available_docs": 228077,
-        "available_chars": 455463155,
+        "available_docs": 228145,
+        "available_chars": 455534129,
         "cap_share": 0.65,
         "quota_chars": 29250000,
-        "selected_docs": 26853,
-        "selected_chars": 35298800,
+        "selected_docs": 26850,
+        "selected_chars": 35298596,
         "sampling": "quality",
         "length_band_sampling": {
           "short": {
-            "documents": 7786,
-            "characters": 4387497,
+            "documents": 7785,
+            "characters": 4387350,
             "weight": 0.15
           },
           "medium": {
-            "documents": 5107,
-            "characters": 11699870,
+            "documents": 5108,
+            "characters": 11699917,
             "weight": 0.4
           },
           "long": {
-            "documents": 1940,
-            "characters": 10237034,
+            "documents": 1939,
+            "characters": 10237345,
             "weight": 0.35
           },
           "very_long": {
             "documents": 213,
-            "characters": 2922889,
+            "characters": 2923119,
             "weight": 0.1
           }
         },
-        "budget_overflow_fill": 6051510
+        "budget_overflow_fill": 6050865
       },
       "persian_poetry": {
         "available_docs": 14069,
-        "available_chars": 40844873,
+        "available_chars": 40844887,
         "cap_share": 0.02,
         "quota_chars": 900000,
         "selected_docs": 322,
@@ -617,18 +617,18 @@
         "budget_overflow_fill": 0
       },
       "persian_news": {
-        "available_docs": 9421,
-        "available_chars": 24429117,
+        "available_docs": 9439,
+        "available_chars": 24435115,
         "cap_share": 0.1,
         "quota_chars": 4500000,
-        "selected_docs": 1749,
-        "selected_chars": 4500151,
+        "selected_docs": 1757,
+        "selected_chars": 4499846,
         "sampling": "hash",
-        "budget_overflow_fill": 300
+        "budget_overflow_fill": 0
       },
       "ganjoor_classics": {
         "available_docs": 2008,
-        "available_chars": 5627470,
+        "available_chars": 5627468,
         "cap_share": 0.03,
         "quota_chars": 1350000,
         "selected_docs": 485,
@@ -638,55 +638,55 @@
       },
       "parsinlu_entailment": {
         "available_docs": 10685,
-        "available_chars": 2954447,
+        "available_chars": 2954450,
         "cap_share": 0.025,
         "quota_chars": 1125000,
-        "selected_docs": 4072,
-        "selected_chars": 1124992,
+        "selected_docs": 4073,
+        "selected_chars": 1125118,
         "sampling": "hash",
-        "budget_overflow_fill": 0
+        "budget_overflow_fill": 125
       },
       "parsinlu_rc_passage": {
         "available_docs": 808,
-        "available_chars": 491224,
+        "available_chars": 491225,
         "cap_share": 0.02,
         "quota_chars": 900000,
         "selected_docs": 808,
-        "selected_chars": 491224,
+        "selected_chars": 491225,
         "sampling": "hash"
       },
       "peqa_dialogue": {
         "available_docs": 3362,
-        "available_chars": 4777092,
+        "available_chars": 4778181,
         "cap_share": 0.025,
         "quota_chars": 1125000,
         "selected_docs": 791,
-        "selected_chars": 1124338,
+        "selected_chars": 1124702,
         "sampling": "hash",
         "budget_overflow_fill": 0
       },
       "parsinlu_mc": {
         "available_docs": 807,
-        "available_chars": 139403,
+        "available_chars": 139406,
         "cap_share": 0.006,
         "quota_chars": 270000,
         "selected_docs": 807,
-        "selected_chars": 139403,
+        "selected_chars": 139406,
         "sampling": "hash"
       },
       "parsinlu_qa": {
         "available_docs": 699,
-        "available_chars": 71481,
+        "available_chars": 71480,
         "cap_share": 0.004,
         "quota_chars": 180000,
         "selected_docs": 699,
-        "selected_chars": 71481,
+        "selected_chars": 71480,
         "sampling": "hash"
       }
     },
     "split": {
-      "train_docs": 35859,
-      "val_docs": 727
+      "train_docs": 35864,
+      "val_docs": 728
     }
   }
 }

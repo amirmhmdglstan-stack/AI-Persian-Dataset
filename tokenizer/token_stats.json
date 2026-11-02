@@ -11,25 +11,25 @@
   },
   "train": {
     "path": "train.txt",
-    "documents": 35859,
-    "characters": 44362820,
-    "tokens": 11115035,
+    "documents": 35864,
+    "characters": 44361809,
+    "tokens": 11114710,
     "characters_per_token": 3.991,
     "bytes_per_token": 7.234
   },
   "validation": {
     "path": "validation.txt",
-    "documents": 727,
-    "characters": 941259,
-    "tokens": 235919,
-    "characters_per_token": 3.99,
-    "bytes_per_token": 7.229
+    "documents": 728,
+    "characters": 941811,
+    "tokens": 236091,
+    "characters_per_token": 3.989,
+    "bytes_per_token": 7.228
   },
   "total": {
-    "tokens": 11350954,
-    "characters": 45304079,
+    "tokens": 11350801,
+    "characters": 45303620,
     "characters_per_token": 3.991
   },
   "method": "exact: encode_batch() over every document, no sampling",
-  "generated_at_utc": "2026-11-02T01:49:36Z"
+  "generated_at_utc": "2026-11-02T02:13:24Z"
 }

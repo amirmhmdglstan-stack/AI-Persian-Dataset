@@ -1,6 +1,6 @@
 {
   "dataset": "Persian Pretraining Corpus (GPT-100M)",
-  "generated_at_utc": "2026-11-02T01:49:11Z",
+  "generated_at_utc": "2026-11-02T02:12:59Z",
   "collection_date": "2026-11-01",
   "collector": "autonomous data-collection agent (Arena.ai Agent Mode)",
   "language": "Persian (Farsi), standard Iranian Persian",
@@ -9,16 +9,16 @@
   "aggregate": {
     "raw_documents_extracted": 925316,
     "raw_characters_extracted": 736630689,
-    "documents_after_quality_filter": 274771,
-    "characters_after_quality_filter": 538769440,
-    "documents_in_dataset": 36586,
-    "characters_in_dataset": 44999989,
+    "documents_after_quality_filter": 274860,
+    "characters_after_quality_filter": 538849962,
+    "documents_in_dataset": 36592,
+    "characters_in_dataset": 44999973,
     "deduplication": {
-      "input_docs": 274771,
+      "input_docs": 274860,
       "exact_duplicates": 317,
-      "near_duplicates": 4518,
+      "near_duplicates": 4521,
       "empty": 0,
-      "output_docs": 269936
+      "output_docs": 270022
     }
   },
   "licensing_summary": {
@@ -72,22 +72,22 @@
       "counts": {
         "raw_documents_extracted": 864889,
         "raw_characters_extracted": 621656144,
-        "documents_after_quality_filter": 230794,
-        "characters_after_quality_filter": 457036342,
-        "documents_in_dataset": 26853,
-        "characters_in_dataset": 35298800,
+        "documents_after_quality_filter": 230865,
+        "characters_after_quality_filter": 457109769,
+        "documents_in_dataset": 26850,
+        "characters_in_dataset": 35298596,
         "sampling": "quality",
         "budget_cap_share": 0.65
       },
       "cleaning_dropped_by_reason": {
-        "too_short": 621379,
-        "too_few_sentences": 7369,
-        "high_digit_ratio": 1568,
-        "bad_sentence_length": 1178,
-        "fragmented": 1057,
+        "too_short": 621500,
+        "too_few_sentences": 7356,
+        "high_digit_ratio": 1521,
+        "bad_sentence_length": 1171,
+        "fragmented": 984,
         "excessive_quotes": 591,
-        "no_sentence_end": 574,
-        "few_persian_letters": 189,
+        "no_sentence_end": 580,
+        "few_persian_letters": 131,
         "too_long": 123,
         "repeated_lines": 37,
         "repetitive_ngrams": 30
@@ -118,9 +118,9 @@
         "raw_documents_extracted": 1170,
         "raw_characters_extracted": 97956,
         "documents_after_quality_filter": 702,
-        "characters_after_quality_filter": 71953,
+        "characters_after_quality_filter": 71952,
         "documents_in_dataset": 699,
-        "characters_in_dataset": 71481,
+        "characters_in_dataset": 71480,
         "sampling": "hash",
         "budget_cap_share": 0.004
       },
@@ -157,9 +157,9 @@
         "raw_documents_extracted": 1271,
         "raw_characters_extracted": 217425,
         "documents_after_quality_filter": 844,
-        "characters_after_quality_filter": 144757,
+        "characters_after_quality_filter": 144760,
         "documents_in_dataset": 807,
-        "characters_in_dataset": 139403,
+        "characters_in_dataset": 139406,
         "sampling": "hash",
         "budget_cap_share": 0.006
       },
@@ -199,9 +199,9 @@
         "raw_documents_extracted": 12168,
         "raw_characters_extracted": 3471516,
         "documents_after_quality_filter": 11836,
-        "characters_after_quality_filter": 3324324,
-        "documents_in_dataset": 4072,
-        "characters_in_dataset": 1124992,
+        "characters_after_quality_filter": 3324316,
+        "documents_in_dataset": 4073,
+        "characters_in_dataset": 1125118,
         "sampling": "hash",
         "budget_cap_share": 0.025
       },
@@ -238,9 +238,9 @@
         "raw_documents_extracted": 1170,
         "raw_characters_extracted": 593776,
         "documents_after_quality_filter": 856,
-        "characters_after_quality_filter": 520825,
+        "characters_after_quality_filter": 520826,
         "documents_in_dataset": 808,
-        "characters_in_dataset": 491224,
+        "characters_in_dataset": 491225,
         "sampling": "hash",
         "budget_cap_share": 0.02
       },
@@ -279,9 +279,9 @@
         "raw_documents_extracted": 3368,
         "raw_characters_extracted": 4982021,
         "documents_after_quality_filter": 3362,
-        "characters_after_quality_filter": 4777092,
+        "characters_after_quality_filter": 4778181,
         "documents_in_dataset": 791,
-        "characters_in_dataset": 1124338,
+        "characters_in_dataset": 1124702,
         "sampling": "hash",
         "budget_cap_share": 0.025
       },
@@ -318,7 +318,7 @@
         "raw_documents_extracted": 2292,
         "raw_characters_extracted": 6379315,
         "documents_after_quality_filter": 2290,
-        "characters_after_quality_filter": 6342368,
+        "characters_after_quality_filter": 6342366,
         "documents_in_dataset": 485,
         "characters_in_dataset": 1349768,
         "sampling": "hash",
@@ -353,7 +353,7 @@
         "raw_documents_extracted": 14348,
         "raw_characters_extracted": 46647137,
         "documents_after_quality_filter": 14316,
-        "characters_after_quality_filter": 41305928,
+        "characters_after_quality_filter": 41305942,
         "documents_in_dataset": 322,
         "characters_in_dataset": 899832,
         "sampling": "hash",
@@ -393,19 +393,19 @@
       "counts": {
         "raw_documents_extracted": 13455,
         "raw_characters_extracted": 33589891,
-        "documents_after_quality_filter": 9771,
-        "characters_after_quality_filter": 25245851,
-        "documents_in_dataset": 1749,
-        "characters_in_dataset": 4500151,
+        "documents_after_quality_filter": 9789,
+        "characters_after_quality_filter": 25251850,
+        "documents_in_dataset": 1757,
+        "characters_in_dataset": 4499846,
         "sampling": "hash",
         "budget_cap_share": 0.1
       },
       "cleaning_dropped_by_reason": {
-        "too_short": 3618,
+        "too_short": 3617,
         "bad_sentence_length": 31,
-        "too_few_sentences": 20,
         "excessive_quotes": 8,
         "no_sentence_end": 5,
+        "too_few_sentences": 3,
         "fragmented": 1,
         "repeated_lines": 1
       },
@@ -445,10 +445,10 @@
         "characters_in_dataset": 0
       },
       "cleaning_dropped_by_reason": {
-        "bad_sentence_length": 10718,
+        "bad_sentence_length": 10753,
         "too_short": 322,
         "no_sentence_end": 99,
-        "too_few_sentences": 45,
+        "too_few_sentences": 10,
         "high_digit_ratio": 1
       },
       "status": "rejected_by_quality_gate"

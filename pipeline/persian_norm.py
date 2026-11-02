@@ -137,9 +137,9 @@ _RE_WIKI_LINK = re.compile(r"\[\[(?:[^\]|]{0,120}\|)?([^\]]{0,200})\]\]")
 
 _RE_MULTISPACE = re.compile(r"[ \t\u00a0\u2000-\u200a\u202f\u205f]+")
 _RE_MULTINEWLINE = re.compile(r"\n{3,}")
-_RE_SPACE_BEFORE_PUNCT = re.compile(r"\s+([،؛؟!.:»\)\],])")
-_RE_SPACE_AFTER_OPEN = re.compile(r"([«\(\[])\s+")
-_RE_SPACE_AROUND_ZWNJ = re.compile(r"\s*\u200c\s*")
+_RE_SPACE_BEFORE_PUNCT = re.compile(r"[ \t]+([،؛؟!.:»\)\],])")
+_RE_SPACE_AFTER_OPEN = re.compile(r"([«\(\[])[ \t]+")
+_RE_SPACE_AROUND_ZWNJ = re.compile(r"[ \t]*\u200c[ \t]*")
 _RE_MISSING_SPACE = re.compile(r"([.!؟؛،:])(?=[آ-یءأإئؤ])")
 _RE_TRAILING_WS = re.compile(r"[ \t]+\n")
 
@@ -160,18 +160,18 @@ _RE_BOILERPLATE = re.compile("|".join(BOILERPLATE_PATTERNS), re.IGNORECASE)
 # Punctuation debris repaired after the allowed-character pass. Upstream cleaning
 # (Wikipedia dump, news archives) leaves behind empty brackets, doubled commas and
 # orphan colons, e.g. "(به انگلیسی: )" or "( ، )".
-_RE_EMPTY_PARENS = re.compile(r"[([{]\s*[،؛:.\-–—]{0,3}\s*[)\]}]")
+_RE_EMPTY_PARENS = re.compile(r"[([{][ \t]*[،؛:.\-–—]{0,3}[ \t]*[)\]}]")
 _RE_EMPTY_QUOTES = re.compile(r"«\s*[،؛:\-]{0,2}\s*»")
 _RE_PUNCT_FIXES = [
     (re.compile(r"،(?:\s*،)+"), "،"),
-    (re.compile(r":\s*([،؛.!؟)\]])"), r"\1"),
-    (re.compile(r"([،؛:])\s*(\)|\])"), r"\1"),
-    (re.compile(r"([\[({])\s*([،؛:])"), r"\1"),
-    (re.compile(r"([،؛:])\s*([.!؟])"), r"\2"),
-    (re.compile(r"\s+([،؛.؟!:])"), r"\1"),
+    (re.compile(r":[ \t]*([،؛.!؟)\]])"), r"\1"),
+    (re.compile(r"([،؛:])([ \t]*)(\)|\])"), r"\1\3"),
+    (re.compile(r"([\[({])[ \t]*([،؛:])"), r"\1"),
+    (re.compile(r"([،؛:])[ \t]*([.!؟])"), r"\2"),
+    (re.compile(r"[ \t]+([،؛.؟!:])"), r"\1"),
     (re.compile(r"(^|\n)\s*[،؛:\-–—]+\s*"), r"\1"),
-    (re.compile(r"([،؛])\s*\n"), r"\n"),
-    (re.compile(r"([.!؟])\s*[.!؟]+"), r"\1"),
+    (re.compile(r"([،؛])[ \t]*\n"), r"\n"),
+    (re.compile(r"([.!؟])[ \t]*[.!؟]+"), r"\1"),
 ]
 
 # Upstream wiki-link flattening ("[[فیلم ترسناک|ترسناک]]") leaves the same word

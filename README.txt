@@ -4,7 +4,7 @@ PERSIAN PRETRAINING CORPUS FOR GPT-100M
 ==============================================================================
 
 Version      : 1.0
-Generated    : 2026-11-02T01:49:47Z (UTC)
+Generated    : 2026-11-02T02:13:35Z (UTC)
 Collected    : 2026-11-01
 Language     : Persian (Farsi), standard Iranian Persian
 Encoding     : UTF-8 (no BOM), Unix line endings
@@ -18,20 +18,20 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 1. WHAT IS IN THE DATASET
 ------------------------------------------------------------------------------
 
-  Documents              36,586
-  Unique documents       36,586
-  Characters             44,999,989
-  Persian letters        34,620,724
-  Words                  8,493,432
-  Lines                  208,114
-  Sentences              350,275
-  ZWNJ (نیم‌فاصله)         572,928
+  Documents              36,592
+  Unique documents       36,592
+  Characters             44,999,973
+  Persian letters        34,621,181
+  Words                  8,493,555
+  Lines                  208,641
+  Sentences              350,224
+  ZWNJ (نیم‌فاصله)         572,953
   Size on disk           82.11 MB (0.076 GiB)
   Persian letter share   100.00% of all letters
                          (the corpus is 100% Persian script: characters outside
                           the Persian alphabet/punctuation/digit set are removed)
 
-  Tokens (measured)      11,350,954 tokens
+  Tokens (measured)      11,350,801 tokens
   Characters per token   3.991
   Tokenizer              byte-level BPE, vocab 32,000, file tokenizer/persian-bpe-32k.json
 
@@ -44,13 +44,13 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 2. TRAIN / VALIDATION SPLIT
 ------------------------------------------------------------------------------
 
-  train.txt            35,859 documents    44,064,615 chars     80.40 MB  (97.92%)
-  validation.txt          727 documents       935,374 chars      1.71 MB  (2.08%)
+  train.txt            35,864 documents    44,064,049 chars     80.40 MB  (97.92%)
+  validation.txt          728 documents       935,924 chars      1.71 MB  (2.08%)
 
   The split is computed from a salted SHA-1 of the document id, AFTER global
   deduplication, so no document (and no near-duplicate document) can appear
   on both sides. Verified: 0 exact and 0 near-duplicate overlaps
-  (checked 727 validation documents against all train documents with MinHash LSH).
+  (checked 728 validation documents against all train documents with MinHash LSH).
 
   Validation documents look exactly like training documents on purpose: this
   is a pretraining corpus, so the validation set measures whether the model
@@ -91,23 +91,23 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 
   source                   documents    characters   share  type / license
   --------------------------------------------------------------------------
-  wikipedia_fa                26,853    35,298,800   78.4%  encyclopedia / factual articles
+  wikipedia_fa                26,850    35,298,596   78.4%  encyclopedia / factual articles
                                                             license: CC BY-SA 4.0
-  persian_news                 1,749     4,500,151   10.0%  news and general articles
+  persian_news                 1,757     4,499,846   10.0%  news and general articles
                                                             license: none declared
-  parsinlu_entailment          4,072     1,124,992    2.5%  questions and answers / reasoning 
+  parsinlu_entailment          4,073     1,125,118    2.5%  questions and answers / reasoning 
                                                             license: CC BY-NC-SA 4.0
   ganjoor_classics               485     1,349,768    3.0%  literature and poetry
                                                             license: GPL-3.0 (repository); the underlying works are p
   persian_poetry                 322       899,832    2.0%  literature and poetry
                                                             license: CC BY-SA 4.0
-  peqa_dialogue                  791     1,124,338    2.5%  everyday conversations and dialogu
+  peqa_dialogue                  791     1,124,702    2.5%  everyday conversations and dialogu
                                                             license: MIT
-  parsinlu_rc_passage            808       491,224    1.1%  news and general articles
+  parsinlu_rc_passage            808       491,225    1.1%  news and general articles
                                                             license: CC BY-NC-SA 4.0 (annotations); passages © origin
-  parsinlu_mc                    807       139,403    0.3%  educational questions and answers
+  parsinlu_mc                    807       139,406    0.3%  educational questions and answers
                                                             license: CC BY-NC-SA 4.0
-  parsinlu_qa                    699        71,481    0.2%  questions and answers
+  parsinlu_qa                    699        71,480    0.2%  questions and answers
                                                             license: CC BY-NC-SA 4.0
 
   One further source (pn_summary_news, 11,185 articles) was downloaded and
@@ -146,19 +146,19 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
                        Latin-letter and digit-ratio caps, sentence-length and
                        fragment checks, repeated-line and repeated-4-gram checks,
                        compression-ratio check for numeric/table garbage.
-                       -> 274,771 documents kept
-                          (538,769,440 characters)
-  5. Deduplication   : 317 exact duplicates + 4,518 near-duplicates removed
+                       -> 274,860 documents kept
+                          (538,849,962 characters)
+  5. Deduplication   : 317 exact duplicates + 4,521 near-duplicates removed
                        (SHA-1 of the normalized text; one-permutation MinHash
                        over 4-word shingles, 4-band LSH, >=12/16 buckets equal)
-                       -> 269,936 unique documents
+                       -> 270,022 unique documents
   6. Budget balance  : per-source caps keep the mix comparable to real-world
                        Persian text. Wikipedia is sampled per article-length
                        band (short/medium/long/very long) and ranked by a
                        quality score inside each band, so the sample keeps
                        encyclopedic breadth instead of collapsing onto a few
                        thousand very long articles.
-                       -> 36,586 documents shipped
+                       -> 36,592 documents shipped
   7. Verification    : independent re-scan of the written files (see section 8).
 
 ------------------------------------------------------------------------------
@@ -202,7 +202,7 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 
   * Size. The corpus is deliberately capped (see section 9) to stay inside the
     repository budget. For a 100M-parameter model this is a small corpus:
-    11,350,954 tokens is well below the ~2B tokens that
+    11,350,801 tokens is well below the ~2B tokens that
     Chinchilla-style scaling would suggest. Expect to repeat epochs, and
     expect validation loss to bottom out early; treat it as a starting
     corpus and extend it as more Persian text becomes available.
@@ -261,10 +261,10 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 9. WHY THE CORPUS IS CAPPED, AND HOW TO GET MORE
 ------------------------------------------------------------------------------
 
-  The cleaning stage produced 538,769,440
+  The cleaning stage produced 538,849,962
   characters of acceptable Persian text, but this repository is limited to a
   practical Git artefact size, so the shipped files hold a documented sample
-  of 44,999,989 characters. The sampling is deterministic and
+  of 44,999,973 characters. The sampling is deterministic and
   quality-weighted, and the full cleaned corpus can be regenerated with one
   command (larger --budget):
 
@@ -308,7 +308,8 @@ pipeline/compute_statistics.py and pipeline/verify_dataset.py.
 
 TRAIN sample 1/6 (document #2930)
 
-یوسف ریشار یا یوسف ریشار خان، ملقب به مؤدب الملک (زاده: ۱۲۸۵ هجری قمری در طهران، درگذشت: ۱۳۵۴ هجری قمری در طهران)، پسر ژول ریشار، معلم مشهور زبان فرانسه در دارالفنون بود. وی پس از مرگ پدرش در سال ۱۳۰۸ هجری قمری، به جای پدر به دارالفنون رفت و برای مدتهای مدید در این مدرسه زبان فرانسه تدریس می‌کرد. از دیگر عوامل شهرت او، مجموعه یا کلکسیون کاملی است که وی در طول عمر خویش، از مسکوکات ایرانی در دوره‌های مختلف تاریخی جمع‌آوری کرده بود. مجموعه سکه‌های وی، بسیار ارزشمند و قیمتی بود و در طهران شهرت داشت و طراح مدرسه رازی منطقه ۳ طهران بود
+جی‌بیلدر محیط یکپارچه توسعه نرم‌افزار محیط توسعه مجتمعی است که برای زبان برنامه‌نویسی جاوا (زبان برنامه‌نویسی) جاوا از سوی بورلند ایجادشده که بعدها به کدگیر انتقال داده‌شد. کدگیر نیز در سال ۱۳۸۷ توسط فناوری امباکاردو خریداری شد. جی‌بیلدر رقبای اصلی محصولاتی مانند اکلیپس از بنیاد اکلیپس ومحیط توسعه مجتمع اینتل‌جی از جت برنتز و نتبینز و جی دولوپر از اوراکل است. نسخه اولیه جی دولوپر اوراکل، ابتدا براساس جی‌بیلدر و باه اجازه بورلند، پیاده‌سازی شده‌بود ولی بعدها از اساس دوباره طراحی و برنامه‌نویسی و توزیع.
+نتبینز اکلیپس
 
   (more samples: reports/samples.txt)
 

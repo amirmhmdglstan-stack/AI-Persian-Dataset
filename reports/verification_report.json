@@ -36,17 +36,17 @@
     "persian_only_letters_present": {
       "pass": true,
       "counts": {
-        "پ": 278048,
-        "چ": 135192,
-        "ژ": 43972,
-        "گ": 476305,
-        "ک": 1037067,
-        "ی": 3519136
+        "پ": 278049,
+        "چ": 135207,
+        "ژ": 43961,
+        "گ": 476465,
+        "ک": 1036959,
+        "ی": 3519081
       }
     },
     "zwnj_preserved": {
       "pass": true,
-      "zwnj_total": 572928
+      "zwnj_total": 572953
     },
     "no_empty_documents": {
       "pass": true
@@ -73,15 +73,15 @@
       "overlap": 0
     }
   },
-  "generated_at_utc": "2026-11-02T01:49:50Z",
+  "generated_at_utc": "2026-11-02T02:13:37Z",
   "files": {
     "train.txt": {
-      "bytes": 80401681,
+      "bytes": 80400899,
       "utf8_strict_ok": true,
       "bom_present": false,
-      "documents": 35859,
+      "documents": 35864,
       "empty_documents": 0,
-      "characters": 44064615,
+      "characters": 44064049,
       "forbidden_character_hits": {},
       "documents_with_forbidden_characters": {},
       "presentation_form_characters": 0,
@@ -92,22 +92,22 @@
       "documents_with_low_persian_ratio": 0,
       "low_persian_examples": [],
       "persian_only_letter_counts": {
-        "پ": 272303,
-        "چ": 132432,
-        "ژ": 43024,
-        "گ": 466489,
-        "ک": 1016128,
-        "ی": 3446582
+        "پ": 272294,
+        "چ": 132447,
+        "ژ": 43013,
+        "گ": 466646,
+        "ک": 1016009,
+        "ی": 3446473
       },
-      "zwnj_count": 561517,
+      "zwnj_count": 561515,
       "exact_duplicates_within_file": 0,
-      "unique_documents": 35859,
-      "mean_document_length": 1228.8,
+      "unique_documents": 35864,
+      "mean_document_length": 1228.6,
       "min_document_length": 51,
       "max_document_length": 45682,
       "longest_document_head": "معانی نام‌های ایرانی\nدر فهرست زیر نام‌های ایرانی به همراه معنی آن ذکر شده‌است.\nآبان: نام ایزد آب در دین زرتشتی آبان‌دخت: همسر دارا (داریوش سوم)، دخترآبان آبتین: نام پدر فریدون پادشاه پیشدادی آتوسا: دختر کوروش بزرگ و همسر داریوش بزرگ همچنین دختر اردشیر دوم آتنا: الهه عشق و مهربانی یونانی آدنیا: الهه ",
-      "sentences": 337155,
-      "sentences_ending_with_punctuation_share": 0.9643,
+      "sentences": 337175,
+      "sentences_ending_with_punctuation_share": 0.9642,
       "first_documents_head": [
         "مقدماتی جام جهانی فوتبال ۲۰۲۲ (آسیا) – مرحله اول\nمرحله نخست از مرحله مقدماتی جام جهانی فوتبال ۲۰۲۲ (آسیا) بازی‌های مقدماتی جام جهانی ۲۰۲۲ در قاره آسیا و همچنین مرحله نخست از مرحله مقدماتی جام ملت‌های آسیا ۲۰۲۳ بازی‌های مقدماتی جام ملت‌های آسیا ۲۰۲۳ از تاریخ ۶ تا ۱۱ ژوئن ۲۰۱۹ برگزار شد.\nنحوه برگزاری\n۱۲ تیم حاضر در رتبه بندی ۳۵ تا ۴۶ تیم‌های برتر قاره آسیا در ۲ گروه ۶ تیمی به صورت رفت و برگشت باهم ب",
         "فرایند مارکوف\nبه فرایندی تصادفی که احتمالات آینده آن از طریق مقادیر اخیر آن محاسبه می‌شود، فرایند مارکوف می‌گویند. این فرایند از روی نام ریاضیدان روسی به نام آندری مارکوف نامگذاری شده‌است.\nفرایند مارکف:\nدنباله‌ای از متغیرهای تصادفی را در نظر گرفته و فرض کنید مجموعه مقادیر ممکن که این متغیرها انتخاب می‌کنند برابر با باشد. اگر را به عنوان حالتی از یک سیستم در لحظه در نظر گرفته و چنین تفسیر کنیم که س",
@@ -116,12 +116,12 @@
       "seconds": 14.4
     },
     "validation.txt": {
-      "bytes": 1705524,
+      "bytes": 1706558,
       "utf8_strict_ok": true,
       "bom_present": false,
-      "documents": 727,
+      "documents": 728,
       "empty_documents": 0,
-      "characters": 935374,
+      "characters": 935924,
       "forbidden_character_hits": {},
       "documents_with_forbidden_characters": {},
       "presentation_form_characters": 0,
@@ -132,21 +132,21 @@
       "documents_with_low_persian_ratio": 0,
       "low_persian_examples": [],
       "persian_only_letter_counts": {
-        "پ": 5745,
+        "پ": 5755,
         "چ": 2760,
         "ژ": 948,
-        "گ": 9816,
-        "ک": 20939,
-        "ی": 72554
+        "گ": 9819,
+        "ک": 20950,
+        "ی": 72608
       },
-      "zwnj_count": 11411,
+      "zwnj_count": 11438,
       "exact_duplicates_within_file": 0,
-      "unique_documents": 727,
-      "mean_document_length": 1286.6,
+      "unique_documents": 728,
+      "mean_document_length": 1285.6,
       "min_document_length": 59,
       "max_document_length": 21710,
       "longest_document_head": "هرا در اساطیر یونانی، بانوی قدرت، حامی زنان و ملکه آسمان‌ها بود که در غار کوه دیکته به دنیا آمد. هرا تا حدی زیبا بود که آوازه‌اش به گوش برادرش رسید و همین مسئله باعث شد زئوس برای دیدار با هرا به جزیره «اوبه» سفر کند و با یک نگاه دلباخته خواهر خویش شود. زئوس خود را به فاخته تبدیل کرد و طی دستوری که ب",
-      "sentences": 6888,
+      "sentences": 6894,
       "sentences_ending_with_punctuation_share": 0.9688,
       "first_documents_head": [
         "روحانی: بیش از ۲۳ درخواست ملاقات از سوی آمریکا دریافت کردم\nرئیس جمهوری با اشاره به طرح درخواست های متعدد از سوی ایالات متحده آمریکا و متحدانش برای ملاقات با مقامات ایرانی خاطر نشان کرد: طی ۲ سال و ۳ ماه گذشته که آمریکا از برجام خارج شده است، اگر بگویم ۲۳ مرتبه درخواست ملاقات با مقامات آمریکایی دریافت کردم، کم گفته ام.\nبه گزارش ایسنا، رییس جمهور عصر دوشنبه در جمع مدیران صنایع پتروشیمی و فولاد کشور ",
@@ -157,19 +157,19 @@
     }
   },
   "cross_split": {
-    "train_unique_hashes": 35859,
-    "validation_unique_hashes": 727,
+    "train_unique_hashes": 35864,
+    "validation_unique_hashes": 728,
     "exact_duplicates_between_splits": 0,
-    "validation_documents_checked_for_near_duplicates": 727,
+    "validation_documents_checked_for_near_duplicates": 728,
     "near_duplicates_between_splits": 0,
     "near_duplicate_examples": [],
     "method": "one-permutation MinHash (16 buckets), 4-band LSH, >=12/16 buckets",
-    "seconds": 9.4
+    "seconds": 9.3
   },
   "summary": {
-    "documents": 36586,
-    "characters": 44999989,
-    "bytes": 82107205,
+    "documents": 36592,
+    "characters": 44999973,
+    "bytes": 82107457,
     "checks_passed": 14,
     "checks_failed": [],
     "checks_total": 14,

@@ -14,13 +14,13 @@ Every number below is measured by `pipeline/compute_statistics.py` and re-checke
 
 | Metric | Value |
 |---|---|
-| Documents | 36,586 (all unique) |
-| Characters | 45.0 M |
-| Words | 8.49 M |
+| Documents | 36,592 (all unique) |
+| Characters | 44,999,973 |
+| Words | 8,493,555 |
 | Persian letters | 34.62 M (100 % of all letters — the corpus is pure Persian script) |
-| Tokens (measured with the shipped tokenizer) | 11,350,954 |
+| Tokens (measured with the shipped tokenizer) | 11,350,801 |
 | Size on disk | 82.11 MB (0.08 GiB) |
-| Train / validation | 35,859 / 727 documents (97.9 % / 2.1 %) |
+| Train / validation | 35,864 / 728 documents (97.9 % / 2.1 %) |
 | Sources | 10 upstream corpora, 9 shipped + 1 rejected at the quality gate |
 | Leakage between splits | 0 exact, 0 near-duplicate |
 | Verification | 14 / 14 checks passed |
