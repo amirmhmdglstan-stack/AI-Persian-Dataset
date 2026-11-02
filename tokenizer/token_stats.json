@@ -1,0 +1,35 @@
+{
+  "tokenizer": {
+    "type": "byte-level BPE",
+    "vocab_size": 32000,
+    "special_tokens": [
+      "<|endoftext|>"
+    ],
+    "file": "tokenizer/persian-bpe-32k.json",
+    "trained_on": "40,000,000 characters sampled from train.txt",
+    "note": "shipped as a convenience; the dataset is plain text and can be tokenized with any Persian vocabulary"
+  },
+  "train": {
+    "path": "train.txt",
+    "documents": 35859,
+    "characters": 44362820,
+    "tokens": 11115035,
+    "characters_per_token": 3.991,
+    "bytes_per_token": 7.234
+  },
+  "validation": {
+    "path": "validation.txt",
+    "documents": 727,
+    "characters": 941259,
+    "tokens": 235919,
+    "characters_per_token": 3.99,
+    "bytes_per_token": 7.229
+  },
+  "total": {
+    "tokens": 11350954,
+    "characters": 45304079,
+    "characters_per_token": 3.991
+  },
+  "method": "exact: encode_batch() over every document, no sampling",
+  "generated_at_utc": "2026-11-02T01:49:36Z"
+}

@@ -1,0 +1,9 @@
+# raw upstream corpora and intermediate build products (never committed)
+/work/
+/build/
+/extracted/
+*.7z
+*.jsonl
+*.rar
+__pycache__/
+*.pyc
