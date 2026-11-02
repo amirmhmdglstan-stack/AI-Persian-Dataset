@@ -1,0 +1,12 @@
+# Persian Dataset V2 dependencies.
+# Tested on the agent machine with Python 3.11.2 / Linux:
+#   tokenizers 0.22.2, pyarrow 21.0.0, py7zr 1.1.4
+# Target machine: Windows 11 / Python 3.12 (not executed on the agent machine).
+#
+# tokenizers: REQUIRED for exact token counts and 8K/16K/32K comparison.
+# pyarrow:    OPTIONAL, only for Parquet sources (quarantined by default).
+# py7zr:      OPTIONAL, only for the optional V1 2021 Wikipedia 7z mirror.
+# No GPU, PyTorch, TensorFlow, pandas, numpy or datasets library is required.
+tokenizers>=0.20,<0.23
+pyarrow>=17,<22
+py7zr>=0.20,<2

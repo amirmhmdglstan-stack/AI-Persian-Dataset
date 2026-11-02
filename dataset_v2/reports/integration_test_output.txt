@@ -1,0 +1,145 @@
+Persian Dataset V2 small-sample integration test
+Python: /tmp/v2venv/bin/python
+Workdir: /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work
+Scope: small_sample. No external corpus was downloaded.
+Generated 54 synthetic test-fixture documents (NOT production training data).
+
+===== unit tests =====
+$ /tmp/v2venv/bin/python -m unittest discover -s dataset_v2/tests -v
+
+[stderr]
+test_exact_duplicate_detection (test_deduplication.TestDeduplication.test_exact_duplicate_detection) ... ok
+test_near_duplicate_detection_and_cluster (test_deduplication.TestDeduplication.test_near_duplicate_detection_and_cluster) ... ok
+test_signature_is_deterministic_and_short_text_exact_only (test_deduplication.TestDeduplication.test_signature_is_deterministic_and_short_text_exact_only) ... ok
+test_sqlite_index_is_disk_backed (test_deduplication.TestDeduplication.test_sqlite_index_is_disk_backed) ... ok
+test_csv_mapping (test_extraction.TestExtraction.test_csv_mapping) ... ok
+test_jsonl_gz_excludes_synthetic_query_fields (test_extraction.TestExtraction.test_jsonl_gz_excludes_synthetic_query_fields) ... ok
+test_mediawiki_xml_bz2_streaming_and_license_filter (test_extraction.TestExtraction.test_mediawiki_xml_bz2_streaming_and_license_filter) ... ok
+test_parquet_excludes_generated_query_columns (test_extraction.TestExtraction.test_parquet_excludes_generated_query_columns) ... ok
+test_public_domain_allowlist_in_txt_tree (test_extraction.TestExtraction.test_public_domain_allowlist_in_txt_tree) ... ok
+test_tar_tsv_tatoeba_attribution_only_in_metadata (test_extraction.TestExtraction.test_tar_tsv_tatoeba_attribution_only_in_metadata) ... ok
+test_txt_lines_one_document_per_natural_sentence (test_extraction.TestExtraction.test_txt_lines_one_document_per_natural_sentence) ... ok
+test_wikitext_conversion_keeps_only_piped_link_label (test_extraction.TestExtraction.test_wikitext_conversion_keeps_only_piped_link_label) ... ok
+test_arabic_variants_and_zwnj (test_normalization.TestNormalization.test_arabic_variants_and_zwnj) ... ok
+test_language_detection_rejects_english_and_arabic (test_normalization.TestNormalization.test_language_detection_rejects_english_and_arabic) ... ok
+test_latin_technical_terms_preserved_and_measured (test_normalization.TestNormalization.test_latin_technical_terms_preserved_and_measured) ... ok
+test_markup_urls_emails_and_pii (test_normalization.TestNormalization.test_markup_urls_emails_and_pii) ... ok
+test_no_silent_large_removal (test_normalization.TestNormalization.test_no_silent_large_removal) ... ok
+test_paragraph_boundaries_and_punctuation (test_normalization.TestNormalization.test_paragraph_boundaries_and_punctuation) ... ok
+test_persian_and_latin_digits_preserved (test_normalization.TestNormalization.test_persian_and_latin_digits_preserved) ... ok
+test_english_only_rejected (test_quality_filters.TestQualityFilters.test_english_only_rejected) ... ok
+test_good_prose_accepted_with_explainable_features (test_quality_filters.TestQualityFilters.test_good_prose_accepted_with_explainable_features) ... ok
+test_latin_technical_terms_not_automatically_rejected (test_quality_filters.TestQualityFilters.test_latin_technical_terms_not_automatically_rejected) ... ok
+test_pii_rejected (test_quality_filters.TestQualityFilters.test_pii_rejected) ... ok
+test_repetition_rejected (test_quality_filters.TestQualityFilters.test_repetition_rejected) ... ok
+test_short_document_rejected (test_quality_filters.TestQualityFilters.test_short_document_rejected) ... ok
+test_short_natural_dialogue_sentence_accepted (test_quality_filters.TestQualityFilters.test_short_natural_dialogue_sentence_accepted) ... ok
+test_spam_rejected (test_quality_filters.TestQualityFilters.test_spam_rejected) ... ok
+test_deterministic_cluster_consistent_splits (test_splitting.TestSplitting.test_deterministic_cluster_consistent_splits) ... ok
+test_baseline_json_matches_v1_baseline_record (test_tokenization.TestBaselineTokenizer.test_baseline_json_matches_v1_baseline_record) ... ok
+test_document_separator_not_needed_in_text (test_tokenization.TestBaselineTokenizer.test_document_separator_not_needed_in_text) ... ok
+test_persian_roundtrip_zwnj_and_latin (test_tokenization.TestBaselineTokenizer.test_persian_roundtrip_zwnj_and_latin) ... ok
+test_vocab_and_special_token (test_tokenization.TestBaselineTokenizer.test_vocab_and_special_token) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.172s
+
+OK
+[exit_code] 0
+
+===== build_corpus (small sample) =====
+$ /tmp/v2venv/bin/python /home/user/AI-Persian-Dataset/dataset_v2/pipeline/build_corpus.py --config /home/user/AI-Persian-Dataset/dataset_v2/configs/dataset_config.json --workdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work --extracted /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/extracted --outdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final --reports-dir /home/user/AI-Persian-Dataset/dataset_v2/reports --profiles A --force --scope small_sample --min-free-gb 1
+2026-11-02 13:08:44,563Z INFO disk check: 19.0 GiB free at /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work (required 1.0 GiB)
+2026-11-02 13:08:44,569Z INFO found 5 extracted source files
+2026-11-02 13:08:44,569Z INFO [process] smoke_dialogue (profile=A, skip_lines=0)
+2026-11-02 13:08:44,579Z INFO [process] smoke_encyclopedia (profile=A, skip_lines=0)
+2026-11-02 13:08:44,598Z INFO [process] smoke_literary (profile=A, skip_lines=0)
+2026-11-02 13:08:44,606Z INFO [process] smoke_news (profile=A, skip_lines=0)
+2026-11-02 13:08:44,615Z INFO [process] smoke_qa (profile=A, skip_lines=0)
+2026-11-02 13:08:44,621Z INFO balance: budget not binding; selected all 30 docs / 6,681 chars
+2026-11-02 13:08:44,623Z INFO splits: {"test": {"documents": 1, "characters": 42, "share_of_characters": 0.0063}, "train": {"documents": 28, "characters": 6595, "share_of_characters": 0.9871}, "validation": {"documents": 1, "characters": 44, "share_of_characters": 0.0066}}
+2026-11-02 13:08:44,629Z INFO profile A: {'test': 1, 'train': 28, 'validation': 1}
+2026-11-02 13:08:44,642Z INFO build complete in 0.1s; reports in /home/user/AI-Persian-Dataset/dataset_v2/reports
+{
+  "scope": "small_sample",
+  "documents_seen": 54,
+  "accepted": 30,
+  "rejected": 17,
+  "exact_duplicates": 1,
+  "near_duplicates": 6,
+  "selected_documents": 30,
+  "selected_characters": 6681,
+  "duration_seconds": 0.073,
+  "peak_rss_mb": 24.2,
+  "reports_dir": "/home/user/AI-Persian-Dataset/dataset_v2/reports",
+  "outdir": "/home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final"
+}
+[exit_code] 0
+
+===== compute_statistics (measured small sample) =====
+$ /tmp/v2venv/bin/python /home/user/AI-Persian-Dataset/dataset_v2/pipeline/compute_statistics.py --config /home/user/AI-Persian-Dataset/dataset_v2/configs/dataset_config.json --workdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work --outdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final --reports-dir /home/user/AI-Persian-Dataset/dataset_v2/reports --tokenizer /home/user/AI-Persian-Dataset/dataset_v2/tokenizer/persian-bpe-32k.json --profiles A --scope small_sample --out /home/user/AI-Persian-Dataset/dataset_v2/reports/dataset_statistics.json
+2026-11-02 13:08:44,767Z INFO scanned train.txt: 28 docs / 1,864 tokens
+2026-11-02 13:08:44,767Z INFO scanned validation.txt: 1 docs / 9 tokens
+2026-11-02 13:08:44,767Z INFO scanned test.txt: 1 docs / 13 tokens
+2026-11-02 13:08:44,781Z INFO statistics: 30 docs / 6,681 chars / 1,886 content tokens -> /home/user/AI-Persian-Dataset/dataset_v2/reports/dataset_statistics.json
+{
+  "scope": "small_sample",
+  "documents": 30,
+  "unique_documents": 30,
+  "characters": 6681,
+  "words": 1208,
+  "content_tokens": 1886,
+  "tokens_including_document_end": 1916,
+  "characters_per_token": 3.5424,
+  "bytes_per_token": 6.6925,
+  "output": "/home/user/AI-Persian-Dataset/dataset_v2/reports/dataset_statistics.json"
+}
+[exit_code] 0
+
+===== verify_dataset (small sample) =====
+$ /tmp/v2venv/bin/python /home/user/AI-Persian-Dataset/dataset_v2/pipeline/verify_dataset.py --config /home/user/AI-Persian-Dataset/dataset_v2/configs/dataset_config.json --workdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work --outdir /home/user/AI-Persian-Dataset/dataset_v2/.smoke_work/final --reports-dir /home/user/AI-Persian-Dataset/dataset_v2/reports --profiles A --scope small_sample --out /home/user/AI-Persian-Dataset/dataset_v2/reports/verification_report_v2.json
+2026-11-02 13:08:44,844Z INFO verification: 27 checks, 26 passed, 1 warnings, 0 failed -> /home/user/AI-Persian-Dataset/dataset_v2/reports/verification_report_v2.json
+{
+  "checks": 27,
+  "passed": 26,
+  "warnings": 1,
+  "failed": 0,
+  "report": "/home/user/AI-Persian-Dataset/dataset_v2/reports/verification_report_v2.json"
+}
+[exit_code] 0
+
+===== compare_tokenizers (small sample) =====
+$ /tmp/v2venv/bin/python /home/user/AI-Persian-Dataset/dataset_v2/pipeline/compare_tokenizers.py --config /home/user/AI-Persian-Dataset/dataset_v2/configs/dataset_config.json --sample /tmp/v1_audit/validation.txt --tokenizer-baseline /home/user/AI-Persian-Dataset/dataset_v2/tokenizer/persian-bpe-32k.json --reports-dir /home/user/AI-Persian-Dataset/dataset_v2/reports --out /home/user/AI-Persian-Dataset/dataset_v2/reports/tokenizer_comparison.json --max-chars 1700000 --scope small_sample
+{
+  "scope": "small_sample",
+  "sample_documents": 728,
+  "sample_characters": 935924,
+  "vocabularies": [
+    {
+      "label": "V1_baseline_32k",
+      "actual_vocab_size": 32000,
+      "chars_per_token": 3.9643,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_8k",
+      "actual_vocab_size": 8000,
+      "chars_per_token": 3.6354,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_16k",
+      "actual_vocab_size": 15958,
+      "chars_per_token": 3.9728,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_32k",
+      "actual_vocab_size": 15958,
+      "chars_per_token": 3.9728,
+      "roundtrip": 1.0
+    }
+  ],
+  "output": "/home/user/AI-Persian-Dataset/dataset_v2/reports/tokenizer_comparison.json"
+}
+[exit_code] 0

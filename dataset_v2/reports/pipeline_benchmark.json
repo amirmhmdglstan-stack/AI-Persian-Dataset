@@ -1,0 +1,24 @@
+{
+  "documents_per_second": 739.73,
+  "documents_seen": 54,
+  "documents_with_overloaded_lsh_bands": 0,
+  "duration_seconds": 0.073,
+  "final_output_bytes": 48730,
+  "generated_at_utc": "2026-11-02T13:08:44Z",
+  "input_extracted_bytes": 47490,
+  "lsh_candidates_rejected": 18,
+  "lsh_candidates_verified": 6,
+  "measurement_scope": "small_sample",
+  "normalized_characters_per_second": 91520.55,
+  "normalized_shard_bytes": 13958,
+  "normalized_shards": 1,
+  "peak_rss_mb": 24.2,
+  "peak_rss_note": "Measured with resource.getrusage on Linux / GetProcessMemoryInfo on Windows; None if unavailable.",
+  "sqlite_index_bytes": 4096,
+  "untested_at_scale": [
+    "Full 1.456 GB MediaWiki XML bz2 extraction",
+    "Tens of millions of near-dup LSH lookups",
+    "Full-corpus tokenization on Windows",
+    "Peak RAM on the user's Windows 11 / Python 3.12 machine"
+  ]
+}

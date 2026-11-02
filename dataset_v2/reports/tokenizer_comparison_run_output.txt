@@ -1,0 +1,32 @@
+{
+  "scope": "small_sample",
+  "sample_documents": 728,
+  "sample_characters": 935924,
+  "vocabularies": [
+    {
+      "label": "V1_baseline_32k",
+      "actual_vocab_size": 32000,
+      "chars_per_token": 3.9643,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_8k",
+      "actual_vocab_size": 8000,
+      "chars_per_token": 3.6354,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_16k",
+      "actual_vocab_size": 15958,
+      "chars_per_token": 3.9728,
+      "roundtrip": 1.0
+    },
+    {
+      "label": "from_scratch_32k",
+      "actual_vocab_size": 15958,
+      "chars_per_token": 3.9728,
+      "roundtrip": 1.0
+    }
+  ],
+  "output": "dataset_v2/reports/tokenizer_comparison.json"
+}

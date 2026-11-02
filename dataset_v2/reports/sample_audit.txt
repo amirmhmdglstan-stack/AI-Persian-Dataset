@@ -1,0 +1,290 @@
+==============================================================================
+PERSIAN DATASET V2 - MANUAL AUDIT SAMPLES
+Generated: 2026-11-02T13:08:44Z
+Excerpts are truncated and PII-redacted. Automated quality scores do NOT
+establish semantic correctness, factual accuracy, or legal safety.
+Review good, rejected, borderline, near-duplicate, formal and informal
+documents from EVERY source before training.
+==============================================================================
+
+SOURCE: smoke_dialogue
+------------------------------------------------------------------------------
+  CATEGORY: good (5 sample(s))
+    doc_id=d0298f53ce5d6286f2d13fb97f290600 reason=kept category=good,informal_or_dialogue split=train quality=0.7404
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود.
+
+    doc_id=51588a5279539795b26974b09baa3f15 reason=kept category=good,informal_or_dialogue split=train quality=0.7162
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند.
+
+    doc_id=2a51b4e6c567bc7243030a79b72e0360 reason=kept category=good,informal_or_dialogue split=train quality=0.7237
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند.
+
+    doc_id=4a0b99ccb0d58d4e88c3c160f3ab0fb0 reason=kept category=good,informal_or_dialogue split=train quality=0.7649
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند.
+
+    doc_id=2fd3777bb9cd58c3e14b26b21ec13d75 reason=kept category=good,informal_or_dialogue split=validation quality=0.7352
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: در باغ قدیمی درختان چنار سایه انداخته بودند.
+
+  CATEGORY: rejected (2 sample(s))
+    doc_id=f148a522ffa21997c3fc2d5563a25062 reason=non_persian:persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_lexical_evidence;few_persian_letters;high_latin_contamination category=rejected,informal_or_dialogue split=None quality=0.5182
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: This is English only.
+
+    doc_id=f232af9ab5ec307d5de1bd88d12121c6 reason=pii_detected;excessive_normalization_removal category=rejected,informal_or_dialogue split=None quality=0.7703
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: شماره تماس [NUMBER_REDACTED] است.
+
+  CATEGORY: informal_or_dialogue (5 sample(s))
+    doc_id=d0298f53ce5d6286f2d13fb97f290600 reason=kept category=good,informal_or_dialogue split=train quality=0.7404
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود.
+
+    doc_id=51588a5279539795b26974b09baa3f15 reason=kept category=good,informal_or_dialogue split=train quality=0.7162
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند.
+
+    doc_id=2a51b4e6c567bc7243030a79b72e0360 reason=kept category=good,informal_or_dialogue split=train quality=0.7237
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند.
+
+    doc_id=4a0b99ccb0d58d4e88c3c160f3ab0fb0 reason=kept category=good,informal_or_dialogue split=train quality=0.7649
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند.
+
+    doc_id=2fd3777bb9cd58c3e14b26b21ec13d75 reason=kept category=good,informal_or_dialogue split=validation quality=0.7352
+    license=CC0-1.0 small-sample test fixture domain=dialogue
+    text: در باغ قدیمی درختان چنار سایه انداخته بودند.
+
+
+SOURCE: smoke_encyclopedia
+------------------------------------------------------------------------------
+  CATEGORY: good (5 sample(s))
+    doc_id=9afb0679248d5ce117729b2cc4035ba0 reason=kept category=good,formal_prose split=train quality=0.8424
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: زبان فارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+
+    doc_id=726a8bf5fbbc80a18d6c8f4904b22a7d reason=kept category=good,formal_prose split=train quality=0.8441
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: کوه‌های البرز در شمال کشور قرار گرفته‌اند و آب و هوای متنوعی دارند. در تابستان هوا گرم می‌شود و مردم به دنبال سایه و آب خنک هستند. زمستان در برخی شهرها بارانی است و خیابان‌ها خیس می‌شوند. دانشجویان در کتابخانه مطالعه می‌کنند و یادداشت برمی‌دارند. استاد درباره تاریخ علم سخن گفت و پرسش‌های دانشجویان را پاسخ داد. آزمایشگاه دانشگاه ابزارهای تازه‌ای برای اندازه‌گیری دما دارد. مهندسان نرم‌افزار سامانه‌ا...
+
+    doc_id=bec83bae660c8ec62849143e85dd2884 reason=kept category=good,formal_prose split=train quality=0.8044
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سلام، امروز حالت چطوره؟ خیلی خوبم، ممنون که پرسیدی. دیروز رفتم کتابخانه و یه کتاب تازه گرفتم. قرار شد فردا همدیگه رو ببینیم. نظرت درباره این مقاله چیه؟ به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. کجا می‌شه بلیط تهیه کرد؟
+
+    doc_id=095120a8b0fb38a545f65cbf40ab1744 reason=kept category=good,formal_prose split=train quality=0.8148
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: از باجه‌ی ایستگاه یا سایت رسمی می‌شه خرید. امشب شام چی درست کنیم؟ یه خورشت ساده و برنج، شاید هم سالاد. کتابی که خواندم درباره سفرهای قدیمی بود. نویسنده در آن کتاب از شهرها و راه‌ها و کاروان‌ها گفته است. شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است. نثر امروزی ساده‌تر است و جمله‌های کوتاه‌تری دارد. گزارشگر نوشت که جلسه امروز برگزار شد و تصمیم‌ها اعلام گردید.
+
+    doc_id=7b018f8384612b3011e035349412c9b8 reason=kept category=good,formal_prose split=train quality=0.8328
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود. کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند. ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند. تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند. در باغ قدیمی درختان چنار سایه انداخته بودند. پرندگان روی شاخه‌ها نشستند و صدای آن‌ها در حیاط پیچید. بچه‌ها در کوچه بازی می‌کردند و صدای خنده‌شان بلند بود. مادر از پنجره نگاه کرد و بچه‌ها...
+
+  CATEGORY: rejected (5 sample(s))
+    doc_id=0fa449a957ba720e511a86d1de0f8c49 reason=pii_detected category=rejected,formal_prose split=None quality=0.8028
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سلام، امروز حالت چطوره؟ خیلی خوبم، ممنون که پرسیدی. دیروز رفتم کتابخانه و یه کتاب تازه گرفتم. قرار شد فردا همدیگه رو ببینیم. نظرت درباره این مقاله چیه؟ به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. رایانامه [EMAIL_REDACTED] و شماره [NUMBER_REDACTED].
+
+    doc_id=21d64d29692cd47967090097e5e4f4e6 reason=non_persian:persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters;no_persian_lexical_evidence;too_short;few_persian_letters;high_latin_contamination category=rejected,formal_prose split=None quality=0.5116
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: This is an English-only document with many words and punctuation. It should be rejected because the objective is Persian-only pretraining. There is no Persian prose here at all.
+
+    doc_id=4d632a550fa489620d2b8b79253593b0 reason=excessive_normalization_removal;too_short category=rejected,formal_prose split=None quality=0.7856
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: از باجه‌ی ایستگاه یا سایت رسمی می‌شه خرید. امشب شام چی درست کنیم؟ یه خورشت ساده و برنج، شاید هم سالاد. کتابی که خواندم درباره سفرهای قدیمی بود. نویسنده در آن کتاب از شهرها و راه‌ها و کاروان‌ها گفته است. شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است. همین حالا کلیک کنید. تخفیف ویژه. فروش ویژه. تبلیغات.
+
+    doc_id=ebdb3b729cd9b9ee745f0110c4f65838 reason=non_persian:no_persian_lexical_evidence;too_short;few_persian_letters;too_few_sentences;fragmented;no_sentence_end category=rejected,formal_prose split=None quality=0.6004
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سلام
+
+    doc_id=e5b9c8f46d639f6a87ed641f051136ea reason=too_short;no_sentence_end category=rejected,formal_prose split=None quality=0.6364
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند
+
+  CATEGORY: near_duplicate_example (3 sample(s))
+    doc_id=2a370ac934583c8609bd21dfaac401e0 reason=exact_duplicate category=near_duplicate_example split=None quality=0.8424
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: زبان فارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+    paired_survivor=9afb0679248d5ce117729b2cc4035ba0
+    survivor_text: زبان فارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+
+    doc_id=87059df3f62748c30b553bfcd0f013eb reason=near_duplicate category=near_duplicate_example split=None quality=0.8429
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: زبان پارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+    paired_survivor=9afb0679248d5ce117729b2cc4035ba0
+    survivor_text: زبان فارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+
+    doc_id=d94ccc7228740b54c4792c3b3e20c44b reason=near_duplicate category=near_duplicate_example split=None quality=0.7808
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: <div>کوه‌های البرز در شمال کشور قرار گرفته‌اند و آب و هوای متنوعی دارند. در تابستان هوا گرم می‌شود و مردم به دنبال سایه و آب خنک هستند. زمستان در برخی شهرها بارانی است و خیابان‌ها خیس می‌شوند. دانشجویان در کتابخانه مطالعه می‌کنند و یادداشت برمی‌دارند. استاد درباره تاریخ علم سخن گفت و پرسش‌های دانشجویان را پاسخ داد. آزمایشگاه دانشگاه ابزارهای تازه‌ای برای اندازه‌گیری دما دارد. مهندسان نرم‌افزار سام...
+    paired_survivor=726a8bf5fbbc80a18d6c8f4904b22a7d
+    survivor_text: کوه‌های البرز در شمال کشور قرار گرفته‌اند و آب و هوای متنوعی دارند. در تابستان هوا گرم می‌شود و مردم به دنبال سایه و آب خنک هستند. زمستان در برخی شهرها بارانی است و خیابان‌ها خیس می‌شوند. دانشجویان در کتابخانه مطالعه می‌کنند و یادداشت برمی‌دارند. استاد درباره تاریخ علم سخن گفت و پرسش‌های دانشجویان را پاسخ داد. آزمایشگاه دانشگاه ابزارهای تازه‌ای برای اندازه‌گیری دما دارد. مهندسان نرم‌افزار سامانه‌ا...
+
+  CATEGORY: formal_prose (5 sample(s))
+    doc_id=9afb0679248d5ce117729b2cc4035ba0 reason=kept category=good,formal_prose split=train quality=0.8424
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: زبان فارسی یکی از زبان‌های ایرانی است و در ایران، افغانستان و تاجیکستان رایج است. این زبان تاریخی طولانی دارد و آثار بسیاری به آن نوشته شده است. نیم‌فاصله در واژه‌هایی مانند کتابخانه‌ها و برنامه‌نویسی اهمیت دارد. اعداد فارسی مانند ۱۴۰۲ و ۱۳۹۹ در متن‌های رسمی دیده می‌شوند. در کنار واژه‌های فارسی، نام‌های فنی مانند Python و API نیز ممکن است بیایند. پژوهشگران برای آموزش مدل زبانی به پیکره متنی با کیف...
+
+    doc_id=726a8bf5fbbc80a18d6c8f4904b22a7d reason=kept category=good,formal_prose split=train quality=0.8441
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: کوه‌های البرز در شمال کشور قرار گرفته‌اند و آب و هوای متنوعی دارند. در تابستان هوا گرم می‌شود و مردم به دنبال سایه و آب خنک هستند. زمستان در برخی شهرها بارانی است و خیابان‌ها خیس می‌شوند. دانشجویان در کتابخانه مطالعه می‌کنند و یادداشت برمی‌دارند. استاد درباره تاریخ علم سخن گفت و پرسش‌های دانشجویان را پاسخ داد. آزمایشگاه دانشگاه ابزارهای تازه‌ای برای اندازه‌گیری دما دارد. مهندسان نرم‌افزار سامانه‌ا...
+
+    doc_id=bec83bae660c8ec62849143e85dd2884 reason=kept category=good,formal_prose split=train quality=0.8044
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سلام، امروز حالت چطوره؟ خیلی خوبم، ممنون که پرسیدی. دیروز رفتم کتابخانه و یه کتاب تازه گرفتم. قرار شد فردا همدیگه رو ببینیم. نظرت درباره این مقاله چیه؟ به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. کجا می‌شه بلیط تهیه کرد؟
+
+    doc_id=095120a8b0fb38a545f65cbf40ab1744 reason=kept category=good,formal_prose split=train quality=0.8148
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: از باجه‌ی ایستگاه یا سایت رسمی می‌شه خرید. امشب شام چی درست کنیم؟ یه خورشت ساده و برنج، شاید هم سالاد. کتابی که خواندم درباره سفرهای قدیمی بود. نویسنده در آن کتاب از شهرها و راه‌ها و کاروان‌ها گفته است. شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است. نثر امروزی ساده‌تر است و جمله‌های کوتاه‌تری دارد. گزارشگر نوشت که جلسه امروز برگزار شد و تصمیم‌ها اعلام گردید.
+
+    doc_id=7b018f8384612b3011e035349412c9b8 reason=kept category=good,formal_prose split=train quality=0.8328
+    license=CC0-1.0 small-sample test fixture domain=encyclopedia
+    text: سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود. کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند. ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند. تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند. در باغ قدیمی درختان چنار سایه انداخته بودند. پرندگان روی شاخه‌ها نشستند و صدای آن‌ها در حیاط پیچید. بچه‌ها در کوچه بازی می‌کردند و صدای خنده‌شان بلند بود. مادر از پنجره نگاه کرد و بچه‌ها...
+
+
+SOURCE: smoke_literary
+------------------------------------------------------------------------------
+  CATEGORY: good (5 sample(s))
+    doc_id=2b0a0188021976262ef7799d811f773e reason=kept category=good split=train quality=0.8052
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. کجا می‌شه بلیط تهیه کرد؟ از باجه‌ی ایستگاه یا سایت رسمی می‌شه خرید. امشب شام چی درست کنیم؟ یه خورشت ساده و برنج، شاید هم سالاد.
+
+    doc_id=6092d4b90f2868382acf542229bc5bb7 reason=kept category=good split=train quality=0.8126
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: کجا می‌شه بلیط تهیه کرد؟ از باجه‌ی ایستگاه یا سایت رسمی می‌شه خرید. امشب شام چی درست کنیم؟ یه خورشت ساده و برنج، شاید هم سالاد. کتابی که خواندم درباره سفرهای قدیمی بود. نویسنده در آن کتاب از شهرها و راه‌ها و کاروان‌ها گفته است. شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است.
+
+    doc_id=91958cd3fdca15469a19c233f5e23afc reason=kept category=good split=train quality=0.805
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: یه خورشت ساده و برنج، شاید هم سالاد. کتابی که خواندم درباره سفرهای قدیمی بود. نویسنده در آن کتاب از شهرها و راه‌ها و کاروان‌ها گفته است. شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است. نثر امروزی ساده‌تر است و جمله‌های کوتاه‌تری دارد. گزارشگر نوشت که جلسه امروز برگزار شد و تصمیم‌ها اعلام گردید.
+
+    doc_id=228c8fc55144cef8b9936e784fb58490 reason=kept category=good split=train quality=0.808
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: شعر کلاسیک فارسی وزن و قافیه دارد و گاهی دشوار است. نثر امروزی ساده‌تر است و جمله‌های کوتاه‌تری دارد. گزارشگر نوشت که جلسه امروز برگزار شد و تصمیم‌ها اعلام گردید. سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود. کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند. ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند.
+
+    doc_id=7131846a64c8c612fc9f1bf25f9e9caa reason=kept category=good split=train quality=0.8263
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: گزارشگر نوشت که جلسه امروز برگزار شد و تصمیم‌ها اعلام گردید. سخنگوی سازمان گفت آمار تازه تا هفته آینده منتشر می‌شود. کارشناسان هواشناسی افزایش دما را پیش‌بینی کرده‌اند. ورزشکاران تیم ملی تمرین‌های خود را آغاز کردند. تماشاگران در ورزشگاه حضور داشتند و تیم خود را تشویق کردند. در باغ قدیمی درختان چنار سایه انداخته بودند. پرندگان روی شاخه‌ها نشستند و صدای آن‌ها در حیاط پیچید.
+
+  CATEGORY: rejected (1 sample(s))
+    doc_id=bfa36f4366e6645b753133ec632c915d reason=non_persian:persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_lexical_evidence;too_short;few_persian_letters;high_latin_contamination;repetitive_ngrams category=rejected split=None quality=0.4245
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: Only English text in a verse slot.
+
+  CATEGORY: near_duplicate_example (1 sample(s))
+    doc_id=7e9abf6435762e1bc158d2c73ee80b6f reason=near_duplicate category=near_duplicate_example split=None quality=0.8058
+    license=CC0-1.0 small-sample test fixture domain=literary
+    text: دیروز رفتم کتابخانه و یه کتاب تازه گرفتم. قرار شد فردا همدیگه رو ببینیم. نظرت درباره این مقاله چیه؟ به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. کجا می‌شه بلیط تهیه کرد؟
+    paired_survivor=bec83bae660c8ec62849143e85dd2884
+    survivor_text: سلام، امروز حالت چطوره؟ خیلی خوبم، ممنون که پرسیدی. دیروز رفتم کتابخانه و یه کتاب تازه گرفتم. قرار شد فردا همدیگه رو ببینیم. نظرت درباره این مقاله چیه؟ به نظرم توضیحش روشن بود، ولی مثال‌ها کم بودن. چرا قطار دیر رسید؟ گفتن به خاطر بارندگی مسیر با تأخیر مواجه شده بود. کجا می‌شه بلیط تهیه کرد؟
+
+
+SOURCE: smoke_news
+------------------------------------------------------------------------------
+  CATEGORY: good (3 sample(s))
+    doc_id=d9dcb6ac221a93c657e1dfedfcfe11e6 reason=kept category=good,formal_prose split=train quality=0.8241
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: رایانه‌ها اطلاعات را ذخیره می‌کنند و پردازش می‌کنند. الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود.
+
+    doc_id=5d37352e03cf59cbcb8a9302cb0d2e4b reason=kept category=good,formal_prose split=train quality=0.8228
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است.
+
+    doc_id=ed2b85845a858bacdd4d63b38ab011a8 reason=kept category=good,formal_prose split=train quality=0.8181
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است. منبع هر سند باید در کنار متن ثبت شود. پروانه متن اصلی پیش از آموزش مدل بررسی می‌شود.
+
+  CATEGORY: rejected (1 sample(s))
+    doc_id=fd781b795051e98e8a45972f8b81aed9 reason=non_persian:persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters;few_persian_letters;high_latin_contamination;repetitive_ngrams;repeated_sentences;low_information_density category=rejected,formal_prose split=None quality=0.4883
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English onl...
+
+  CATEGORY: near_duplicate_example (3 sample(s))
+    doc_id=048010e9e3a2ceb11c86d72a97044392 reason=near_duplicate category=near_duplicate_example split=None quality=0.8237
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: چای داغ در استکان ریخته شد و کنار پنجره گذاشته شد. رایانه‌ها اطلاعات را ذخیره می‌کنند و پردازش می‌کنند. الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود.
+    paired_survivor=4213555dc3f83355b0d7e999d79c8193
+    survivor_text: چای داغ در استکان ریخته شد و کنار پنجره گذاشته شد. رایانه‌ها اطلاعات را ذخیره می‌کنند و پردازش می‌کنند. الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقی...
+
+    doc_id=2d712477126bfc9c30d75d6a75f54158 reason=near_duplicate category=near_duplicate_example split=None quality=0.82
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است. منبع هر سند باید در کنار متن ثبت شود.
+    paired_survivor=5d37352e03cf59cbcb8a9302cb0d2e4b
+    survivor_text: الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است.
+
+    doc_id=13eecfef5feacd239296afce3e79b7d5 reason=near_duplicate category=near_duplicate_example split=None quality=0.8153
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است. منبع هر سند باید در کنار متن ثبت شود. پروانه متن اصلی پیش از آموزش مدل بررسی می‌شود. اگر حقوق متن روشن نباشد، سند قرنطینه می‌شود.
+    paired_survivor=ed2b85845a858bacdd4d63b38ab011a8
+    survivor_text: امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است. منبع هر سند باید در کنار متن ثبت شود. پروانه متن اصلی پیش از آموزش مدل بررسی می‌شود.
+
+  CATEGORY: formal_prose (4 sample(s))
+    doc_id=d9dcb6ac221a93c657e1dfedfcfe11e6 reason=kept category=good,formal_prose split=train quality=0.8241
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: رایانه‌ها اطلاعات را ذخیره می‌کنند و پردازش می‌کنند. الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود.
+
+    doc_id=5d37352e03cf59cbcb8a9302cb0d2e4b reason=kept category=good,formal_prose split=train quality=0.8228
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: الگوریتم جستجو در میان داده‌ها دنبال الگوهای تکراری می‌گردد. پایگاه داده باید پشتیبان داشته باشد تا اطلاعات از بین نرود. امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است.
+
+    doc_id=ed2b85845a858bacdd4d63b38ab011a8 reason=kept category=good,formal_prose split=train quality=0.8181
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: امنیت سامانه به رمزهای قوی و به‌روزرسانی منظم وابسته است. پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است. نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود. آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود. تا پیش از آن، هر عدد بزرگ فقط یک برآورد است. منبع هر سند باید در کنار متن ثبت شود. پروانه متن اصلی پیش از آموزش مدل بررسی می‌شود.
+
+    doc_id=fd781b795051e98e8a45972f8b81aed9 reason=non_persian:persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters;few_persian_letters;high_latin_contamination;repetitive_ngrams;repeated_sentences;low_information_density category=rejected,formal_prose split=None quality=0.4883
+    license=CC0-1.0 small-sample test fixture domain=news
+    text: Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English only. Breaking news in English onl...
+
+
+SOURCE: smoke_qa
+------------------------------------------------------------------------------
+  CATEGORY: good (1 sample(s))
+    doc_id=dee33ba5187ee1ec5f9c513bb462f069 reason=kept category=good,informal_or_dialogue split=train quality=0.6944
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: تا پیش از آن، هر عدد بزرگ فقط یک برآورد است.
+
+  CATEGORY: rejected (5 sample(s))
+    doc_id=6177226e2c71d8ddd1e0c05e57d631ba reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.7
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است.
+
+    doc_id=c9b031b9879899392a79d812e7475f22 reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6878
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود.
+
+    doc_id=ff975e9a8164683ecc22fabf6c3eb05e reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6999
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود.
+
+    doc_id=7d572ffcfcf2b25078bf67bf214853cb reason=too_short;repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6831
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: منبع هر سند باید در کنار متن ثبت شود.
+
+    doc_id=e91fc8b6c5e2bd94d462123619a43635 reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.698
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: پروانه متن اصلی پیش از آموزش مدل بررسی می‌شود.
+
+  CATEGORY: informal_or_dialogue (5 sample(s))
+    doc_id=6177226e2c71d8ddd1e0c05e57d631ba reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.7
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: پژوهش درباره زبان نیازمند نمونه‌های واقعی و متنوع است.
+
+    doc_id=c9b031b9879899392a79d812e7475f22 reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6878
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: نمونه مصنوعی فقط برای آزمایش نرم‌افزار به کار می‌رود.
+
+    doc_id=ff975e9a8164683ecc22fabf6c3eb05e reason=repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6999
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: آمار دقیق پس از اجرای کامل خط لوله اندازه‌گیری می‌شود.
+
+    doc_id=dee33ba5187ee1ec5f9c513bb462f069 reason=kept category=good,informal_or_dialogue split=train quality=0.6944
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: تا پیش از آن، هر عدد بزرگ فقط یک برآورد است.
+
+    doc_id=7d572ffcfcf2b25078bf67bf214853cb reason=too_short;repetitive_ngrams category=rejected,informal_or_dialogue split=None quality=0.6831
+    license=CC0-1.0 small-sample test fixture domain=qa
+    text: منبع هر سند باید در کنار متن ثبت شود.
+

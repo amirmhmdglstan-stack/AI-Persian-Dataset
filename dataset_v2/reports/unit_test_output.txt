@@ -1,0 +1,42 @@
+
+
+[stderr]
+test_exact_duplicate_detection (test_deduplication.TestDeduplication.test_exact_duplicate_detection) ... ok
+test_near_duplicate_detection_and_cluster (test_deduplication.TestDeduplication.test_near_duplicate_detection_and_cluster) ... ok
+test_signature_is_deterministic_and_short_text_exact_only (test_deduplication.TestDeduplication.test_signature_is_deterministic_and_short_text_exact_only) ... ok
+test_sqlite_index_is_disk_backed (test_deduplication.TestDeduplication.test_sqlite_index_is_disk_backed) ... ok
+test_csv_mapping (test_extraction.TestExtraction.test_csv_mapping) ... ok
+test_jsonl_gz_excludes_synthetic_query_fields (test_extraction.TestExtraction.test_jsonl_gz_excludes_synthetic_query_fields) ... ok
+test_mediawiki_xml_bz2_streaming_and_license_filter (test_extraction.TestExtraction.test_mediawiki_xml_bz2_streaming_and_license_filter) ... ok
+test_parquet_excludes_generated_query_columns (test_extraction.TestExtraction.test_parquet_excludes_generated_query_columns) ... ok
+test_public_domain_allowlist_in_txt_tree (test_extraction.TestExtraction.test_public_domain_allowlist_in_txt_tree) ... ok
+test_tar_tsv_tatoeba_attribution_only_in_metadata (test_extraction.TestExtraction.test_tar_tsv_tatoeba_attribution_only_in_metadata) ... ok
+test_txt_lines_one_document_per_natural_sentence (test_extraction.TestExtraction.test_txt_lines_one_document_per_natural_sentence) ... ok
+test_wikitext_conversion_keeps_only_piped_link_label (test_extraction.TestExtraction.test_wikitext_conversion_keeps_only_piped_link_label) ... ok
+test_arabic_variants_and_zwnj (test_normalization.TestNormalization.test_arabic_variants_and_zwnj) ... ok
+test_language_detection_rejects_english_and_arabic (test_normalization.TestNormalization.test_language_detection_rejects_english_and_arabic) ... ok
+test_latin_technical_terms_preserved_and_measured (test_normalization.TestNormalization.test_latin_technical_terms_preserved_and_measured) ... ok
+test_markup_urls_emails_and_pii (test_normalization.TestNormalization.test_markup_urls_emails_and_pii) ... ok
+test_no_silent_large_removal (test_normalization.TestNormalization.test_no_silent_large_removal) ... ok
+test_paragraph_boundaries_and_punctuation (test_normalization.TestNormalization.test_paragraph_boundaries_and_punctuation) ... ok
+test_persian_and_latin_digits_preserved (test_normalization.TestNormalization.test_persian_and_latin_digits_preserved) ... ok
+test_english_only_rejected (test_quality_filters.TestQualityFilters.test_english_only_rejected) ... ok
+test_good_prose_accepted_with_explainable_features (test_quality_filters.TestQualityFilters.test_good_prose_accepted_with_explainable_features) ... ok
+test_latin_technical_terms_not_automatically_rejected (test_quality_filters.TestQualityFilters.test_latin_technical_terms_not_automatically_rejected) ... ok
+test_pii_rejected (test_quality_filters.TestQualityFilters.test_pii_rejected) ... ok
+test_repetition_rejected (test_quality_filters.TestQualityFilters.test_repetition_rejected) ... ok
+test_short_document_rejected (test_quality_filters.TestQualityFilters.test_short_document_rejected) ... ok
+test_short_natural_dialogue_sentence_accepted (test_quality_filters.TestQualityFilters.test_short_natural_dialogue_sentence_accepted) ... ok
+test_spam_rejected (test_quality_filters.TestQualityFilters.test_spam_rejected) ... ok
+test_deterministic_cluster_consistent_splits (test_splitting.TestSplitting.test_deterministic_cluster_consistent_splits) ... ok
+test_baseline_json_matches_v1_baseline_record (test_tokenization.TestBaselineTokenizer.test_baseline_json_matches_v1_baseline_record) ... ok
+test_document_separator_not_needed_in_text (test_tokenization.TestBaselineTokenizer.test_document_separator_not_needed_in_text) ... ok
+test_persian_roundtrip_zwnj_and_latin (test_tokenization.TestBaselineTokenizer.test_persian_roundtrip_zwnj_and_latin) ... ok
+test_vocab_and_special_token (test_tokenization.TestBaselineTokenizer.test_vocab_and_special_token) ... ok
+
+----------------------------------------------------------------------
+Ran 32 tests in 0.172s
+
+OK
+
+[exit_code] 0
