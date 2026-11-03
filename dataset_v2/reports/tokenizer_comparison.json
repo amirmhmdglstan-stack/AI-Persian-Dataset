@@ -7,7 +7,7 @@
     "special_token_id": 0,
     "vocab_size": 32000
   },
-  "generated_at_utc": "2026-11-02T16:42:56Z",
+  "generated_at_utc": "2026-11-03T20:08:23Z",
   "limitations": [
     "Round-trip accuracy is exact string equality on this capped sample, not semantic quality.",
     "Rare-token frequency is sample-relative and vocabulary-bounded.",
@@ -20,7 +20,7 @@
     "bpe_training_note": "tokenizers.BpeTrainer may internally materialise counts. Input is hard-capped at 10M chars; no strict O(1)-memory claim is made and a 40M-char sample is refused as unbounded for this path.",
     "default_sample_chars": 8000000,
     "evaluation_strategy": "Streaming aggregation; no retained lists of sample texts, token IDs, Persian words or unbounded token frequencies. Frequencies use a fixed array bounded by vocabulary size.",
-    "process_peak_rss_mb": 51.61,
+    "process_peak_rss_mb": 51.59,
     "process_peak_rss_note": "Measured with resource.getrusage on Linux / GetProcessMemoryInfo on Windows when available. This is process-wide peak RSS for this capped run, NOT a full-corpus memory measurement.",
     "sample_characters_used": 3612,
     "sample_utf8_bytes_used": 6629
@@ -258,7 +258,7 @@
     "hard_max_chars_cap": 10000000,
     "max_chars_cap": 20000,
     "note": "Capped streaming sample; on the agent machine this is a SMALL SAMPLE, not the full V2 corpus. A full-run launcher uses at most 8M characters.",
-    "path": "dataset_v2/tests/fixtures/representative_persian_sample.txt",
+    "path": "/home/user/AI-Persian-Dataset/dataset_v2/tests/fixtures/representative_persian_sample.txt",
     "sha256": "1d5794916b9dcd7639b0d8a2ee37cf0c17a5a6e3b360719254d8a4fd62e2db92",
     "utf8_bytes_used": 6629
   }

@@ -115,7 +115,9 @@ def configure_logging(workdir: str | Path, name: str = "dataset_v2") -> logging.
     log_path = Path(workdir) / "pipeline.log"
     logger = logging.getLogger(name)
     logger.setLevel(logging.INFO)
-    logger.handlers.clear()
+    for handler in logger.handlers[:]:
+        logger.removeHandler(handler)
+        handler.close()
     fmt = logging.Formatter("%(asctime)sZ %(levelname)s %(message)s")
     fmt.converter = time.gmtime
     fh = logging.FileHandler(log_path, encoding=DEFAULT_ENCODING)

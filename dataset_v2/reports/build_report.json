@@ -145,13 +145,13 @@
     }
   },
   "config_version": "2.1.0",
-  "generated_at_utc": "2026-11-02T16:42:55Z",
+  "generated_at_utc": "2026-11-03T20:08:23Z",
   "measurement_scope": "small_sample",
   "outputs": {
     "files": {
       "profile_A/documents.jsonl": {
-        "bytes": 36108,
-        "sha256": "4e7f78488337a0963a94c15c1940046303c0b6f9bca6a04bd194a5b56f4b8441"
+        "bytes": 36378,
+        "sha256": "1b7a557a9edabbc858fbf4dc28ca521a29fedbecbbc5672e07924c5b6a343b22"
       },
       "profile_A/test.txt": {
         "bytes": 92,
@@ -182,7 +182,7 @@
           "train": 6595,
           "validation": 44
         },
-        "directory": "dataset_v2/.smoke_work/final/profile_A",
+        "directory": "/home/user/v2-smoke-repair/final/profile_A",
         "documents_by_split": {
           "test": 1,
           "train": 28,
@@ -190,10 +190,10 @@
         }
       }
     },
-    "quarantine_manifest": "dataset_v2/.smoke_work/final/profile_C_quarantine_manifest_only/quarantine_manifest.json"
+    "quarantine_manifest": "/home/user/v2-smoke-repair/final/profile_C_quarantine_manifest_only/quarantine_manifest.json"
   },
   "platform": "linux",
-  "processing_duration_seconds": 0.074,
+  "processing_duration_seconds": 0.113,
   "profiles": [
     "A"
   ],

@@ -41,6 +41,15 @@ FORBIDDEN = {
 PRESENTATION_RANGES = ((0xFB50, 0xFDFF), (0xFE70, 0xFEFF))
 
 
+def cluster_leakage(index_path: Path) -> list[str]:
+    """Independently inspect global clusters, including cross-source members."""
+    with sqlite3.connect(str(index_path)) as conn:
+        return [r[0] for r in conn.execute(
+            "SELECT cluster_id FROM docs WHERE status='kept' AND selected=1 "
+            "AND split IS NOT NULL GROUP BY cluster_id "
+            "HAVING COUNT(DISTINCT split)>1 LIMIT 20")]
+
+
 def check_v1_immutability(repo_root: Path) -> dict:
     baseline_path = repo_root / "dataset_v2" / "sources" / "v1_baseline.json"
     if not baseline_path.exists():
@@ -212,13 +221,7 @@ def main() -> None:
     index_path = workdir / "corpus_index.sqlite3"
     leakage = []
     if index_path.exists():
-        conn = sqlite3.connect(str(index_path))
-        for row in conn.execute(
-                "SELECT cluster_id, COUNT(DISTINCT split) AS n FROM docs "
-                "WHERE status='kept' AND selected=1 AND split IS NOT NULL "
-                "GROUP BY cluster_id HAVING n > 1 LIMIT 20"):
-            leakage.append(row[0])
-        conn.close()
+        leakage = cluster_leakage(index_path)
         add("no_duplicate_cluster_leakage_across_splits", not leakage, leakage[:5])
     else:
         add("no_duplicate_cluster_leakage_across_splits", False,

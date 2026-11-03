@@ -7,7 +7,7 @@ REM ===========================================================================
 setlocal
 set "PY=D:\GPT\venv\Scripts\python.exe"
 set "REPO=D:\GPT\dataset\repo_v2_review"
-set "BRANCH=arena/62203741-ai-persian-dataset"
+set "BRANCH=arena/b2bcd196-ai-persian-dataset"
 set "CONFIG=%REPO%\dataset_v2\configs\dataset_config.json"
 set "META=%REPO%\dataset_v2\sources\source_metadata.json"
 set "TOK=%REPO%\dataset_v2\tokenizer\persian-bpe-32k.json"

@@ -74,7 +74,7 @@ The ~20 training tokens per parameter ratio is a scaling reference, not a law. S
 
 For a ~30 M-parameter small model with d=512, a 32K vocabulary embedding is **16.4 M parameters**, over half the model if embeddings are tied and even more dominant if untied. An 8K or 16K vocabulary could free capacity, but measured small-sample fragmentation rises: mean tokens per Persian word was 1.51 for the 32K baseline, 1.73 for the 16K sample model and 1.92 for the 8K sample model. Fewer embedding parameters therefore buy a longer token sequence and more compute per word.
 
-**Tokenizer policy:** keep the independently verified V1 32K tokenizer as the baseline for all V2 statistics. Do **not** replace it based on a 0.94 M-character sample. Rerun `compare_tokenizers.py` on the user's final `profile_A/train.txt` (the Windows CMD uses a 40 M-character cap) and only then consider 8K/16K alternatives. `<|endoftext|>` must remain ID 0 and a single token.
+**Tokenizer policy:** keep the independently verified V1 32K tokenizer as the baseline for all V2 statistics. Do **not** replace it based on a 0.94 M-character sample. Rerun `compare_tokenizers.py` on the user's final `profile_A/train.txt` (the Windows CMD uses an 8 M-character sample; code hard cap is 10 M characters) and only then consider 8K/16K alternatives. `<|endoftext|>` must remain ID 0 and a single token.
 
 ## 5. Training-token accounting
 

@@ -5,7 +5,7 @@
 ## 1. What was actually executed on the agent machine
 
 * `python -m compileall -q dataset_v2/pipeline dataset_v2/tests dataset_v2/sources`: **passed**.
-* `python -m unittest discover -s dataset_v2/tests -v` in a **core-only** venv with `tokenizers 0.23.3`: **72 tests, OK (1 skipped: optional `pyarrow` not installed)** (`reports/unit_test_output.txt`). A second system-Python run also passed 72 tests with 7 optional-dependency skips.
+* `python -m unittest discover -s dataset_v2/tests -v` in a **core-only** venv with `tokenizers 0.23.3`: **86 tests, OK (1 skipped: optional `pyarrow` not installed)** (`reports/unit_test_output.txt`). A second system-Python run also passed 86 tests with 7 optional-dependency skips.
 * New synthetic tests cover: repository-relative config paths and launcher safety; exact Wikisource licence-template allowlist/rejection reasons; `pes` Tatoeba catalog pins, bzip2 TSV parsing, MySQL OUTFILE escapes, attribution metadata and the real all-language `sentences_detailed.csv` member; download manifest URL+filename identity, SHA-256/size verification, corruption, `.part` Range resume, `--force` and mutable weekly snapshot skipping; full-run balancing caps below the 480 M target and unchanged `small_sample`; four Wikimedia page domains; core/optional dependency policy; and bounded tokenizer comparison.
 * `extract_sources.py --only-sources tatoeba_fa_cc_by` on a synthetic `pes_sentences_detailed.tsv.bz2` through the real catalog/extractor mapping retained 1 `pes` document, rejected `eng`/`fas`, and kept provenance and CC BY 2.0 FR attribution in metadata only (`reports/tatoeba_extraction_integration_output.txt`).
 * `pipeline/check_requirements.py`: default Profile A printed `tokenizers 0.23.3`, no optional packages required, V1 32K baseline OK, and exited 0. With `--include-optional` it reported optional `py7zr` missing and exited 1 (`reports/requirements_check_output.txt`). No optional package was auto-installed.
@@ -43,7 +43,7 @@
 * Wikimedia `latest` symlinks move; V2 pins dated 2026-10-01 / 2026-11-01 dump URLs and SHA-1 values in `source_metadata.json`. Per-project `page_base_url` values are configured for Wikipedia, Wikibooks, Wikisource and Wikinews.
 * GitHub sources are commit-pinned, but a repository can disappear; checksums and manifests will show exactly what was used.
 * V1 root files are absent from this session's branch checkout; the current branch has its own 21-byte `README.md` from `main`'s initial commit. The verifier skips same-named files whose size differs from the V1 baseline. V1 remains untouched on `arena/f01a4e1e-ai-persian-dataset`.
-* The user requested a separate `persian-dataset-v2-pipeline` branch. This Arena session is fixed to `arena/62203741-ai-persian-dataset`; creating or pushing another branch is not allowed in this session. All work is committed only to the fixed branch.
+* The user requested a separate `persian-dataset-v2-pipeline` branch. This Arena session is fixed to `arena/b2bcd196-ai-persian-dataset`; creating or pushing another branch is not allowed in this session. All work is committed only to the fixed branch.
 
 ## 5. Numeric caveats
 
@@ -62,3 +62,9 @@
 ## 7. Definition-of-done honesty
 
 The handover satisfies: research report, licensing matrix, V1 audit, proposed distribution, scalable pipeline, unit tests, small integration test, measured small-sample statistics, reproducible config, checksums/version metadata, Windows CMD guide, honest untested list, storage/download estimate, and clearly labelled estimated V2 token count. It does **not** claim that the full expanded dataset is verified, that Windows 11 / Python 3.12 was fully exercised, that full extraction/tokenization passed, that full-corpus memory was measured, that all licensing is clear, or that 100–150 M tokens were measured.
+
+## Repair addendum (2026-11-03; overrides earlier branch/test-count/rights claims)
+
+The fixed repair branch is `arena/b2bcd196-ai-persian-dataset`, not the earlier branch recorded in historical report text. Previous reports are small synthetic measurements and cannot be read as proof of a complete production corpus. Poetry and Common Voice fa moved to Profile C pending per-work/per-file rights review. The pinned poetry README identifies Ganjoor as its upstream database; CC BY-SA on the compilation does not independently license every underlying poem. The pinned Common Voice README says **the majority** of `/server/data` text is CC0, and names Europarl exceptions; the exact 21 fa files have no reviewed per-sentence origin ledger. No allowlist has been invented.
+
+Range resume with an HTTP validator still depends on the remote server honoring standard HTTP semantics; source-side changes with reused ETags/Last-Modified are not independently detectable. SQLite ingestion checkpoints are durable per document with shard fsync (slower at scale); millions-of-documents throughput and Windows file locking remain untested. Existing pre-repair indexes require `--force`; stale final files should not be trusted. The synthetic archive/HTTP/integration tests do not constitute real external download or full-scale testing.

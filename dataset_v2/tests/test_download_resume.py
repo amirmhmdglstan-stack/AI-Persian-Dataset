@@ -135,6 +135,9 @@ class TestDownloadResume(unittest.TestCase):
         part = dest.with_name(dest.name + ".part")
         full = b"12345678"
         part.write_bytes(full[:4])
+        part.with_name(part.name + ".json").write_text(json.dumps({
+            "url": URL, "size": 4, "sha256": sha(full[:4]),
+            "last_modified": LAST_MODIFIED, "etag": ""}))
         seen = []
 
         def fake(req, timeout=None):

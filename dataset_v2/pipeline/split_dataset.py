@@ -41,11 +41,12 @@ def assign_splits(index: SQLiteCorpusIndex, config: dict, *,
     conn.execute("DELETE FROM clusters")
     conn.commit()
 
-    # 1. One row per (source, duplicate cluster) with a deterministic order.
+    # 1. One row per global cluster, stratified by its kept representative source.
     n_clusters = 0
     for row in conn.execute(
-            "SELECT source_id, cluster_id, SUM(chars) AS chars FROM docs "
-            "WHERE status='kept' AND selected=1 GROUP BY source_id, cluster_id"):
+            "SELECT d.cluster_id, r.source_id, SUM(d.chars) AS chars FROM docs d "
+            "JOIN docs r ON r.doc_id=d.cluster_id "
+            "WHERE d.status='kept' AND d.selected=1 GROUP BY d.cluster_id, r.source_id"):
         h = stable_int(row["cluster_id"] + "\x1f" + row["source_id"], seed + ":split")
         conn.execute(
             "INSERT OR REPLACE INTO clusters(source_id,cluster_id,chars,h,split) VALUES(?,?,?,?,NULL)",

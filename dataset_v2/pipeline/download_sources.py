@@ -112,6 +112,7 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
     """
     dest.parent.mkdir(parents=True, exist_ok=True)
     part = dest.with_name(dest.name + ".part")
+    sidecar = part.with_name(part.name + ".json")
     label = f"{source_id or 'source'}/{dest.name}"
 
     if manifest_record is not None and not (
@@ -127,6 +128,7 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
             dest.unlink()
         if part.exists():
             part.unlink()
+        sidecar.unlink(missing_ok=True)
     elif dest.exists():
         if manifest_record is not None:
             try:
@@ -157,6 +159,7 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
             dest.unlink()
             if part.exists():
                 part.unlink()
+            sidecar.unlink(missing_ok=True)
         elif expected_sha1:
             actual_size = dest.stat().st_size
             digest1 = sha1_file(dest)
@@ -176,6 +179,7 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
             dest.unlink()
             if part.exists():
                 part.unlink()
+            sidecar.unlink(missing_ok=True)
         else:
             logger and logger.warning(
                 "%s exists but has no matching URL+filename manifest and no catalog SHA-1; "
@@ -183,11 +187,28 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
             dest.unlink()
             if part.exists():
                 part.unlink()
+            sidecar.unlink(missing_ok=True)
 
     partial = part.stat().st_size if part.exists() else 0
+    validator = None
+    if partial and mutable_weekly_snapshot:
+        try:
+            state = json.loads(sidecar.read_text(encoding="utf-8"))
+            validator = (state.get("etag") if not state.get("etag", "").startswith("W/")
+                         else None) or state.get("last_modified")
+            if (state.get("url") != url or state.get("size") != partial or
+                    state.get("sha256") != sha256_file(part) or not validator):
+                raise ValueError("partial identity or validator missing")
+        except (ValueError, OSError, json.JSONDecodeError):
+            part.unlink(missing_ok=True)
+            sidecar.unlink(missing_ok=True)
+            partial = 0
+            validator = None
     headers = {"User-Agent": USER_AGENT}
     if partial:
         headers["Range"] = f"bytes={partial}-"
+        if validator:
+            headers["If-Range"] = validator
     req = urllib.request.Request(url, headers=headers)
     resumed = False
     snapshot: dict = {}
@@ -195,30 +216,58 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
         with urllib.request.urlopen(req, timeout=timeout) as resp:
             snapshot = _snapshot_fields(resp.headers, mutable_weekly_snapshot,
                                         catalog_snapshot_date)
-            if resp.status == 206 and partial:
+            if resp.status == 206:
+                import re
+                cr = resp.headers.get("Content-Range", "")
+                match = re.fullmatch(r"bytes (\d+)-(\d+)/(\d+|\*)", cr)
+                if (not partial or not match or int(match.group(1)) != partial or
+                        int(match.group(2)) < partial or
+                        (match.group(3) != "*" and int(match.group(3)) <= int(match.group(2)))):
+                    raise ValueError("invalid Content-Range for partial download")
+                for key, header in (("snapshot_etag", "ETag"),
+                                    ("snapshot_last_modified", "Last-Modified")):
+                    if mutable_weekly_snapshot and state.get(key.replace("snapshot_", "")) and \
+                            (resp.headers.get(header) not in (None, state[key.replace("snapshot_", "")]) or
+                             (validator == state[key.replace("snapshot_", "")] and
+                              resp.headers.get(header) is None)):
+                        raise ValueError("snapshot validator changed during resume")
                 mode = "ab"
                 resumed = True
-            else:
+            elif resp.status == 200:
                 mode = "wb"
                 partial = 0
+            else:
+                raise ValueError(f"unexpected HTTP response {resp.status}")
             total = _parse_total(resp, partial)
             if max_bytes and total and total > max_bytes:
-                raise RuntimeError(
-                    f"Refusing to download {url}: reported size {total:,} bytes exceeds "
-                    f"--max-bytes {max_bytes:,}. Increase --max-bytes on the user PC.")
+                raise RuntimeError(f"Refusing to download {url}: reported size {total:,} exceeds --max-bytes")
             written = partial
-            with open(part, mode) as f:
-                while True:
-                    chunk = resp.read(CHUNK)
-                    if not chunk:
-                        break
-                    f.write(chunk)
-                    written += len(chunk)
-                    if logger and (written // (10 * CHUNK)) != ((written - len(chunk)) // (10 * CHUNK)):
-                        logger.info("  %s: %.1f MiB", dest.name, written / 1024 ** 2)
-                    if max_bytes and written > max_bytes:
-                        raise RuntimeError(
-                            f"Download exceeded --max-bytes {max_bytes:,}: {url}")
+            try:
+                with open(part, mode) as f:
+                    while True:
+                        chunk = resp.read(CHUNK)
+                        if not chunk:
+                            break
+                        f.write(chunk)
+                        written += len(chunk)
+                        if max_bytes and written > max_bytes:
+                            raise RuntimeError(f"Download exceeded --max-bytes {max_bytes:,}: {url}")
+            finally:
+                if part.exists():
+                    sidecar.write_text(json.dumps({"url": url, "size": part.stat().st_size,
+                        "sha256": sha256_file(part),
+                        "etag": resp.headers.get("ETag", ""),
+                        "last_modified": resp.headers.get("Last-Modified", "")}), encoding="utf-8")
+    except ValueError as e:
+        part.unlink(missing_ok=True)
+        sidecar.unlink(missing_ok=True)
+        # A clean request is safer than appending an inconsistent range.
+        if partial:
+            return download_one(url, dest, expected_size=expected_size, expected_sha1=expected_sha1,
+                max_bytes=max_bytes, timeout=timeout, logger=logger, force=True,
+                mutable_weekly_snapshot=mutable_weekly_snapshot,
+                catalog_snapshot_date=catalog_snapshot_date, source_id=source_id)
+        raise RuntimeError(str(e)) from e
     except urllib.error.HTTPError as e:
         raise RuntimeError(f"HTTP {e.code} while downloading {url}: {e.reason}") from e
     except urllib.error.URLError as e:
@@ -226,6 +275,8 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
                            "The .part file is kept; rerun to resume.") from e
 
     size = part.stat().st_size
+    if total is not None and size != total:
+        raise RuntimeError(f"Incomplete HTTP body for {url}: got {size}, expected {total}; partial kept")
     if expected_size and size != expected_size:
         raise RuntimeError(f"Size mismatch for {url}: got {size:,}, expected {expected_size:,}. "
                            "The .part file is kept for inspection; delete it to restart.")
@@ -234,6 +285,7 @@ def download_one(url: str, dest: Path, *, expected_size: int | None = None,
         raise RuntimeError(f"SHA-1 mismatch for {url}: got {digest1}, expected {expected_sha1}. "
                            "The .part file is kept; delete it to restart.")
     os.replace(part, dest)
+    sidecar.unlink(missing_ok=True)
     rec = {
         "path": str(dest), "filename": dest.name, "source_id": source_id,
         "url": url, "size": size, "sha1": digest1, "sha256": sha256_file(dest),
@@ -331,9 +383,14 @@ def main() -> None:
         source_dir = raw_root / s["id"]
         source_dir.mkdir(parents=True, exist_ok=True)
         records = []
+        fallback_needed = False
+        primary_available = False
         logger.info("[source] %s (%s)", s["id"], s["name"])
         for f in s.get("files", []):
-            if f.get("required") is False and not args.include_optional:
+            if f.get("fallback_only") and s["id"] == "tatoeba_fa_cc_by":
+                if primary_available or not fallback_needed:
+                    continue
+            elif f.get("required") is False and not args.include_optional:
                 logger.info("[skip optional] %s / %s (use --include-optional to download)",
                             s["id"], f["filename"])
                 continue
@@ -347,7 +404,8 @@ def main() -> None:
             else:
                 dest = source_dir / f["filename"]
                 mrec = manifest_record_for(manifest, s["id"], f["url"], dest)
-                rec = download_one(
+                try:
+                    rec = download_one(
                     f["url"], dest,
                     expected_size=f.get("reported_size_bytes"),
                     expected_sha1=f.get("sha1"),
@@ -356,6 +414,15 @@ def main() -> None:
                     mutable_weekly_snapshot=bool(f.get("mutable_weekly_snapshot", False)),
                     catalog_snapshot_date=f.get("snapshot_date"),
                     source_id=s["id"])
+                except RuntimeError as exc:
+                    if (s["id"] == "tatoeba_fa_cc_by" and not f.get("fallback_only") and
+                            (str(exc).startswith("HTTP 404 ") or str(exc).startswith("HTTP 410 "))):
+                        fallback_needed = True
+                        logger.warning("primary Tatoeba export permanently unavailable: %s", exc)
+                        continue
+                    raise
+                if s["id"] == "tatoeba_fa_cc_by" and not f.get("fallback_only"):
+                    primary_available = True
                 rec["format"] = f["format"]
                 rec["extractor"] = f["extractor"]
                 records.append(rec)

@@ -41,7 +41,7 @@ from urllib.parse import quote
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from common import (  # noqa: E402
-    config_policy, config_source_metadata, configure_logging, load_config,
+    atomic_write_json, config_policy, config_source_metadata, configure_logging, load_config,
     now_utc, require_free_space, sha256_file, stable_hash,
 )
 
@@ -501,23 +501,34 @@ def extract_csv(ctx: ExtractContext) -> Iterator[dict]:
 def extract_tsv(ctx: ExtractContext) -> Iterator[dict]:
     opts = ctx.options
     for path in ctx.raw_paths:
-        if path.suffixes[-2:] in ([".tar", ".gz"], [".tar", ".bz2"]) or ".tar." in path.name:
-            sources = [(m, f) for m, f in _iter_tar_files(path)
-                       if fnmatch.fnmatch(PurePosixPath(m).name, opts.get("member_pattern", "*"))]
+        if ".tar." in path.name:
+            sources = _iter_tar_files(path)
         else:
-            sources = [(path.name, open(path, "rb"))]
+            def plain():
+                with open(path, "rb") as f:
+                    yield path.name, f
+            sources = plain()
         for member_name, fileobj in sources:
-            for lineno, d, row in _delimited_rows(_lines_from_binary(fileobj), opts, ctx):
-                text = str(d.get(opts.get("text_column", "text"), "")).strip()
-                if not text:
-                    ctx.skip("empty_text_column")
+            try:
+                if not fnmatch.fnmatch(PurePosixPath(member_name).name,
+                                       opts.get("member_pattern", "*")):
                     continue
-                title = str(d.get(opts.get("title_column", ""), "") or "").strip()
-                rid = str(d.get(opts.get("id_column", "id"), "") or f"{lineno}").strip()
-                meta = {k: d.get(k, "") for k in opts.get("meta_columns", [])}
-                meta.update({"raw_file": path.name, "member": member_name, "line": lineno})
-                yield ctx.record(f"{member_name}:{rid}", text, title=title, meta=meta)
-            if fileobj is not path and hasattr(fileobj, "close"):
+                for lineno, d, row in _delimited_rows(_lines_from_binary(fileobj), opts, ctx):
+                    text = str(d.get(opts.get("text_column", "text"), "")).strip()
+                    if not text:
+                        ctx.skip("empty_text_column")
+                        continue
+                    title = str(d.get(opts.get("title_column", ""), "") or "").strip()
+                    rid = str(d.get(opts.get("id_column", "id"), "") or f"{lineno}").strip()
+                    meta = {k: d.get(k, "") for k in opts.get("meta_columns", [])}
+                    if ctx.source["id"] == "persian_poetry_ccbysa":
+                        meta.update({"poet": d.get("poet", ""), "century": d.get("century", ""),
+                                     "compilation_license": ctx.source.get("license_compilation"),
+                                     "underlying_work_rights": "unverified; quarantine pending per-work review",
+                                     "repository": ctx.source.get("url")})
+                    meta.update({"raw_file": path.name, "member": member_name, "line": lineno})
+                    yield ctx.record(f"{member_name}:{rid}", text, title=title, meta=meta)
+            finally:
                 fileobj.close()
 
 
@@ -938,31 +949,52 @@ EXTRACTORS = {
 
 def source_raw_paths(source: dict, raw_root: Path, skip_missing: bool, logger) -> tuple[list[Path], Path | None, str | None]:
     paths, parts_dir, extractor = [], None, None
-    for f in source.get("files", []):
+    missing_required = False
+    files = source.get("files", [])
+    if source["id"] == "tatoeba_fa_cc_by":
+        # The two files are alternatives, never simultaneous inputs.
+        files = [next((f for f in files if not f.get("fallback_only") and
+                       (raw_root / source["id"] / f["filename"]).exists()), None)
+                 or next(f for f in files if f.get("fallback_only"))]
+    for f in files:
         ex = f["extractor"]
         extractor = extractor or ex
         if ex != extractor:
-            raise RuntimeError(f"Source {source['id']} mixes extractors {extractor}/{ex}; split it into separate sources.")
+            raise RuntimeError(f"Source {source['id']} mixes extractors {extractor}/{ex}")
         if f.get("format") == "github_api_7z":
             candidate = raw_root / source["id"] / "parts"
-            if not candidate.exists():
-                if skip_missing or not f.get("required", True):
-                    logger.warning("skipping missing optional 7z parts directory %s", candidate)
+            if candidate.exists():
+                parts_dir = candidate
+            elif f.get("required", True):
+                if skip_missing:
+                    missing_required = True
                 else:
                     raise FileNotFoundError(f"Missing 7z parts directory: {candidate}")
-            else:
-                parts_dir = candidate
         else:
             p = raw_root / source["id"] / f["filename"]
             if not p.exists():
                 if skip_missing or not f.get("required", True):
-                    logger.warning("skipping missing optional raw file %s", p)
+                    logger.warning("missing raw file %s; required=%s", p, f.get("required", True))
+                    if f.get("required", True):
+                        missing_required = True
                     continue
                 raise FileNotFoundError(f"Missing raw file for {source['id']}: {p}. Run download_sources.py first.")
             paths.append(p)
-    if not paths and parts_dir is None:
-        return [], None, extractor
+    if missing_required:
+        return [], None, extractor  # never publish an incomplete multi-file source
     return paths, parts_dir, extractor
+
+
+def input_identity(source, paths, parts_dir, extractor, options, policy):
+    files = list(paths)
+    if parts_dir:
+        files += sorted(p for p in parts_dir.rglob("*") if p.is_file())
+    return {
+        "raw_inputs": [{"filename": str(p), "size": p.stat().st_size,
+                        "sha256": sha256_file(p)} for p in files],
+        "source": source, "extractor": extractor, "options": options,
+        "policy": policy,
+    }
 
 
 def main() -> None:
@@ -1012,11 +1044,6 @@ def main() -> None:
         out_dir = extracted_root / s["profile"]
         out_dir.mkdir(parents=True, exist_ok=True)
         out_path = out_dir / f"{s['id']}.jsonl"
-        prior = manifest["sources"].get(s["id"])
-        if (not args.force and prior and prior.get("status") == "complete"
-                and out_path.exists() and sha256_file(out_path) == prior.get("sha256")):
-            logger.info("[skip] %s already extracted and checksum verified", s["id"])
-            continue
         paths, parts_dir, extractor = source_raw_paths(s, raw_root, args.skip_missing, logger)
         if not paths and parts_dir is None:
             manifest["sources"][s["id"]] = {"status": "missing_raw_files", "updated_at_utc": now_utc()}
@@ -1024,46 +1051,81 @@ def main() -> None:
             continue
         if extractor not in EXTRACTORS:
             raise RuntimeError(f"No extractor named {extractor!r} for source {s['id']}")
-        # Merge file-entry options; later entries may refine earlier ones.
         options: dict = {}
         for f in s.get("files", []):
+            if s["id"] == "tatoeba_fa_cc_by" and f["filename"] != paths[0].name:
+                continue
             options.update(f.get("options", {}))
+        identity = input_identity(s, paths, parts_dir, extractor, options, policy)
+        prior = manifest["sources"].get(s["id"])
+        if (not args.force and args.max_docs is None and prior and
+                prior.get("status") == "complete" and prior.get("input_identity") == identity
+                and out_path.exists() and sha256_file(out_path) == prior.get("sha256")):
+            logger.info("[skip] %s already extracted and inputs verified", s["id"])
+            continue
+        out_path.unlink(missing_ok=True)  # stale outputs must not be buildable
         ctx = ExtractContext(source=s, options=options, raw_paths=paths,
                              parts_dir=parts_dir, workdir=workdir, logger=logger,
                              policy=policy, max_docs=args.max_docs)
         tmp = out_path.with_name(out_path.name + ".part")
         docs = chars = 0
         logger.info("[extract] %s -> %s", s["id"], out_path)
-        with open(tmp, "w", encoding="utf-8", newline="\n") as out:
-            for rec in EXTRACTORS[extractor](ctx):
-                if not rec:
-                    continue
-                text = rec["text"]
-                out.write(json.dumps(rec, ensure_ascii=False, sort_keys=True,
-                                     separators=(",", ":")) + "\n")
-                docs += 1
-                chars += len(text)
-                if docs % int(cfg.get("log_every_docs", 10000)) == 0:
-                    logger.info("  %s: %s docs", s["id"], f"{docs:,}")
-                if args.max_docs and docs >= args.max_docs:
-                    logger.warning("  %s: stopping at --max-docs %d", s["id"], args.max_docs)
-                    break
-            out.flush()
-            os.fsync(out.fileno())
-        os.replace(tmp, out_path)
-        checksum = sha256_file(out_path)
+        partial = False
+        try:
+            with open(tmp, "w", encoding="utf-8", newline="\n") as out:
+                gen = EXTRACTORS[extractor](ctx)
+                try:
+                    for rec in gen:
+                        if not rec:
+                            continue
+                        text = rec["text"]
+                        out.write(json.dumps(rec, ensure_ascii=False, sort_keys=True,
+                                             separators=(",", ":")) + "\n")
+                        docs += 1
+                        chars += len(text)
+                        if docs % int(cfg.get("log_every_docs", 10000)) == 0:
+                            logger.info("  %s: %s docs", s["id"], f"{docs:,}")
+                        if args.max_docs and docs >= args.max_docs:
+                            partial = True  # even at EOF, conservative until iterator exhausted
+                            break
+                finally:
+                    gen.close()
+                out.flush()
+                os.fsync(out.fileno())
+        except BaseException:
+            manifest["sources"][s["id"]] = {"status": "failed", "reason": "interrupted_or_extraction_error",
+                                             "input_identity": identity}
+            atomic_write_json(manifest_path, manifest)
+            raise
+        if not partial:
+            os.replace(tmp, out_path)
+        else:
+            # A previous complete file is stale; do not expose it to the builder.
+            out_path.unlink(missing_ok=True)
+        checksum = sha256_file(tmp if partial else out_path)
+        snapshot = None
+        dl_manifest = workdir / "download_manifest.json"
+        if dl_manifest.exists():
+            downloaded = json.loads(dl_manifest.read_text(encoding="utf-8"))
+            snapshot = [r for r in downloaded.get("sources", {}).get(s["id"], {}).get("files", [])
+                        if any(r.get("filename") == p.name and r.get("sha256") == sha256_file(p)
+                               for p in paths)]
         rec = {
-            "status": "complete", "profile": s["profile"], "decision": s["decision"],
-            "license_content": s["license_content"], "output": str(out_path),
+            "download_snapshot": snapshot,
+            "status": "partial" if partial else "complete",
+            "reason": "max_docs" if partial else None,
+            "profile": s["profile"], "decision": s["decision"],
+            "license_content": s["license_content"],
+            "output": str(tmp if partial else out_path),
             "documents": docs, "characters": chars, "sha256": checksum,
-            "raw_files": [str(p) for p in paths],
+            "raw_files": [str(p) for p in paths], "input_identity": identity,
             "parts_dir": str(parts_dir) if parts_dir else None,
             "extractor": extractor, "options": options,
             "skipped_by_reason": ctx.stats["skipped_by_reason"],
             "license_template_rejections": ctx.stats.get("license_template_rejections", {}),
             "license_allowlist_version": policy.get("license_allowlist", {}).get("version"),
             "raw_records": ctx.stats["raw_records"],
-            "truncated_by_max_docs": bool(args.max_docs and docs >= args.max_docs),
+            "truncated_by_max_docs": partial,
             "extracted_at_utc": now_utc(),
         }
         manifest["sources"][s["id"]] = rec

@@ -16,6 +16,7 @@ emitted.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import re
@@ -493,6 +494,16 @@ def main() -> None:
                            policy["global_rules"]["v1_root_filenames"])
     catalog, catalog_meta = load_catalog(meta_path)
     reports_dir.mkdir(parents=True, exist_ok=True)
+    if args.force or args.max_docs:
+        # Never leave an earlier production result visible during a partial run.
+        for dirname in ("profile_A", "profile_B", "profile_C_quarantine_manifest_only"):
+            old = outdir / dirname
+            if old.exists():
+                shutil.rmtree(old)
+        for name in ("checksums.json",):
+            (outdir / name).unlink(missing_ok=True)
+        for name in ("build_report.json", "quality_report.json", "pipeline_benchmark.json"):
+            (reports_dir / name).unlink(missing_ok=True)
 
     index_path = workdir / "corpus_index.sqlite3"
     normalized_dir = workdir / "normalized"
@@ -509,7 +520,10 @@ def main() -> None:
         checkpoint = {"processed_sources": [], "last_source": None, "last_line": 0,
                       "processed_docs": 0, "stats": {}}
     elif args.resume and checkpoint_path.exists():
-        checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        try:
+            checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            checkpoint = {}  # authoritative state is in SQLite; JSON may be torn
     elif index_path.exists() and not args.resume:
         raise RuntimeError(
             f"Corpus index already exists at {index_path}. Use --resume to continue "
@@ -518,9 +532,76 @@ def main() -> None:
         checkpoint = {"processed_sources": [], "last_source": None, "last_line": 0,
                       "processed_docs": 0, "stats": {}}
 
+    files = iter_extracted_files(extracted_root)
+    if not files:
+        raise FileNotFoundError(f"No extracted JSONL files found under {extracted_root}")
+    manifest_path = workdir / "extract_manifest.json"
+    if manifest_path.exists() and extracted_root.resolve() == (workdir / "extracted").resolve():
+        extraction = json.loads(manifest_path.read_text(encoding="utf-8"))["sources"]
+        for path in files:
+            rec = extraction.get(path.stem)
+            if not rec or rec.get("status") != "complete" or rec.get("sha256") != sha256_file(path):
+                raise RuntimeError(f"Extraction for {path.stem} is not verified complete; re-extract before building")
+    relevant_cfg = {k: v for k, v in cfg.items()
+                    if k not in ("checkpoint_every_docs", "log_every_docs", "min_free_gb",
+                                 "workdir", "outdir")}
+    fingerprint_data = {"inputs": [(str(p.resolve()), sha256_file(p)) for p in files],
+                        "config": relevant_cfg, "metadata": json.loads(meta_path.read_text(encoding="utf-8")),
+                        "policy": policy, "profiles": sorted(profiles),
+                        "only_sources": sorted(args.only_sources or [])}
+    fingerprint = hashlib.sha256(json.dumps(fingerprint_data, sort_keys=True,
+                                  ensure_ascii=False).encode("utf-8")).hexdigest()
+    existing_index = index_path.exists()
     index = SQLiteCorpusIndex(index_path, cfg, reset=args.force)
+    # Ingestion state and document rows must commit together. An external JSON
+    # checkpoint is a readable mirror, never authoritative after a crash.
+    index.commit_every = 2**63
+    index.conn.execute("CREATE TABLE IF NOT EXISTS ingestion (k TEXT PRIMARY KEY, v TEXT NOT NULL)")
+    stored = index.conn.execute("SELECT v FROM ingestion WHERE k='state'").fetchone()
+    if stored:
+        checkpoint = json.loads(stored[0])
+        if not args.resume and not args.force:
+            raise RuntimeError("Existing ingestion state; use --resume or --force")
+        if checkpoint.get("fingerprint") != fingerprint:
+            raise RuntimeError("Incompatible build inputs/configuration; use --force for a clean rebuild")
+    elif existing_index and not args.force:
+        index.close()
+        raise RuntimeError("Index has no transactional ingestion state; use --force for a clean rebuild")
+    checkpoint["fingerprint"] = fingerprint
     writer = ShardWriter(normalized_dir, int(cfg.get("shard_bytes", 67108864)),
                          checkpoint.get("shard_state"))
+    if stored:
+        # Shard writes ahead of the last DB commit are harmless; remove only the
+        # uncommitted tail before appending again.
+        state = checkpoint.get("shard_state") or {}
+        current = Path(state.get("current_shard") or "")
+        if current.is_file():
+            if current.stat().st_size < int(state.get("shard_size", 0)):
+                raise RuntimeError("Committed shard is truncated; use --force")
+            writer.fh.truncate(int(state["shard_size"]))
+            writer.fh.seek(0, 2)
+            writer.size = int(state["shard_size"])
+        elif checkpoint.get("processed_docs", 0):
+            raise RuntimeError("Committed shard is missing; use --force")
+
+    def save_state(source_id, line_no):
+        checkpoint.update({
+            "processed_sources": processed_sources, "last_source": source_id,
+            "last_line": line_no, "processed_docs": processed_docs,
+            "shard_state": writer.state(),
+            "stats": {**stats, "by_source": {k: dict(v) for k, v in by_source.items()},
+                      "rejection_reasons": dict(rejection_reasons),
+                      "language_reasons": dict(language_reasons)},
+            "updated_at_utc": now_utc(), "fingerprint": fingerprint,
+        })
+        if writer.fh:
+            writer.fh.flush()
+            os.fsync(writer.fh.fileno())
+        index.conn.execute("INSERT OR REPLACE INTO ingestion(k,v) VALUES('state',?)",
+                           (json.dumps(checkpoint, ensure_ascii=False),))
+        index.commit()
+        if processed_docs % checkpoint_every == 0 or line_no == 0:
+            write_checkpoint(checkpoint_path, checkpoint)
 
     stats = checkpoint.get("stats") or {
         "documents_seen": 0, "documents_accepted": 0, "documents_rejected": 0,
@@ -539,15 +620,12 @@ def main() -> None:
     last_line = int(checkpoint.get("last_line", 0))
     processed_docs = int(checkpoint.get("processed_docs", 0))
 
-    files = iter_extracted_files(extracted_root)
-    if not files:
-        raise FileNotFoundError(
-            f"No extracted JSONL files found under {extracted_root}. "
-            "Run extract_sources.py first, or pass --extracted for a small test.")
     logger.info("found %d extracted source files", len(files))
     seed = cfg.get("seed", "persian-dataset-v2")
     checkpoint_every = int(cfg.get("checkpoint_every_docs", 5000))
     log_every = int(cfg.get("log_every_docs", 10000))
+    if not stored:
+        save_state(last_source, last_line)
 
     for path in files:
         source_id = path.stem
@@ -594,8 +672,7 @@ def main() -> None:
                 doc_id = stable_hash(source_id + "\x1f" + rec.get("doc_id", str(line_no)),
                                      seed + ":docid")
                 if index.has_doc(doc_id):
-                    by_source[source_id]["already_indexed"] += 1
-                    continue
+                    raise RuntimeError(f"Duplicate document ID in input: {source_id}:{line_no}")
                 norm = normalize(raw_text, cfg)
                 lang = detect_language(norm.text, norm.stats, cfg,
                                        domain=src.get("domain", "default"))
@@ -605,13 +682,13 @@ def main() -> None:
                     "source_id": source_id, "source_name": src.get("name", source_id),
                     "profile": src["profile"], "license": src["license_content"],
                     "domain": src.get("domain", "encyclopedia"),
-                    "attribution": src.get("copyright_holder", ""),
                     "content_rights_verified": bool(src.get("content_rights_verified")),
                     "quality_score": decision.score,
                     "quality_features": decision.features,
                     "language_score": lang.score,
                     "language_reason": lang.reason,
                 })
+                meta.setdefault("attribution", src.get("copyright_holder", ""))
                 excerpt = redact_excerpt(raw_text or norm.text,
                                          int(cfg.get("audit_excerpt_chars", 400)))
                 if not decision.passed:
@@ -676,38 +753,30 @@ def main() -> None:
                 if processed_docs % log_every == 0:
                     logger.info("progress: %s docs seen, %s accepted", f"{processed_docs:,}",
                                 f"{stats['documents_accepted']:,}")
-                if processed_docs % checkpoint_every == 0:
-                    index.commit()
-                    checkpoint.update({
-                        "processed_sources": processed_sources,
-                        "last_source": source_id, "last_line": line_no,
-                        "processed_docs": processed_docs, "shard_state": writer.state(),
-                        "stats": {**stats, "by_source": {k: dict(v) for k, v in by_source.items()},
-                                  "rejection_reasons": dict(rejection_reasons),
-                                  "language_reasons": dict(language_reasons)},
-                        "updated_at_utc": now_utc(),
-                    })
-                    write_checkpoint(checkpoint_path, checkpoint)
+                save_state(source_id, line_no)
                 if args.max_docs and processed_docs >= args.max_docs:
                     logger.warning("stopping at --max-docs %d", args.max_docs)
                     break
+        if args.max_docs and processed_docs >= args.max_docs:
+            # The source is not complete. Keep the exact committed line cursor.
+            break
         processed_sources.append(source_id)
         last_source, last_line = source_id, 0
-        index.commit()
-        checkpoint.update({
-            "processed_sources": processed_sources, "last_source": None, "last_line": 0,
-            "processed_docs": processed_docs, "shard_state": writer.state(),
-            "stats": {**stats, "by_source": {k: dict(v) for k, v in by_source.items()},
-                      "rejection_reasons": dict(rejection_reasons),
-                      "language_reasons": dict(language_reasons)},
-            "updated_at_utc": now_utc(),
-        })
-        write_checkpoint(checkpoint_path, checkpoint)
-        if args.max_docs and processed_docs >= args.max_docs:
-            break
+        save_state(None, 0)
     writer.close()
     index.commit()
+    if args.max_docs and processed_docs >= args.max_docs:
+        atomic_write_json(reports_dir / "partial_build.json", {
+            "status": "partial", "reason": "max_docs", "fingerprint": fingerprint,
+            "last_source": checkpoint["last_source"], "last_line": checkpoint["last_line"],
+            "processed_sources": processed_sources, "statistics": checkpoint["stats"],
+        })
+        index.close()
+        logger.warning("Partial ingestion only; no balance, splits or production outputs written")
+        return
 
+
+    (reports_dir / "partial_build.json").unlink(missing_ok=True)
     balance_report = apply_balance(index, cfg, logger, scope=args.scope)
     split_report = assign_splits(index, cfg, logger=logger)
     outputs = write_final_outputs(index, outdir, profiles, catalog_meta, cfg, logger)

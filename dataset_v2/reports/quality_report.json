@@ -62,7 +62,7 @@
   "documents_accepted_after_quality": 30,
   "documents_rejected": 17,
   "documents_seen": 54,
-  "generated_at_utc": "2026-11-02T16:42:55Z",
+  "generated_at_utc": "2026-11-03T20:08:23Z",
   "language_rejection_reasons": {
     "no_persian_lexical_evidence": 2,
     "persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters": 1,

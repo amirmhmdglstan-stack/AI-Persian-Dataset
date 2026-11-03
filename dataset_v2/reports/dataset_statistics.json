@@ -154,7 +154,7 @@
       "latin_letter_ratio_of_letters": 0.0,
       "latin_letters": 0,
       "lines": 1,
-      "path": "dataset_v2/.smoke_work/final/profile_A/test.txt",
+      "path": "/home/user/v2-smoke-repair/final/profile_A/test.txt",
       "persian_digits": 0,
       "persian_letter_ratio_of_characters": 0.7381,
       "persian_letter_ratio_of_letters": 1.0,
@@ -188,14 +188,14 @@
       "latin_letter_ratio_of_letters": 0.0053,
       "latin_letters": 27,
       "lines": 194,
-      "path": "dataset_v2/.smoke_work/final/profile_A/train.txt",
+      "path": "/home/user/v2-smoke-repair/final/profile_A/train.txt",
       "persian_digits": 16,
       "persian_letter_ratio_of_characters": 0.7638,
       "persian_letter_ratio_of_letters": 0.9947,
       "persian_letters": 5037,
       "persian_words": 1180,
       "profile": "A",
-      "scan_seconds": 0.007,
+      "scan_seconds": 0.008,
       "sentences": 126,
       "split": "train",
       "tokens_content_excluding_document_end": 1864,
@@ -222,7 +222,7 @@
       "latin_letter_ratio_of_letters": 0.0,
       "latin_letters": 0,
       "lines": 1,
-      "path": "dataset_v2/.smoke_work/final/profile_A/validation.txt",
+      "path": "/home/user/v2-smoke-repair/final/profile_A/validation.txt",
       "persian_digits": 0,
       "persian_letter_ratio_of_characters": 0.8182,
       "persian_letter_ratio_of_letters": 1.0,
@@ -240,7 +240,7 @@
       "zwnj": 0
     }
   },
-  "generated_at_utc": "2026-11-02T16:42:55Z",
+  "generated_at_utc": "2026-11-03T20:08:23Z",
   "license_distribution": {
     "CC0-1.0 small-sample test fixture": {
       "characters": 6681,
@@ -255,9 +255,9 @@
   ],
   "measurement_scope": "small_sample",
   "measurement_status": "measured_from_final_files_on_disk",
-  "peak_rss_mb": 24.29,
+  "peak_rss_mb": 24.8,
   "peak_rss_note": "Measured with resource.getrusage on Linux / GetProcessMemoryInfo on Windows; None if unavailable.",
-  "processing_duration_seconds": 0.074,
+  "processing_duration_seconds": 0.113,
   "profile_distribution": {
     "A": {
       "characters": 6681,
@@ -525,7 +525,7 @@
       "tokens_including_document_end": 10
     }
   },
-  "statistics_scan_seconds": 0.007,
+  "statistics_scan_seconds": 0.009,
   "tokenizer": {
     "document_ending_tokens_note": "Content token counts EXCLUDE document separators. One <|endoftext|> token per document is reported separately and in tokens_including_document_end. Separator lines are not tokenized as text.",
     "method": "exact: Tokenizer.encode() over every final document, add_special_tokens=False",

@@ -12,13 +12,13 @@
 
 | Item | Value |
 |---|---|
-| Current session branch | `arena/62203741-ai-persian-dataset` |
+| Current session branch | `arena/b2bcd196-ai-persian-dataset` |
 | Base commit | `a770ebfc33b4d72c26b9655084b45ec13ef5dacc` (`main` initial commit) |
 | V1 branch (untouched) | `arena/f01a4e1e-ai-persian-dataset` |
 | V1 commit | `8e35d5e7e72597eda96e83db9c01a1335f235e19` |
 | V1 status | immutable baseline; its `train.txt`, `validation.txt`, README, sources, reports and tokenizer remain on the remote V1 branch |
 
-The user's requested branch name `persian-dataset-v2-pipeline` was **not** created: this Arena session is fixed to `arena/62203741-ai-persian-dataset` and must not create/switch/push another branch. V2 lives in a new `dataset_v2/` tree on the fixed branch. The only V1 artifact copied into V2 is `tokenizer/persian-bpe-32k.json`, byte-identical to the V1 blob (`sha256 8bdecc85dd05009b2abb2148d2cea6ac15ed4815d3d8064e6ee8b1d2500c53a5`), because it is the working baseline. `verify_dataset.py` checks V1 files that are present and size-compatible; `build_corpus.py` refuses to write into the repository root or over V1-named files.
+This repair session is fixed to `arena/b2bcd196-ai-persian-dataset`. Its parent history contains the V2 branch at `e9bbf532`; repairs are pushed **only** to this session branch, not to `arena/62203741-ai-persian-dataset` or V1. V2 lives in a new `dataset_v2/` tree on the fixed branch. The only V1 artifact copied into V2 is `tokenizer/persian-bpe-32k.json`, byte-identical to the V1 blob (`sha256 8bdecc85dd05009b2abb2148d2cea6ac15ed4815d3d8064e6ee8b1d2500c53a5`), because it is the working baseline. `verify_dataset.py` checks V1 files that are present and size-compatible; `build_corpus.py` refuses to write into the repository root or over V1-named files.
 
 ---
 
@@ -32,7 +32,7 @@ The user's requested branch name `persian-dataset-v2-pipeline` was **not** creat
 
 A source's MIT/ODC-BY/CC **compilation** label never counts as permission for the underlying text. `sources/source_catalog.csv`, `sources/licensing_matrix.csv` and `sources/source_metadata.json` record both. PROFILE A is **not obligation-free**: CC BY-SA / GFDL share-alike, Tatoeba CC BY 2.0 FR author attribution, Wikinews CC BY 2.5 attribution, GPL-3.0 data-file notices and other source-specific conditions still apply. Per-document provenance is retained in `documents.jsonl`. Trained model weights are **not** assumed to be automatically free of upstream licensing obligations. See `reports/licensing_report.md`.
 
-Approved A sources include dated official Wikimedia dumps (Wikipedia 2026-10-01, Wikibooks/Wikisource/Wikinews 2026-11-01), Common Voice CC0 Persian sentence text, Tatoeba CC BY 2.0 FR sentences, a public-domain-only Ganjoor subset, CC BY-SA classical poetry, and the optional V1 Wikipedia mirror. PROFILE B contains ParsiNLU CC BY-NC-SA text. SLPL/naab, Shiraz, TLPC, MirasText, publisher news, PeQa and Common-Crawl-derived corpora are quarantined.
+Approved A sources include dated official Wikimedia dumps (Wikipedia 2026-10-01, Wikibooks/Wikisource/Wikinews 2026-11-01), Tatoeba CC BY 2.0 FR sentences, a public-domain-only Ganjoor subset, and the optional V1 Wikipedia mirror. PROFILE B contains ParsiNLU CC BY-NC-SA text. SLPL/naab, Shiraz, TLPC, MirasText, publisher news, PeQa and Common-Crawl-derived corpora are quarantined.
 
 ---
 
@@ -52,7 +52,7 @@ verify_dataset.py     independent re-scan, split leakage, V1 integrity, checksum
 compare_tokenizers.py capped 8M-char streaming BPE comparison, measured peak RSS
 ```
 
-Scalability design: one document at a time; normalized text in 64 MiB JSONL shards; all dedup/audit/provenance metadata in SQLite (`PRAGMA cache_size=-32768`, WAL, `temp_store=FILE`); LSH candidate lists capped; streaming SQL cursors; atomic `.part` → `os.replace`; deterministic BLAKE2b hashes (never Python's randomized `hash()`); checkpoint every 5,000 docs; resumable `--resume`; `--force` rebuild; disk-space checks; logging to `workdir/pipeline.log`; no Linux-only commands; no GPU; standard library wherever practical.
+Scalability design: one document at a time; normalized text in 64 MiB JSONL shards; all dedup/audit/provenance metadata in SQLite (`PRAGMA cache_size=-32768`, WAL, `temp_store=FILE`); LSH candidate lists capped; streaming SQL cursors; atomic `.part` → `os.replace`; deterministic BLAKE2b hashes (never Python's randomized `hash()`); transactional SQLite ingestion checkpoint per document (JSON mirror every 5,000); resumable `--resume`; `--force` rebuild; disk-space checks; logging to `workdir/pipeline.log`; no Linux-only commands; no GPU; standard library wherever practical.
 
 Default `requirements.txt` contains **only** `tokenizers>=0.20,<0.24`, which supports the user's installed `tokenizers 0.23.3` without downgrading it. `pyarrow` (Parquet) and `py7zr` (optional V1 7z mirror) are in separate optional requirement files and are **never auto-installed** by the default launchers. `pipeline/check_requirements.py` prints versions and missing optional packages only when corresponding sources are enabled. No PyTorch, NumPy, pandas, TensorFlow, `datasets` library, GPU packages or model weights.
 
@@ -142,7 +142,7 @@ Exact single commands are also in the `.cmd` files; use `--force` instead of `--
 **Linux-only, Python 3.11.2.** These are small synthetic/unit results. They are **not** Windows 11 / Python 3.12 verification, full-corpus extraction, full-corpus tokenization or full-corpus memory measurements.
 
 * `python -m compileall -q dataset_v2/pipeline dataset_v2/tests dataset_v2/sources`: **passed**.
-* `python -m unittest discover -s dataset_v2/tests -v` in a **core-only** venv with `tokenizers 0.23.3`: **72 tests, OK (1 skipped: optional `pyarrow` not installed)** (`reports/unit_test_output.txt`). A second run on the system Python also passed 72 tests with 7 optional-dependency skips. New tests cover path resolution/launchers, `pes` Tatoeba catalog/parsing/fallback, Wikisource licence allowlist, download manifest resume/corruption/partial/force, full-run balancing, Wikimedia page domains, requirements policy and bounded tokenizer comparison.
+* `python -m unittest discover -s dataset_v2/tests -v` in a **core-only** venv with `tokenizers 0.23.3`: **86 tests, OK (1 skipped: optional `pyarrow` not installed)** (`reports/unit_test_output.txt`). A second run on the system Python also passed 86 tests with 7 optional-dependency skips. New tests cover path resolution/launchers, `pes` Tatoeba catalog/parsing/fallback, Wikisource licence allowlist, download manifest resume/corruption/partial/force, full-run balancing, Wikimedia page domains, requirements policy and bounded tokenizer comparison.
 * `pipeline/check_requirements.py`: default Profile A printed `tokenizers 0.23.3`, no optional packages required, V1 32K baseline OK, and exited 0. With `--include-optional` it correctly reported the optional `py7zr` missing and exited 1; no optional package was auto-installed (`reports/requirements_check_output.txt`).
 * `dataset_v2/tests/run_smoke_test.py`: **small-sample integration passed** on 54 synthetic fixtures; 30 final documents, 6,681 characters, 1,886 measured content tokens, 3.5424 chars/token, 6.6925 bytes/token, 1 exact + 6 near duplicates removed, train/validation/test = 28/1/1, 27 verification checks / 0 failures / 1 expected split-ratio warning (`reports/small_sample_statistics.json`, `reports/integration_test_output.txt`). `build_report.json` records `small_sample_caps_bypassed_for_synthetic_tests_only`; unit tests separately verify that `full_run` applies caps below the 480 M target.
 * `extract_sources.py --only-sources tatoeba_fa_cc_by` on a synthetic `pes_sentences_detailed.tsv.bz2` through the real catalog/extractor mapping: 1 Persian document retained, `eng` and `fas` rejected, provenance and CC BY 2.0 FR attribution in metadata only (`reports/tatoeba_extraction_integration_output.txt`).
@@ -167,3 +167,11 @@ V1's 538,849,962 filtered characters were 84.83% Wikipedia; only 504,758,077 cha
 5. Prioritize rights-cleared modern Persian prose, educational text and dialogue over simply increasing model size.
 
 No model training is performed or recommended in this phase. The dataset must be finalized first.
+
+## Repair handover (2026-11-03)
+
+**The source catalog changed:** Chronological Poetry and Common Voice Persian sentence files are now Profile C (quarantine; not downloaded or built). The former Profile A volume estimates and historical synthetic reports that predate this decision are NOT current full-corpus measurements. See `reports/licensing_report.md`. No full-scale V2 corpus has been built here.
+
+Extraction now fingerprints raw files (size/SHA-256), source configuration and policy, writes only complete `.jsonl` files atomically, and leaves limited output as `.part` with `status: partial`. The builder rejects incomplete manifest entries, fingerprints inputs/configuration for resuming, and records ingestion cursor and statistics in SQLite in the same transaction as documents. The JSON checkpoint is an informational mirror. `--max-docs` writes `partial_build.json` and never final splits/reports. Downloads of mutable exports resume only with a matching validator, byte range and verified `.part` sidecar; a 404/410 Tatoeba primary triggers the all-language fallback.
+
+**Existing V2 work directories must be rebuilt after this upgrade.** Old indexes lack transactional cursor/fingerprints. Use `--force` for the first build on the new branch; re-run extraction against existing raw files to refresh old manifests (it will hash raw inputs). Do not reuse an old final dataset or old generated reports. The launchers require the fixed branch named above and a clean tracked tree; they do not change Git branches automatically. Run `run_v2_tests.cmd` before `run_v2.cmd`. Windows 11 / Python 3.12 execution is not verified here.

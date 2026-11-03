@@ -1,6 +1,6 @@
 ==============================================================================
 PERSIAN DATASET V2 - MANUAL AUDIT SAMPLES
-Generated: 2026-11-02T16:42:55Z
+Generated: 2026-11-03T20:08:23Z
 Excerpts are truncated and PII-redacted. Automated quality scores do NOT
 establish semantic correctness, factual accuracy, or legal safety.
 Review good, rejected, borderline, near-duplicate, formal and informal
