@@ -1,0 +1,29 @@
+Persian Dataset V2 requirements check (Linux / Python 3.11.2 / tokenizers 0.23.3)
+
+=== default Profile A (no optional sources enabled) ===
+Persian Dataset V2 requirements check
+  Python                 : 3.11.2 (linux)
+  Profiles               : A
+  Repository metadata    : dataset_v2/sources/source_metadata.json
+  Enabled source files   : 28
+  Optional packages      : none required for enabled sources
+  tokenizers             : 0.23.3 [supported >=0.20,<0.24: OK]
+  V1 32K baseline        : OK vocab=32000, <|endoftext|> ID 0 single-token
+  Heavyweight packages   : not installed, not imported, not required
+REQUIREMENTS CHECK PASSED
+exit=0
+
+=== Profile A --include-optional (expected py7zr missing; optional packages not auto-installed) ===
+Persian Dataset V2 requirements check
+  Python                 : 3.11.2 (linux)
+  Profiles               : A
+  Repository metadata    : dataset_v2/sources/source_metadata.json
+  Enabled source files   : 30
+  Optional packages      : py7zr
+  tokenizers             : 0.23.3 [supported >=0.20,<0.24: OK]
+  py7zr                  : MISSING [required by an enabled source]
+  V1 32K baseline        : OK vocab=32000, <|endoftext|> ID 0 single-token
+  Heavyweight packages   : not installed, not imported, not required
+ERROR: missing enabled requirements: py7zr
+Install optional packages explicitly only when needed; default launchers do not auto-install them.
+exit=1 (expected: py7zr missing)

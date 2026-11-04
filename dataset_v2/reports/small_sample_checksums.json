@@ -1,0 +1,38 @@
+{
+  "algorithm": "sha256",
+  "config_version": "2.1.0",
+  "files": {
+    "profile_A/documents.jsonl": {
+      "bytes": 36378,
+      "sha256": "1b7a557a9edabbc858fbf4dc28ca521a29fedbecbbc5672e07924c5b6a343b22"
+    },
+    "profile_A/test.txt": {
+      "bytes": 92,
+      "characters": 42,
+      "document_separator": "<|endoftext|>",
+      "documents": 1,
+      "sha256": "9a9dbd05944703cea1ccd6ff4d8805908ca0de6f7c621a3c3032a8c23b2f1dd8"
+    },
+    "profile_A/train.txt": {
+      "bytes": 12433,
+      "characters": 6595,
+      "document_separator": "<|endoftext|>",
+      "documents": 28,
+      "sha256": "2cde5cddd949268d70e024d382ee9a099e79d598cd26d3e59208cd8a4d9a7b6f"
+    },
+    "profile_A/validation.txt": {
+      "bytes": 97,
+      "characters": 44,
+      "document_separator": "<|endoftext|>",
+      "documents": 1,
+      "sha256": "dbe925411b442996a40cca17f82b8e14f594efb082d5bae1d515eca95ab9bda3"
+    }
+  },
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "index_sqlite3": {
+    "bytes": 307200,
+    "sha256": "96456b57897dc0045d2ed6cc0b0a941df8f071b5392939e06752eea6f9199af2"
+  },
+  "note": "Full-run checksums are generated on the user's PC; do not commit large files to Git.",
+  "seed": "persian-dataset-v2-2026-11-02"
+}

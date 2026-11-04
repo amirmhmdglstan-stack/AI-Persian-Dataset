@@ -1,0 +1,360 @@
+{
+  "balance": {
+    "available_characters": 6681,
+    "available_documents": 30,
+    "balance_scope_behavior": "small_sample_caps_bypassed_for_synthetic_tests_only",
+    "by_source": {
+      "smoke_dialogue": {
+        "available_characters": 731,
+        "available_documents": 14,
+        "cap_characters": 334,
+        "cap_share": 0.05,
+        "caps_applied": false,
+        "selected_characters": 731,
+        "selected_documents": 14
+      },
+      "smoke_encyclopedia": {
+        "available_characters": 3244,
+        "available_documents": 7,
+        "cap_characters": 334,
+        "cap_share": 0.05,
+        "caps_applied": false,
+        "selected_characters": 3244,
+        "selected_documents": 7
+      },
+      "smoke_literary": {
+        "available_characters": 1511,
+        "available_documents": 5,
+        "cap_characters": 334,
+        "cap_share": 0.05,
+        "caps_applied": false,
+        "selected_characters": 1511,
+        "selected_documents": 5
+      },
+      "smoke_news": {
+        "available_characters": 1151,
+        "available_documents": 3,
+        "cap_characters": 334,
+        "cap_share": 0.05,
+        "caps_applied": false,
+        "selected_characters": 1151,
+        "selected_documents": 3
+      },
+      "smoke_qa": {
+        "available_characters": 44,
+        "available_documents": 1,
+        "cap_characters": 334,
+        "cap_share": 0.05,
+        "caps_applied": false,
+        "selected_characters": 44,
+        "selected_documents": 1
+      }
+    },
+    "caps_applied": false,
+    "domain_target_shares": {
+      "dialogue": 0.08,
+      "educational": 0.15,
+      "encyclopedia": 0.45,
+      "legal": 0.0,
+      "literary": 0.15,
+      "mixed_web": 0.0,
+      "news": 0.1,
+      "qa": 0.05,
+      "reference": 0.0,
+      "speech": 0.0
+    },
+    "effective_budget_characters": 6681,
+    "method": "small_sample: all quality-approved deduplicated documents kept; caps NOT applied",
+    "note": "Small synthetic test scope. A full_run ALWAYS applies source/domain caps, even below the configured target. No document is duplicated or padded.",
+    "scope": "small_sample",
+    "selected_by_domain": {
+      "dialogue": 14,
+      "encyclopedia": 7,
+      "literary": 5,
+      "news": 3,
+      "qa": 1
+    },
+    "selected_by_source": {
+      "smoke_dialogue": 14,
+      "smoke_encyclopedia": 7,
+      "smoke_literary": 5,
+      "smoke_news": 3,
+      "smoke_qa": 1
+    },
+    "selected_characters": 6681,
+    "selected_documents": 30,
+    "skipped_by_cap": {},
+    "source_cap_shares": {
+      "common_voice_fa_sentences": 0.04,
+      "fawikibooks_20261101": 0.08,
+      "fawikinews_20261101": 0.05,
+      "fawikisource_20261101": 0.15,
+      "ganjoor_classics_pd": 0.1,
+      "parsinlu_suite_nc": 0.05,
+      "persian_poetry_ccbysa": 0.1,
+      "tatoeba_fa_cc_by": 0.04,
+      "wikipedia_fa_2021_mirror_recovery": 0.1,
+      "wikipedia_fa_official_20261001": 0.5
+    },
+    "source_percentages_changed": false,
+    "target_char_budget": 480000000,
+    "unfilled_characters": 0
+  },
+  "balance_scope_policy": {
+    "effective_budget": "min(target_char_budget, actual_available_characters)",
+    "full_run_caps_always_applied": true,
+    "no_duplication_or_padding": true,
+    "scope": "small_sample",
+    "small_sample_caps_bypassed_for_synthetic_tests": true,
+    "source_percentages_changed": false
+  },
+  "by_source": {
+    "smoke_dialogue": {
+      "accepted": 14,
+      "characters": 731,
+      "rejected": 2,
+      "seen": 16
+    },
+    "smoke_encyclopedia": {
+      "accepted": 7,
+      "characters": 3244,
+      "exact_duplicates": 1,
+      "near_duplicates": 2,
+      "rejected": 5,
+      "seen": 15
+    },
+    "smoke_literary": {
+      "accepted": 5,
+      "characters": 1511,
+      "near_duplicates": 1,
+      "rejected": 1,
+      "seen": 7
+    },
+    "smoke_news": {
+      "accepted": 3,
+      "characters": 1151,
+      "near_duplicates": 3,
+      "rejected": 1,
+      "seen": 7
+    },
+    "smoke_qa": {
+      "accepted": 1,
+      "characters": 44,
+      "rejected": 8,
+      "seen": 9
+    }
+  },
+  "config_version": "2.1.0",
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "measurement_scope": "small_sample",
+  "outputs": {
+    "files": {
+      "profile_A/documents.jsonl": {
+        "bytes": 36378,
+        "sha256": "1b7a557a9edabbc858fbf4dc28ca521a29fedbecbbc5672e07924c5b6a343b22"
+      },
+      "profile_A/test.txt": {
+        "bytes": 92,
+        "characters": 42,
+        "document_separator": "<|endoftext|>",
+        "documents": 1,
+        "sha256": "9a9dbd05944703cea1ccd6ff4d8805908ca0de6f7c621a3c3032a8c23b2f1dd8"
+      },
+      "profile_A/train.txt": {
+        "bytes": 12433,
+        "characters": 6595,
+        "document_separator": "<|endoftext|>",
+        "documents": 28,
+        "sha256": "2cde5cddd949268d70e024d382ee9a099e79d598cd26d3e59208cd8a4d9a7b6f"
+      },
+      "profile_A/validation.txt": {
+        "bytes": 97,
+        "characters": 44,
+        "document_separator": "<|endoftext|>",
+        "documents": 1,
+        "sha256": "dbe925411b442996a40cca17f82b8e14f594efb082d5bae1d515eca95ab9bda3"
+      }
+    },
+    "profiles": {
+      "A": {
+        "characters_by_split": {
+          "test": 42,
+          "train": 6595,
+          "validation": 44
+        },
+        "directory": "/home/user/v2-smoke-repair/final/profile_A",
+        "documents_by_split": {
+          "test": 1,
+          "train": 28,
+          "validation": 1
+        }
+      }
+    },
+    "quarantine_manifest": "/home/user/v2-smoke-repair/final/profile_C_quarantine_manifest_only/quarantine_manifest.json"
+  },
+  "platform": "linux",
+  "processing_duration_seconds": 0.113,
+  "profiles": [
+    "A"
+  ],
+  "python_version": "3.11.2 (main, Apr  8 2026, 01:58:00) [GCC 12.2.0]",
+  "quality_report": "/home/user/AI-Persian-Dataset/dataset_v2/reports/quality_report.json",
+  "rejection_reasons": {
+    "excessive_normalization_removal": 2,
+    "few_persian_letters": 6,
+    "fragmented": 2,
+    "high_latin_contamination": 4,
+    "low_information_density": 1,
+    "no_sentence_end": 2,
+    "non_persian": 6,
+    "pii_detected": 2,
+    "repeated_sentences": 1,
+    "repetitive_ngrams": 9,
+    "too_few_sentences": 1,
+    "too_short": 7
+  },
+  "sample_audit": "/home/user/AI-Persian-Dataset/dataset_v2/reports/sample_audit.txt",
+  "seed": "persian-dataset-v2-2026-11-02",
+  "split": {
+    "by_source_split": {
+      "smoke_dialogue": {
+        "test": {
+          "characters": 42,
+          "documents": 1
+        },
+        "train": {
+          "characters": 645,
+          "documents": 12
+        },
+        "validation": {
+          "characters": 44,
+          "documents": 1
+        }
+      },
+      "smoke_encyclopedia": {
+        "train": {
+          "characters": 3244,
+          "documents": 7
+        }
+      },
+      "smoke_literary": {
+        "train": {
+          "characters": 1511,
+          "documents": 5
+        }
+      },
+      "smoke_news": {
+        "train": {
+          "characters": 1151,
+          "documents": 3
+        }
+      },
+      "smoke_qa": {
+        "train": {
+          "characters": 44,
+          "documents": 1
+        }
+      }
+    },
+    "by_split": {
+      "test": {
+        "characters": 42,
+        "documents": 1,
+        "share_of_characters": 0.0063
+      },
+      "train": {
+        "characters": 6595,
+        "documents": 28,
+        "share_of_characters": 0.9871
+      },
+      "validation": {
+        "characters": 44,
+        "documents": 1,
+        "share_of_characters": 0.0066
+      }
+    },
+    "cluster_leakage_count": 0,
+    "cluster_leakage_examples": [],
+    "clusters": 30,
+    "clusters_assigned": 30,
+    "documents_assigned": 30,
+    "forced_minimum_representation_sources": [],
+    "global_tiny_corpus_representation": {
+      "clusters": [
+        "f3908cd4defbcbf48995f8c09ef9e910",
+        "2fd3777bb9cd58c3e14b26b21ec13d75"
+      ],
+      "donor_split": "train",
+      "note": "Only for tiny/small-sample corpora; full runs should meet quotas naturally.",
+      "splits_added": [
+        "test",
+        "validation"
+      ]
+    },
+    "method": "seeded BLAKE2b ordering of duplicate clusters, per-source character quotas with bounded overshoot, cluster-consistent assignment after global deduplication",
+    "min_clusters_for_forced_representation": 30,
+    "requested_ratios": {
+      "test": 0.01,
+      "train": 0.97,
+      "validation": 0.02
+    },
+    "seed": "persian-dataset-v2-2026-11-02",
+    "shortfall_note": "Shortfalls are reported, never filled by duplicating documents.",
+    "shortfalls": [
+      {
+        "clusters": 7,
+        "reason": "source_has_too_few_clusters_for_all_splits_or_quota_not_met",
+        "source_id": "smoke_encyclopedia",
+        "splits_present": [
+          "train"
+        ]
+      },
+      {
+        "clusters": 5,
+        "reason": "source_has_too_few_clusters_for_all_splits_or_quota_not_met",
+        "source_id": "smoke_literary",
+        "splits_present": [
+          "train"
+        ]
+      },
+      {
+        "clusters": 3,
+        "reason": "source_has_too_few_clusters_for_all_splits_or_quota_not_met",
+        "source_id": "smoke_news",
+        "splits_present": [
+          "train"
+        ]
+      },
+      {
+        "clusters": 1,
+        "reason": "source_has_too_few_clusters_for_all_splits_or_quota_not_met",
+        "source_id": "smoke_qa",
+        "splits_present": [
+          "train"
+        ]
+      }
+    ]
+  },
+  "statistics": {
+    "by_source": {},
+    "cleaning_removed_chars": 194,
+    "documents_accepted": 30,
+    "documents_rejected": 17,
+    "documents_seen": 54,
+    "exact_duplicates": 1,
+    "language_reasons": {},
+    "latin_digits": 0,
+    "latin_letters": 27,
+    "latin_words": 6,
+    "near_duplicates": 6,
+    "normalized_characters": 6681,
+    "persian_digits": 16,
+    "persian_letters": 5104,
+    "persian_words": 1198,
+    "quality_score_sum": 23.473800000000004,
+    "rejection_reasons": {},
+    "zwnj": 142
+  },
+  "tokenizer_baseline": "dataset_v2/tokenizer/persian-bpe-32k.json",
+  "v1_immutable": true
+}

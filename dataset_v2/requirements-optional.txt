@@ -1,0 +1,5 @@
+# OPTIONAL convenience file: installs both optional dependency groups.
+# Default Profile A does NOT need these packages and launchers do NOT install them.
+#   D:\GPT\venv\Scripts\python.exe -m pip install -r dataset_v2\requirements-optional.txt
+-r requirements-parquet.txt
+-r requirements-7z.txt
