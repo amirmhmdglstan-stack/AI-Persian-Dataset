@@ -1,0 +1,13 @@
+{
+  "input_document_occurrences": 73178,
+  "unique_documents": 37455,
+  "exact_repeated_occurrences": 35723,
+  "historical_splits": {
+    "train": 36713,
+    "validation": 742
+  },
+  "corpus_file_revisions": 4,
+  "sha256": "91d96994c8f6d28864d7fb8045b942dacdc2ea77ff71d78f62ed6b587d130853",
+  "identity": "SHA256 of UTF-8 document after outer whitespace stripping; no normalization or near-match deletion",
+  "warning": "Historical mixed-rights corpus, NOT a training release. Origins identify Git files, not original sources. Near variants retained."
+}

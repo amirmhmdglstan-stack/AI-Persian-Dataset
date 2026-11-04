@@ -1,0 +1,265 @@
+{
+  "alternatives_note": "8K/16K/32K alternatives were trained from scratch on the capped sample with tokenizers.BpeTrainer. No pretrained tokenizer or model weights were imported.",
+  "baseline_tokenizer": {
+    "path": "/home/user/AI-Persian-Dataset/dataset_v2/tokenizer/persian-bpe-32k.json",
+    "policy": "The existing V1 32K tokenizer remains the baseline and is NOT automatically replaced.",
+    "sha256": "8bdecc85dd05009b2abb2148d2cea6ac15ed4815d3d8064e6ee8b1d2500c53a5",
+    "special_token_id": 0,
+    "vocab_size": 32000
+  },
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "limitations": [
+    "Round-trip accuracy is exact string equality on this capped sample, not semantic quality.",
+    "Rare-token frequency is sample-relative and vocabulary-bounded.",
+    "Full-corpus token counts are measured separately by compute_statistics.py.",
+    "Full-corpus memory, full-corpus extraction and Windows 11 / Python 3.12 execution were not measured here."
+  ],
+  "measurement_scope": "small_sample",
+  "memory": {
+    "bpe_training_input_cap_chars": 10000000,
+    "bpe_training_note": "tokenizers.BpeTrainer may internally materialise counts. Input is hard-capped at 10M chars; no strict O(1)-memory claim is made and a 40M-char sample is refused as unbounded for this path.",
+    "default_sample_chars": 8000000,
+    "evaluation_strategy": "Streaming aggregation; no retained lists of sample texts, token IDs, Persian words or unbounded token frequencies. Frequencies use a fixed array bounded by vocabulary size.",
+    "process_peak_rss_mb": 51.59,
+    "process_peak_rss_note": "Measured with resource.getrusage on Linux / GetProcessMemoryInfo on Windows when available. This is process-wide peak RSS for this capped run, NOT a full-corpus memory measurement.",
+    "sample_characters_used": 3612,
+    "sample_utf8_bytes_used": 6629
+  },
+  "recommendation": "Keep the verified 32K baseline for dataset statistics. This capped sample is too small to choose a final vocabulary; rerun compare_tokenizers.py on the user's final V2 train.txt with the same bounded cap and review measured peak RSS. If a small model's embedding matrix dominates parameters, 8K or 16K may be worth testing, at the cost of more tokens per Persian word.",
+  "results": [
+    {
+      "actual_vocab_size": 32000,
+      "bytes_per_token": 6.8411,
+      "characters_per_token": 3.7276,
+      "evaluation_characters": 3612,
+      "evaluation_documents": 71,
+      "evaluation_memory_strategy": "streaming documents; scalar aggregation; fixed frequency array bounded by vocabulary size; no retained token-ID, word or unbounded frequency lists",
+      "evaluation_utf8_bytes": 6629,
+      "exact_roundtrip_accuracy": 1.0,
+      "label": "V1_baseline_32k",
+      "requested_vocab_size": 32000,
+      "roundtrip_failure_examples": [],
+      "roundtrip_failures": 0,
+      "special_token": "<|endoftext|>",
+      "special_token_id": 0,
+      "special_token_is_single_token": true,
+      "token_count": 969,
+      "token_fragmentation": {
+        "distinct_token_types_used": 464,
+        "mean_tokens_per_persian_word": 1.5665,
+        "out_of_vocabulary_id_occurrences": 0,
+        "persian_word_split_ratio": 0.3572,
+        "persian_words_measured": 669,
+        "persian_words_split_into_multiple_tokens": 239,
+        "rare_note": "Rare is relative to this capped evaluation sample. Frequency counts use a fixed array of vocabulary size, not a retained corpus list.",
+        "rare_occurrence_share": 0.5036,
+        "rare_token_occurrences_frequency_le_2": 488,
+        "rare_token_types_frequency_le_2": 417
+      },
+      "tokens_per_1000_characters": 268.27,
+      "trained_from_scratch_on_chars": 0,
+      "vocabulary_memory_cost": {
+        "embedding_parameters_by_model_dimension": {
+          "1024": {
+            "float16_megabytes": 62.5,
+            "float32_megabytes": 125.0,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 32768000
+          },
+          "512": {
+            "float16_megabytes": 31.25,
+            "float32_megabytes": 62.5,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 16384000
+          },
+          "768": {
+            "float16_megabytes": 46.88,
+            "float32_megabytes": 93.75,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 24576000
+          }
+        },
+        "tokenizer_json_bytes": 1832810,
+        "tokenizer_json_mb": 1.748
+      }
+    },
+    {
+      "actual_vocab_size": 638,
+      "bytes_per_token": 4.4282,
+      "characters_per_token": 2.4128,
+      "evaluation_characters": 3612,
+      "evaluation_documents": 71,
+      "evaluation_memory_strategy": "streaming documents; scalar aggregation; fixed frequency array bounded by vocabulary size; no retained token-ID, word or unbounded frequency lists",
+      "evaluation_utf8_bytes": 6629,
+      "exact_roundtrip_accuracy": 1.0,
+      "label": "from_scratch_8k",
+      "requested_vocab_size": 8000,
+      "roundtrip_failure_examples": [],
+      "roundtrip_failures": 0,
+      "special_token": "<|endoftext|>",
+      "special_token_id": 0,
+      "special_token_is_single_token": true,
+      "token_count": 1497,
+      "token_fragmentation": {
+        "distinct_token_types_used": 347,
+        "mean_tokens_per_persian_word": 2.7235,
+        "out_of_vocabulary_id_occurrences": 0,
+        "persian_word_split_ratio": 0.8565,
+        "persian_words_measured": 669,
+        "persian_words_split_into_multiple_tokens": 573,
+        "rare_note": "Rare is relative to this capped evaluation sample. Frequency counts use a fixed array of vocabulary size, not a retained corpus list.",
+        "rare_occurrence_share": 0.2271,
+        "rare_token_occurrences_frequency_le_2": 340,
+        "rare_token_types_frequency_le_2": 200
+      },
+      "tokens_per_1000_characters": 414.45,
+      "trained_from_scratch_on_chars": 3612,
+      "vocabulary_memory_cost": {
+        "embedding_parameters_by_model_dimension": {
+          "1024": {
+            "float16_megabytes": 1.25,
+            "float32_megabytes": 2.49,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 653312
+          },
+          "512": {
+            "float16_megabytes": 0.62,
+            "float32_megabytes": 1.25,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 326656
+          },
+          "768": {
+            "float16_megabytes": 0.93,
+            "float32_megabytes": 1.87,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 489984
+          }
+        },
+        "tokenizer_json_bytes": 17216,
+        "tokenizer_json_mb": 0.016
+      }
+    },
+    {
+      "actual_vocab_size": 638,
+      "bytes_per_token": 4.4282,
+      "characters_per_token": 2.4128,
+      "evaluation_characters": 3612,
+      "evaluation_documents": 71,
+      "evaluation_memory_strategy": "streaming documents; scalar aggregation; fixed frequency array bounded by vocabulary size; no retained token-ID, word or unbounded frequency lists",
+      "evaluation_utf8_bytes": 6629,
+      "exact_roundtrip_accuracy": 1.0,
+      "label": "from_scratch_16k",
+      "requested_vocab_size": 16000,
+      "roundtrip_failure_examples": [],
+      "roundtrip_failures": 0,
+      "special_token": "<|endoftext|>",
+      "special_token_id": 0,
+      "special_token_is_single_token": true,
+      "token_count": 1497,
+      "token_fragmentation": {
+        "distinct_token_types_used": 347,
+        "mean_tokens_per_persian_word": 2.7235,
+        "out_of_vocabulary_id_occurrences": 0,
+        "persian_word_split_ratio": 0.8565,
+        "persian_words_measured": 669,
+        "persian_words_split_into_multiple_tokens": 573,
+        "rare_note": "Rare is relative to this capped evaluation sample. Frequency counts use a fixed array of vocabulary size, not a retained corpus list.",
+        "rare_occurrence_share": 0.2271,
+        "rare_token_occurrences_frequency_le_2": 340,
+        "rare_token_types_frequency_le_2": 200
+      },
+      "tokens_per_1000_characters": 414.45,
+      "trained_from_scratch_on_chars": 3612,
+      "vocabulary_memory_cost": {
+        "embedding_parameters_by_model_dimension": {
+          "1024": {
+            "float16_megabytes": 1.25,
+            "float32_megabytes": 2.49,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 653312
+          },
+          "512": {
+            "float16_megabytes": 0.62,
+            "float32_megabytes": 1.25,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 326656
+          },
+          "768": {
+            "float16_megabytes": 0.93,
+            "float32_megabytes": 1.87,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 489984
+          }
+        },
+        "tokenizer_json_bytes": 17216,
+        "tokenizer_json_mb": 0.016
+      }
+    },
+    {
+      "actual_vocab_size": 638,
+      "bytes_per_token": 4.4282,
+      "characters_per_token": 2.4128,
+      "evaluation_characters": 3612,
+      "evaluation_documents": 71,
+      "evaluation_memory_strategy": "streaming documents; scalar aggregation; fixed frequency array bounded by vocabulary size; no retained token-ID, word or unbounded frequency lists",
+      "evaluation_utf8_bytes": 6629,
+      "exact_roundtrip_accuracy": 1.0,
+      "label": "from_scratch_32k",
+      "requested_vocab_size": 32000,
+      "roundtrip_failure_examples": [],
+      "roundtrip_failures": 0,
+      "special_token": "<|endoftext|>",
+      "special_token_id": 0,
+      "special_token_is_single_token": true,
+      "token_count": 1497,
+      "token_fragmentation": {
+        "distinct_token_types_used": 347,
+        "mean_tokens_per_persian_word": 2.7235,
+        "out_of_vocabulary_id_occurrences": 0,
+        "persian_word_split_ratio": 0.8565,
+        "persian_words_measured": 669,
+        "persian_words_split_into_multiple_tokens": 573,
+        "rare_note": "Rare is relative to this capped evaluation sample. Frequency counts use a fixed array of vocabulary size, not a retained corpus list.",
+        "rare_occurrence_share": 0.2271,
+        "rare_token_occurrences_frequency_le_2": 340,
+        "rare_token_types_frequency_le_2": 200
+      },
+      "tokens_per_1000_characters": 414.45,
+      "trained_from_scratch_on_chars": 3612,
+      "vocabulary_memory_cost": {
+        "embedding_parameters_by_model_dimension": {
+          "1024": {
+            "float16_megabytes": 1.25,
+            "float32_megabytes": 2.49,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 653312
+          },
+          "512": {
+            "float16_megabytes": 0.62,
+            "float32_megabytes": 1.25,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 326656
+          },
+          "768": {
+            "float16_megabytes": 0.93,
+            "float32_megabytes": 1.87,
+            "note": "One shared/tied embedding matrix; untied input+output embeddings double this cost.",
+            "parameters": 489984
+          }
+        },
+        "tokenizer_json_bytes": 17216,
+        "tokenizer_json_mb": 0.016
+      }
+    }
+  ],
+  "sample": {
+    "characters_used": 3612,
+    "documents_used": 71,
+    "hard_max_chars_cap": 10000000,
+    "max_chars_cap": 20000,
+    "note": "Capped streaming sample; on the agent machine this is a SMALL SAMPLE, not the full V2 corpus. A full-run launcher uses at most 8M characters.",
+    "path": "/home/user/AI-Persian-Dataset/dataset_v2/tests/fixtures/representative_persian_sample.txt",
+    "sha256": "1d5794916b9dcd7639b0d8a2ee37cf0c17a5a6e3b360719254d8a4fd62e2db92",
+    "utf8_bytes_used": 6629
+  }
+}
