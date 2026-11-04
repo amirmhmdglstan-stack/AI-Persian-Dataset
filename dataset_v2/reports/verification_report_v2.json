@@ -1,0 +1,263 @@
+{
+  "checks": [
+    {
+      "check": "output_dir_is_not_repo_root",
+      "detail": "/home/user/v2-smoke-repair/final",
+      "status": "PASS"
+    },
+    {
+      "check": "strict_utf8_readable:profile_A/train.txt",
+      "detail": null,
+      "status": "PASS"
+    },
+    {
+      "check": "strict_utf8_readable:profile_A/validation.txt",
+      "detail": null,
+      "status": "PASS"
+    },
+    {
+      "check": "strict_utf8_readable:profile_A/test.txt",
+      "detail": null,
+      "status": "PASS"
+    },
+    {
+      "check": "no_bom",
+      "detail": [],
+      "status": "PASS"
+    },
+    {
+      "check": "no_empty_documents",
+      "detail": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "no_control_or_replacement_chars",
+      "detail": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "arabic_variants_and_invisible_chars_normalized",
+      "detail": {
+        "arabic_kaf_U0643": 0,
+        "arabic_yeh_U064A": 0,
+        "bom_UFEFF": 0,
+        "lrm_U200E": 0,
+        "presentation_forms": 0,
+        "rlm_U200F": 0,
+        "soft_hyphen_U00AD": 0,
+        "tatweel_U0640": 0,
+        "teh_marbuta_U0629": 0,
+        "zwj_U200D": 0,
+        "zwsp_U200B": 0
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "zwnj_preserved",
+      "detail": {
+        "total_zwnj_measured": 142
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "no_html_or_wiki_markup",
+      "detail": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "no_urls_or_emails",
+      "detail": {
+        "emails": 0,
+        "urls": 0
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "no_long_pii_number_patterns",
+      "detail": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "document_marker_not_inside_text",
+      "detail": 0,
+      "status": "PASS"
+    },
+    {
+      "check": "separator_count_matches_documents",
+      "detail": {
+        "profile_A/test.txt": {
+          "documents": 1,
+          "separators": 1
+        },
+        "profile_A/train.txt": {
+          "documents": 28,
+          "separators": 28
+        },
+        "profile_A/validation.txt": {
+          "documents": 1,
+          "separators": 1
+        }
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "no_exact_duplicates_within_splits",
+      "detail": {
+        "profile_A/test.txt": 0,
+        "profile_A/train.txt": 0,
+        "profile_A/validation.txt": 0
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "no_exact_duplicates_across_splits",
+      "detail": [],
+      "status": "PASS"
+    },
+    {
+      "check": "low_non_persian_contamination",
+      "detail": {
+        "docs_below_0_65_persian_letter_share": 0,
+        "examples": []
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "unique_documents_measured",
+      "detail": {
+        "total_documents": 30,
+        "unique": 30
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "no_duplicate_cluster_leakage_across_splits",
+      "detail": [],
+      "status": "PASS"
+    },
+    {
+      "check": "provenance_manifest_matches:A",
+      "detail": {
+        "final_documents": 30,
+        "manifest_rows": 30
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "license_distribution_recorded",
+      "detail": {
+        "CC0-1.0 small-sample test fixture": 30
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "domain_distribution_recorded",
+      "detail": {
+        "dialogue": 14,
+        "encyclopedia": 7,
+        "literary": 5,
+        "news": 3,
+        "qa": 1
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "source_distribution_recorded",
+      "detail": {
+        "smoke_dialogue": 14,
+        "smoke_encyclopedia": 7,
+        "smoke_literary": 5,
+        "smoke_news": 3,
+        "smoke_qa": 1
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "split_ratios_reasonable",
+      "detail": {
+        "test": 0.0333,
+        "train": 0.9333,
+        "validation": 0.0333
+      },
+      "status": "WARN"
+    },
+    {
+      "check": "quarantine_has_manifest_but_no_text",
+      "detail": {
+        "manifest": "/home/user/v2-smoke-repair/final/profile_C_quarantine_manifest_only/quarantine_manifest.json",
+        "text_files": []
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "checksums_match",
+      "detail": {
+        "available": true,
+        "mismatches": []
+      },
+      "status": "PASS"
+    },
+    {
+      "check": "v1_files_unchanged_or_absent",
+      "detail": {
+        "files": {
+          "README.md": "different_branch_file_skipped_by_size",
+          "README.txt": "not_present_in_this_checkout",
+          "dataset_statistics.json": "not_present_in_this_checkout",
+          "sources.json": "not_present_in_this_checkout",
+          "tokenizer/persian-bpe-32k-vocab.txt": "not_present_in_this_checkout",
+          "tokenizer/persian-bpe-32k.json": "not_present_in_this_checkout",
+          "tokenizer/token_stats.json": "not_present_in_this_checkout",
+          "train.txt": "not_present_in_this_checkout",
+          "validation.txt": "not_present_in_this_checkout"
+        },
+        "mismatches": [],
+        "note": "V1 files are absent from this session's branch checkout; they remain on the remote V1 branch. Missing files and a different-branch README.md of a different size are not failures; only a same-sized V1 file with a changed hash is a failure.",
+        "status": "ok"
+      },
+      "status": "PASS"
+    }
+  ],
+  "checks_run": 27,
+  "failed": 0,
+  "file_stats": {
+    "profile_A/test.txt": {
+      "characters": 42,
+      "documents": 1,
+      "exact_duplicates_in_file": 0,
+      "latin_letters": 0,
+      "persian_letters": 31,
+      "separator_lines": 1,
+      "zwnj": 1
+    },
+    "profile_A/train.txt": {
+      "characters": 6595,
+      "documents": 28,
+      "exact_duplicates_in_file": 0,
+      "latin_letters": 27,
+      "persian_letters": 5037,
+      "separator_lines": 28,
+      "zwnj": 141
+    },
+    "profile_A/validation.txt": {
+      "characters": 44,
+      "documents": 1,
+      "exact_duplicates_in_file": 0,
+      "latin_letters": 0,
+      "persian_letters": 36,
+      "separator_lines": 1,
+      "zwnj": 0
+    }
+  },
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "measurement_scope": "small_sample",
+  "passed": 26,
+  "split_document_ratios": {
+    "test": 0.0333,
+    "train": 0.9333,
+    "validation": 0.0333
+  },
+  "unique_documents": 30,
+  "v1_note": "V1 root files are on a different remote branch and were not modified.",
+  "warnings": 1
+}

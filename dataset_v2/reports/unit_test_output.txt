@@ -1,0 +1,209 @@
+2026-11-03 20:08:22,637Z INFO disk check: 19.2 GiB free at /tmp/tmpbaggj_9k/work (required 0.0 GiB)
+2026-11-03 20:08:22,637Z INFO selected 1 downloadable sources for profiles ['A']
+2026-11-03 20:08:22,637Z INFO [source] tatoeba_fa_cc_by (Tatoeba Persian detailed sentences (CC BY 2.0 FR, author attribution))
+2026-11-03 20:08:22,638Z INFO download manifest: /tmp/tmpbaggj_9k/work/download_manifest.json
+Downloaded/verified 1 file(s).
+2026-11-03 20:08:22,639Z INFO disk check: 19.2 GiB free at /tmp/tmpbaggj_9k/work (required 0.0 GiB)
+2026-11-03 20:08:22,639Z INFO selected 1 downloadable sources for profiles ['A']
+2026-11-03 20:08:22,639Z INFO [source] tatoeba_fa_cc_by (Tatoeba Persian detailed sentences (CC BY 2.0 FR, author attribution))
+2026-11-03 20:08:22,639Z WARNING primary Tatoeba export permanently unavailable: HTTP 404 while downloading
+2026-11-03 20:08:22,640Z INFO download manifest: /tmp/tmpbaggj_9k/work/download_manifest.json
+Downloaded/verified 1 file(s).
+2026-11-03 20:08:22,640Z INFO disk check: 19.2 GiB free at /tmp/tmpbaggj_9k/work (required 0.0 GiB)
+2026-11-03 20:08:22,640Z INFO selected 1 downloadable sources for profiles ['A']
+2026-11-03 20:08:22,641Z INFO [source] tatoeba_fa_cc_by (Tatoeba Persian detailed sentences (CC BY 2.0 FR, author attribution))
+2026-11-03 20:08:22,641Z WARNING primary Tatoeba export permanently unavailable: HTTP 410 while downloading
+2026-11-03 20:08:22,641Z INFO download manifest: /tmp/tmpbaggj_9k/work/download_manifest.json
+Downloaded/verified 1 file(s).
+2026-11-03 20:08:22,642Z INFO disk check: 19.2 GiB free at /tmp/tmpbaggj_9k/work (required 0.0 GiB)
+2026-11-03 20:08:22,643Z INFO selected 1 downloadable sources for profiles ['A']
+2026-11-03 20:08:22,643Z INFO [source] tatoeba_fa_cc_by (Tatoeba Persian detailed sentences (CC BY 2.0 FR, author attribution))
+2026-11-03 20:08:22,663Z INFO disk check: 19.2 GiB free at /tmp/tmp3ucidh8x/work (required 0.0 GiB)
+2026-11-03 20:08:22,664Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,664Z INFO [extract] fixture -> /tmp/tmp3ucidh8x/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,667Z INFO disk check: 19.2 GiB free at /tmp/tmp3ucidh8x/work (required 0.0 GiB)
+2026-11-03 20:08:22,667Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,668Z INFO [extract] fixture -> /tmp/tmp3ucidh8x/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,669Z INFO   fixture: 1 docs / 7 chars / sha256=da4de8712e43
+2026-11-03 20:08:22,670Z INFO extract manifest: /tmp/tmp3ucidh8x/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,671Z INFO disk check: 19.2 GiB free at /tmp/tmp3ucidh8x/work (required 0.0 GiB)
+2026-11-03 20:08:22,857Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,857Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,857Z INFO [extract] fixture -> /tmp/tmpe9rx5p90/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,859Z INFO   fixture: 1 docs / 7 chars / sha256=da4de8712e43
+2026-11-03 20:08:22,860Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,862Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,862Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,862Z INFO [extract] fixture -> /tmp/tmpe9rx5p90/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,864Z INFO   fixture: 2 docs / 14 chars / sha256=2b22ac652499
+2026-11-03 20:08:22,865Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,866Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,867Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,867Z INFO [skip] fixture already extracted and inputs verified
+2026-11-03 20:08:22,867Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,869Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,869Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,870Z INFO [extract] fixture -> /tmp/tmpe9rx5p90/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,872Z INFO   fixture: 2 docs / 15 chars / sha256=a62dad671ecd
+2026-11-03 20:08:22,873Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,874Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,875Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,875Z INFO [extract] fixture -> /tmp/tmpe9rx5p90/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,877Z INFO   fixture: 2 docs / 15 chars / sha256=a0d2ab8e2030
+2026-11-03 20:08:22,877Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,879Z INFO disk check: 19.2 GiB free at /tmp/tmpe9rx5p90/work (required 0.0 GiB)
+2026-11-03 20:08:22,879Z INFO selected 1 sources for extraction, profiles=['A']
+2026-11-03 20:08:22,880Z INFO [extract] fixture -> /tmp/tmpe9rx5p90/work/extracted/A/fixture.jsonl
+2026-11-03 20:08:22,881Z INFO   fixture: 2 docs / 15 chars / sha256=a62dad671ecd
+2026-11-03 20:08:22,882Z INFO extract manifest: /tmp/tmpe9rx5p90/work/extract_manifest.json
+Extraction complete: 1 source entries.
+2026-11-03 20:08:22,887Z INFO disk check: 19.2 GiB free at /tmp/tmprzci5_hb/work (required 0.0 GiB)
+2026-11-03 20:08:22,894Z INFO found 1 extracted source files
+2026-11-03 20:08:22,895Z INFO [process] smoke_news (profile=A, skip_lines=0)
+2026-11-03 20:08:22,901Z WARNING stopping at --max-docs 2
+2026-11-03 20:08:22,904Z WARNING Partial ingestion only; no balance, splits or production outputs written
+2026-11-03 20:08:22,906Z INFO disk check: 19.2 GiB free at /tmp/tmprzci5_hb/work (required 0.0 GiB)
+2026-11-03 20:08:22,909Z INFO found 1 extracted source files
+2026-11-03 20:08:22,909Z INFO [process] smoke_news (profile=A, skip_lines=2)
+2026-11-03 20:08:22,916Z INFO balance scope=small_sample: selected all 4 docs / 1,731 chars; caps bypassed for test scope only
+2026-11-03 20:08:22,917Z INFO splits: {"test": {"documents": 1, "characters": 289, "share_of_characters": 0.167}, "train": {"documents": 2, "characters": 1066, "share_of_characters": 0.6158}, "validation": {"documents": 1, "characters": 376, "share_of_characters": 0.2172}}
+2026-11-03 20:08:22,920Z INFO profile A: {'test': 1, 'train': 2, 'validation': 1}
+2026-11-03 20:08:22,929Z INFO build complete in 0.0s; reports in /tmp/tmprzci5_hb/reports
+{
+  "scope": "small_sample",
+  "documents_seen": 4,
+  "accepted": 4,
+  "rejected": 0,
+  "exact_duplicates": 0,
+  "near_duplicates": 0,
+  "selected_documents": 4,
+  "selected_characters": 1731,
+  "duration_seconds": 0.018,
+  "peak_rss_mb": 63.17,
+  "reports_dir": "/tmp/tmprzci5_hb/reports",
+  "outdir": "/tmp/tmprzci5_hb/out"
+}
+2026-11-03 20:08:22,932Z INFO disk check: 19.2 GiB free at /tmp/tmprzci5_hb/work (required 0.0 GiB)
+2026-11-03 20:08:22,935Z INFO disk check: 19.2 GiB free at /tmp/tmprzci5_hb/work (required 0.0 GiB)
+2026-11-03 20:08:22,938Z INFO found 1 extracted source files
+2026-11-03 20:08:22,938Z INFO [skip] smoke_news already processed (checkpoint)
+2026-11-03 20:08:22,939Z INFO balance scope=small_sample: selected all 4 docs / 1,731 chars; caps bypassed for test scope only
+2026-11-03 20:08:22,940Z INFO splits: {"test": {"documents": 1, "characters": 289, "share_of_characters": 0.167}, "train": {"documents": 2, "characters": 1066, "share_of_characters": 0.6158}, "validation": {"documents": 1, "characters": 376, "share_of_characters": 0.2172}}
+2026-11-03 20:08:22,943Z INFO profile A: {'test': 1, 'train': 2, 'validation': 1}
+2026-11-03 20:08:22,951Z INFO build complete in 0.0s; reports in /tmp/tmprzci5_hb/reports
+{
+  "scope": "small_sample",
+  "documents_seen": 4,
+  "accepted": 4,
+  "rejected": 0,
+  "exact_duplicates": 0,
+  "near_duplicates": 0,
+  "selected_documents": 4,
+  "selected_characters": 1731,
+  "duration_seconds": 0.012,
+  "peak_rss_mb": 63.17,
+  "reports_dir": "/tmp/tmprzci5_hb/reports",
+  "outdir": "/tmp/tmprzci5_hb/out"
+}
+
+
+[stderr]
+test_effective_budget_is_min_target_and_available (test_balancing.TestBalancing.test_effective_budget_is_min_target_and_available) ... ok
+test_full_run_applies_caps_below_480m_target (test_balancing.TestBalancing.test_full_run_applies_caps_below_480m_target) ... ok
+test_small_sample_may_retain_all_accepted_documents (test_balancing.TestBalancing.test_small_sample_may_retain_all_accepted_documents) ... ok
+test_unknown_scope_is_rejected (test_balancing.TestBalancing.test_unknown_scope_is_rejected) ... ok
+test_40m_character_request_is_refused_as_unbounded (test_compare_tokenizers_memory.TestCompareTokenizersMemory.test_40m_character_request_is_refused_as_unbounded) ... ok
+test_bpe_training_accepts_bounded_iterator_length (test_compare_tokenizers_memory.TestCompareTokenizersMemory.test_bpe_training_accepts_bounded_iterator_length) ... ok
+test_evaluation_streams_into_scalar_aggregates (test_compare_tokenizers_memory.TestCompareTokenizersMemory.test_evaluation_streams_into_scalar_aggregates) ... ok
+test_sample_iterator_is_streaming_and_capped (test_compare_tokenizers_memory.TestCompareTokenizersMemory.test_sample_iterator_is_streaming_and_capped) ... ok
+test_exact_duplicate_detection (test_deduplication.TestDeduplication.test_exact_duplicate_detection) ... ok
+test_near_duplicate_detection_and_cluster (test_deduplication.TestDeduplication.test_near_duplicate_detection_and_cluster) ... ok
+test_signature_is_deterministic_and_short_text_exact_only (test_deduplication.TestDeduplication.test_signature_is_deterministic_and_short_text_exact_only) ... ok
+test_sqlite_index_is_disk_backed (test_deduplication.TestDeduplication.test_sqlite_index_is_disk_backed) ... ok
+test_corrupted_completed_file_is_not_trusted (test_download_resume.TestDownloadResume.test_corrupted_completed_file_is_not_trusted) ... ok
+test_filename_alone_is_not_identity (test_download_resume.TestDownloadResume.test_filename_alone_is_not_identity) ... ok
+test_first_download_records_then_ordinary_resume_skips_snapshot (test_download_resume.TestDownloadResume.test_first_download_records_then_ordinary_resume_skips_snapshot) ... ok
+test_forced_refresh_redownloads_verified_file (test_download_resume.TestDownloadResume.test_forced_refresh_redownloads_verified_file) ... ok
+test_interrupted_partial_resumes_with_range (test_download_resume.TestDownloadResume.test_interrupted_partial_resumes_with_range) ... ok
+test_main_loads_existing_manifest_and_passes_matching_record (test_download_resume.TestDownloadResume.test_main_loads_existing_manifest_and_passes_matching_record) ... ok
+test_manifest_identity_requires_url_and_filename (test_download_resume.TestDownloadResume.test_manifest_identity_requires_url_and_filename) ... ok
+test_valid_completed_file_skips_without_network (test_download_resume.TestDownloadResume.test_valid_completed_file_skips_without_network) ... ok
+test_200_restarts_instead_of_appending (test_download_safety.DownloadSafety.test_200_restarts_instead_of_appending) ... ok
+test_changed_last_modified_restarts (test_download_safety.DownloadSafety.test_changed_last_modified_restarts) ... ok
+test_fallback_only_on_permanent_http_error (test_download_safety.DownloadSafety.test_fallback_only_on_permanent_http_error) ... ok
+test_force_clears_stale_partial_and_sidecar (test_download_safety.DownloadSafety.test_force_clears_stale_partial_and_sidecar) ... ok
+test_matching_etag_and_range (test_download_safety.DownloadSafety.test_matching_etag_and_range) ... ok
+test_missing_validator_and_corrupt_partial_restart (test_download_safety.DownloadSafety.test_missing_validator_and_corrupt_partial_restart) ... ok
+test_wrong_range_or_changed_validator_restarts (test_download_safety.DownloadSafety.test_wrong_range_or_changed_validator_restarts) ... ok
+test_csv_mapping (test_extraction.TestExtraction.test_csv_mapping) ... ok
+test_jsonl_gz_excludes_synthetic_query_fields (test_extraction.TestExtraction.test_jsonl_gz_excludes_synthetic_query_fields) ... ok
+test_mediawiki_page_base_urls_for_four_projects (test_extraction.TestExtraction.test_mediawiki_page_base_urls_for_four_projects) ... ok
+test_mediawiki_refuses_missing_page_base_url (test_extraction.TestExtraction.test_mediawiki_refuses_missing_page_base_url) ... ok
+test_mediawiki_xml_bz2_streaming_and_license_filter (test_extraction.TestExtraction.test_mediawiki_xml_bz2_streaming_and_license_filter) ... ok
+test_parquet_excludes_generated_query_columns (test_extraction.TestExtraction.test_parquet_excludes_generated_query_columns) ... skipped 'optional pyarrow not installed'
+test_public_domain_allowlist_in_txt_tree (test_extraction.TestExtraction.test_public_domain_allowlist_in_txt_tree) ... ok
+test_txt_lines_one_document_per_natural_sentence (test_extraction.TestExtraction.test_txt_lines_one_document_per_natural_sentence) ... ok
+test_wikitext_conversion_keeps_only_piped_link_label (test_extraction.TestExtraction.test_wikitext_conversion_keeps_only_piped_link_label) ... ok
+test_actual_matched_template_and_exact_rejection_reason_in_metadata (test_license_allowlist.TestLicenseAllowlist.test_actual_matched_template_and_exact_rejection_reason_in_metadata) ... ok
+test_license_container_templates_are_ignored (test_license_allowlist.TestLicenseAllowlist.test_license_container_templates_are_ignored) ... ok
+test_no_broad_free_license_regex_remains (test_license_allowlist.TestLicenseAllowlist.test_no_broad_free_license_regex_remains) ... ok
+test_no_license_like_template_is_rejected (test_license_allowlist.TestLicenseAllowlist.test_no_license_like_template_is_rejected) ... ok
+test_rejected_nc_nd_generic_and_unknown_templates (test_license_allowlist.TestLicenseAllowlist.test_rejected_nc_nd_generic_and_unknown_templates) ... ok
+test_verified_pd_cc_by_cc_by_sa_gfdl_templates_accepted (test_license_allowlist.TestLicenseAllowlist.test_verified_pd_cc_by_cc_by_sa_gfdl_templates_accepted) ... ok
+test_arabic_variants_and_zwnj (test_normalization.TestNormalization.test_arabic_variants_and_zwnj) ... ok
+test_language_detection_rejects_english_and_arabic (test_normalization.TestNormalization.test_language_detection_rejects_english_and_arabic) ... ok
+test_latin_technical_terms_preserved_and_measured (test_normalization.TestNormalization.test_latin_technical_terms_preserved_and_measured) ... ok
+test_markup_urls_emails_and_pii (test_normalization.TestNormalization.test_markup_urls_emails_and_pii) ... ok
+test_no_silent_large_removal (test_normalization.TestNormalization.test_no_silent_large_removal) ... ok
+test_paragraph_boundaries_and_punctuation (test_normalization.TestNormalization.test_paragraph_boundaries_and_punctuation) ... ok
+test_persian_and_latin_digits_preserved (test_normalization.TestNormalization.test_persian_and_latin_digits_preserved) ... ok
+test_all_config_paths_resolve_to_actual_v2_checkout (test_paths.TestPathResolution.test_all_config_paths_resolve_to_actual_v2_checkout) ... ok
+test_catalog_has_correct_wikimedia_page_base_urls (test_paths.TestPathResolution.test_catalog_has_correct_wikimedia_page_base_urls) ... ok
+test_launchers_use_v2_path_and_no_unsafe_git_operations (test_paths.TestPathResolution.test_launchers_use_v2_path_and_no_unsafe_git_operations) ... ok
+test_no_machine_specific_repo_root_in_config (test_paths.TestPathResolution.test_no_machine_specific_repo_root_in_config) ... ok
+test_stale_v1_repo_root_argument_is_ignored (test_paths.TestPathResolution.test_stale_v1_repo_root_argument_is_ignored) ... ok
+test_extractor_exception_marks_failed_and_builder_rejects_partial (test_pipeline_repair.RepairTests.test_extractor_exception_marks_failed_and_builder_rejects_partial) ... ok
+test_large_unrelated_tar_member_not_buffered (test_pipeline_repair.RepairTests.test_large_unrelated_tar_member_not_buffered) ... ok
+test_partial_recovery_and_input_invalidation (test_pipeline_repair.RepairTests.test_partial_recovery_and_input_invalidation) ... ok
+test_real_tar_gz_and_bz2_poems_streamed_with_provenance (test_pipeline_repair.RepairTests.test_real_tar_gz_and_bz2_poems_streamed_with_provenance) ... ok
+test_tatoeba_already_downloaded_fallback_is_selected_without_primary (test_pipeline_repair.RepairTests.test_tatoeba_already_downloaded_fallback_is_selected_without_primary) ... ok
+test_transactional_resume_after_stale_external_checkpoint (test_pipeline_repair.RepairTests.test_transactional_resume_after_stale_external_checkpoint) ... ok
+test_english_only_rejected (test_quality_filters.TestQualityFilters.test_english_only_rejected) ... ok
+test_good_prose_accepted_with_explainable_features (test_quality_filters.TestQualityFilters.test_good_prose_accepted_with_explainable_features) ... ok
+test_latin_technical_terms_not_automatically_rejected (test_quality_filters.TestQualityFilters.test_latin_technical_terms_not_automatically_rejected) ... ok
+test_pii_rejected (test_quality_filters.TestQualityFilters.test_pii_rejected) ... ok
+test_repetition_rejected (test_quality_filters.TestQualityFilters.test_repetition_rejected) ... ok
+test_short_document_rejected (test_quality_filters.TestQualityFilters.test_short_document_rejected) ... ok
+test_short_natural_dialogue_sentence_accepted (test_quality_filters.TestQualityFilters.test_short_natural_dialogue_sentence_accepted) ... ok
+test_spam_rejected (test_quality_filters.TestQualityFilters.test_spam_rejected) ... ok
+test_core_requirements_file_has_no_optional_or_heavyweight_packages (test_requirements_check.TestRequirementsPolicy.test_core_requirements_file_has_no_optional_or_heavyweight_packages) ... ok
+test_default_launchers_do_not_install_optional_packages (test_requirements_check.TestRequirementsPolicy.test_default_launchers_do_not_install_optional_packages) ... ok
+test_default_profile_a_checks_only_enabled_parquet (test_requirements_check.TestRequirementsPolicy.test_default_profile_a_checks_only_enabled_parquet) ... ok
+test_optional_7z_is_checked_only_with_include_optional (test_requirements_check.TestRequirementsPolicy.test_optional_7z_is_checked_only_with_include_optional) ... ok
+test_quarantine_and_only_sources_are_excluded (test_requirements_check.TestRequirementsPolicy.test_quarantine_and_only_sources_are_excluded) ... ok
+test_tokenizers_0233_is_supported_without_downgrade (test_requirements_check.TestRequirementsPolicy.test_tokenizers_0233_is_supported_without_downgrade) ... ok
+test_global_cluster_has_one_canonical_source_and_split (test_splitting.CrossSourceClusters.test_global_cluster_has_one_canonical_source_and_split) ... ok
+test_deterministic_cluster_consistent_splits (test_splitting.TestSplitting.test_deterministic_cluster_consistent_splits) ... ok
+test_catalog_pins_verified_pes_export_and_real_csv_fallback (test_tatoeba_parser.TestTatoebaParser.test_catalog_pins_verified_pes_export_and_real_csv_fallback) ... ok
+test_fallback_without_real_csv_member_is_rejected (test_tatoeba_parser.TestTatoebaParser.test_fallback_without_real_csv_member_is_rejected) ... ok
+test_fas_code_is_refused (test_tatoeba_parser.TestTatoebaParser.test_fas_code_is_refused) ... ok
+test_mysql_outfile_escapes_and_null (test_tatoeba_parser.TestTatoebaParser.test_mysql_outfile_escapes_and_null) ... ok
+test_pes_only_bzip2_tsv_fields_metadata_and_attribution (test_tatoeba_parser.TestTatoebaParser.test_pes_only_bzip2_tsv_fields_metadata_and_attribution) ... ok
+test_real_all_language_csv_member_fallback (test_tatoeba_parser.TestTatoebaParser.test_real_all_language_csv_member_fallback) ... ok
+test_baseline_json_matches_v1_baseline_record (test_tokenization.TestBaselineTokenizer.test_baseline_json_matches_v1_baseline_record) ... ok
+test_document_separator_not_needed_in_text (test_tokenization.TestBaselineTokenizer.test_document_separator_not_needed_in_text) ... ok
+test_persian_roundtrip_zwnj_and_latin (test_tokenization.TestBaselineTokenizer.test_persian_roundtrip_zwnj_and_latin) ... ok
+test_vocab_and_special_token (test_tokenization.TestBaselineTokenizer.test_vocab_and_special_token) ... ok
+
+----------------------------------------------------------------------
+Ran 86 tests in 0.606s
+
+OK (skipped=1)
+
+[exit_code] 0

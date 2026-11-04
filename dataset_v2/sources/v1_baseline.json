@@ -1,0 +1,32 @@
+{
+  "description": "Immutable V1 baseline reference. Used only to verify that V2 never modifies V1 files. Git blob SHA-1 IDs were read from the remote V1 branch tree via the GitHub API; no V1 corpus file was modified or copied into this branch, except the small 3,104,846-byte tokenizer JSON retained as the working baseline under dataset_v2/tokenizer/.",
+  "v1_branch": "arena/f01a4e1e-ai-persian-dataset",
+  "v1_commit": "8e35d5e7e72597eda96e83db9c01a1335f235e19",
+  "v1_parent_commit": "31d7e8f743ce857ece8fbf99546cf7a4afebd57c",
+  "current_session_branch": "arena/62203741-ai-persian-dataset",
+  "current_session_base_commit": "a770ebfc33b4d72c26b9655084b45ec13ef5dacc",
+  "hash_algorithm": "git blob sha1 = sha1(b'blob ' + str(len(data)).encode() + b'\\0' + data)",
+  "files": {
+    "train.txt": {"size": 80400899, "git_blob_sha1": "394532ebfe2bbfd591ab4353582cfa8a53e6ad2d"},
+    "validation.txt": {"size": 1706558, "git_blob_sha1": "ca00a5ddbe238cf08ba391ef11ff4c693cb10f09"},
+    "README.md": {"size": 5273, "git_blob_sha1": "7c8db7dd3871d1610d2bea04ae891588ee139c0f"},
+    "README.txt": {"size": 17733, "git_blob_sha1": "ff6829793ace50a7407643735ad64fdfc2eb9ad4"},
+    "sources.json": {"size": 20203, "git_blob_sha1": "a09f7b443d888dd364fd6ac58b07ce6152e46900"},
+    "dataset_statistics.json": {"size": 21191, "git_blob_sha1": "ca3d3682e60bdc9547f06e61c3561dd00bc9e56c"},
+    "tokenizer/persian-bpe-32k.json": {"size": 3104846, "git_blob_sha1": "896418af5fc4397f322fc1247169f82f07f8fdd4", "sha256": "8bdecc85dd05009b2abb2148d2cea6ac15ed4815d3d8064e6ee8b1d2500c53a5"},
+    "tokenizer/persian-bpe-32k-vocab.txt": {"size": 863747, "git_blob_sha1": "b09a400bb834986b038d83947fcd76878f0ab061"},
+    "tokenizer/token_stats.json": {"size": 949, "git_blob_sha1": "9545df8166a88fc48705d6504aa92e2cf8c0b883"}
+  },
+  "v1_verified_statistics": {
+    "train_documents": 35864,
+    "validation_documents": 728,
+    "total_documents": 36592,
+    "total_content_characters": 44999973,
+    "total_words": 8493555,
+    "measured_content_tokens": 11350801,
+    "measured_tokens_including_document_separators": 11387393,
+    "characters_per_token": 3.991,
+    "bytes_per_token": 7.234
+  },
+  "note": "V1 files are absent from the current session's branch checkout, which is based on main's initial commit. They remain untouched on the remote V1 branch. The current branch has its own 21-byte README.md from main, which is NOT the V1 README.md; the verifier skips same-named files whose size differs from the V1 baseline. The verifier compares hashes only for files that are present and size-compatible."
+}

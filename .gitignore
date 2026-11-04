@@ -1,0 +1,30 @@
+# Persian Dataset V2: keep large/generated artefacts out of Git.
+# V1 files (on the remote V1 branch) are never modified or committed here.
+dataset_v2/.smoke_work/
+dataset_v2/work/
+dataset_v2/final/
+dataset_v2/**/work/
+dataset_v2/**/final/
+dataset_v2/**/raw/
+dataset_v2/**/extracted/
+dataset_v2/**/normalized/
+*.sqlite3
+*.sqlite3-wal
+*.sqlite3-shm
+*.jsonl
+*.jsonl.gz
+*.jsonl.part
+*.txt.part
+*.part
+*.part.*
+*.7z
+*.bz2
+*.gz
+*.parquet
+*.pyc
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.venv/
+# Reproducible historical corpus; original bytes are in provenance bundle.
+historical_corpus/documents.jsonl.gz

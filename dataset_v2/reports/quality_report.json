@@ -1,0 +1,112 @@
+{
+  "by_source": {
+    "smoke_dialogue": {
+      "accepted": 14,
+      "characters": 731,
+      "rejected": 2,
+      "seen": 16
+    },
+    "smoke_encyclopedia": {
+      "accepted": 7,
+      "characters": 3244,
+      "exact_duplicates": 1,
+      "near_duplicates": 2,
+      "rejected": 5,
+      "seen": 15
+    },
+    "smoke_literary": {
+      "accepted": 5,
+      "characters": 1511,
+      "near_duplicates": 1,
+      "rejected": 1,
+      "seen": 7
+    },
+    "smoke_news": {
+      "accepted": 3,
+      "characters": 1151,
+      "near_duplicates": 3,
+      "rejected": 1,
+      "seen": 7
+    },
+    "smoke_qa": {
+      "accepted": 1,
+      "characters": 44,
+      "rejected": 8,
+      "seen": 9
+    }
+  },
+  "cleaning_statistics": {
+    "cleaning_removed_chars": 194,
+    "latin_digits": 0,
+    "latin_letter_ratio_of_letters": 0.0053,
+    "latin_letters": 27,
+    "latin_words": 6,
+    "mean_quality_score": 0.7825,
+    "normalized_characters": 6681,
+    "persian_digits": 16,
+    "persian_letters": 5104,
+    "persian_words": 1198,
+    "zwnj": 142
+  },
+  "config_version": "2.1.0",
+  "deduplication": {
+    "exact_duplicates_removed": 1,
+    "near_duplicates_removed": 6,
+    "sqlite_measured": {
+      "exact_duplicates": 1,
+      "near_dup_candidates_rejected": 18,
+      "near_dup_candidates_verified": 6,
+      "near_duplicates": 6
+    }
+  },
+  "documents_accepted_after_quality": 30,
+  "documents_rejected": 17,
+  "documents_seen": 54,
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "language_rejection_reasons": {
+    "no_persian_lexical_evidence": 2,
+    "persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters": 1,
+    "persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_function_words;no_persian_specific_letters;no_persian_lexical_evidence": 1,
+    "persian_letter_share_below_threshold;persian_nonspace_share_below_threshold;too_many_latin_only_words;no_persian_lexical_evidence": 2
+  },
+  "limitations": [
+    "Automated quality scores are surface-form heuristics; they do not establish semantic correctness.",
+    "MinHash/LSH near deduplication is approximate; undetected duplicates may remain.",
+    "Language detection uses script ratios and function words, not a trained language classifier.",
+    "All statistics labelled small_sample are NOT full-corpus results."
+  ],
+  "manual_audit": {
+    "by_category": {
+      "formal_prose": 9,
+      "good": 19,
+      "informal_or_dialogue": 10,
+      "near_duplicate_example": 7,
+      "rejected": 14
+    },
+    "path": "/home/user/AI-Persian-Dataset/dataset_v2/reports/sample_audit.txt",
+    "samples_written": 59,
+    "sources": [
+      "smoke_dialogue",
+      "smoke_encyclopedia",
+      "smoke_literary",
+      "smoke_news",
+      "smoke_qa"
+    ]
+  },
+  "measurement_scope": "small_sample",
+  "rejection_reasons": {
+    "excessive_normalization_removal": 2,
+    "few_persian_letters": 6,
+    "fragmented": 2,
+    "high_latin_contamination": 4,
+    "low_information_density": 1,
+    "no_sentence_end": 2,
+    "non_persian": 6,
+    "pii_detected": 2,
+    "repeated_sentences": 1,
+    "repetitive_ngrams": 9,
+    "too_few_sentences": 1,
+    "too_short": 7
+  },
+  "seed": "persian-dataset-v2-2026-11-02"
+}

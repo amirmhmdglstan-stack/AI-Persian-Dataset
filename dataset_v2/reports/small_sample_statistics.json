@@ -1,0 +1,93 @@
+{
+  "bytes_per_token": 6.6925,
+  "characters": 6681,
+  "characters_per_token": 3.5424,
+  "content_tokens_measured_with_v1_32k": 1886,
+  "documents_in_final_files": 30,
+  "exact_duplicates_removed": 1,
+  "fixture_documents_generated": 54,
+  "generated_at_utc": "2026-11-03T20:08:23Z",
+  "honesty_note": "These numbers were measured on synthetic test fixtures only. They are NOT full-corpus results.",
+  "latin_letters": 27,
+  "license_distribution": {
+    "CC0-1.0 small-sample test fixture": {
+      "characters": 6681,
+      "documents": 30
+    }
+  },
+  "measurement_scope": "small_sample",
+  "near_duplicates_removed": 6,
+  "persian_letters": 5104,
+  "rejection_reasons": {
+    "excessive_normalization_removal": 2,
+    "few_persian_letters": 6,
+    "fragmented": 2,
+    "high_latin_contamination": 4,
+    "low_information_density": 1,
+    "no_sentence_end": 2,
+    "non_persian": 6,
+    "pii_detected": 2,
+    "repeated_sentences": 1,
+    "repetitive_ngrams": 9,
+    "too_few_sentences": 1,
+    "too_short": 7
+  },
+  "reports": {
+    "dataset_statistics": "dataset_v2/reports/dataset_statistics.json",
+    "pipeline_benchmark": "dataset_v2/reports/pipeline_benchmark.json",
+    "quality_report": "dataset_v2/reports/quality_report.json",
+    "sample_audit": "dataset_v2/reports/sample_audit.txt",
+    "tokenizer_comparison": "dataset_v2/reports/tokenizer_comparison.json",
+    "verification_report": "dataset_v2/reports/verification_report_v2.json"
+  },
+  "source_distribution": {
+    "smoke_dialogue": {
+      "by_split": {
+        "test": 1,
+        "train": 12,
+        "validation": 1
+      },
+      "characters": 731,
+      "documents": 14
+    },
+    "smoke_encyclopedia": {
+      "by_split": {
+        "train": 7
+      },
+      "characters": 3244,
+      "documents": 7
+    },
+    "smoke_literary": {
+      "by_split": {
+        "train": 5
+      },
+      "characters": 1511,
+      "documents": 5
+    },
+    "smoke_news": {
+      "by_split": {
+        "train": 3
+      },
+      "characters": 1151,
+      "documents": 3
+    },
+    "smoke_qa": {
+      "by_split": {
+        "train": 1
+      },
+      "characters": 44,
+      "documents": 1
+    }
+  },
+  "test_documents": 1,
+  "tokens_including_document_end": 1916,
+  "train_documents": 28,
+  "unique_documents": 30,
+  "validation_documents": 1,
+  "verification": {
+    "checks": 27,
+    "failed": 0
+  },
+  "words": 1208,
+  "zwnj": 142
+}

@@ -1,0 +1,4 @@
+# OPTIONAL: Parquet source extraction only. Not needed for default Profile A.
+# Install explicitly when an enabled source has extractor/format "parquet":
+#   D:\GPT\venv\Scripts\python.exe -m pip install -r dataset_v2\requirements-parquet.txt
+pyarrow>=17,<22
