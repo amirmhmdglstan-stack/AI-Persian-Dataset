@@ -1,0 +1,692 @@
+{
+  "dataset": {
+    "name": "Persian Pretraining Corpus (GPT-100M)",
+    "version": "1.0",
+    "generated_at_utc": "2026-11-02T02:13:35Z",
+    "files": {
+      "train": {
+        "path": "train.txt",
+        "bytes": 80400899,
+        "size_mb": 80.4,
+        "documents": 35864,
+        "characters": 44064049,
+        "characters_mean_per_doc": 1228.6,
+        "characters_min_doc": 51,
+        "characters_max_doc": 45682,
+        "lines": 204336,
+        "words": 8315642,
+        "persian_words": 8157915,
+        "sentences": 343225,
+        "persian_letters": 33901221,
+        "latin_letters": 0,
+        "digits": 372378,
+        "zwnj": 561515,
+        "persian_letter_share_of_chars": 0.7694,
+        "persian_letter_share_of_letters": 1.0,
+        "unique_documents": 35864,
+        "exact_duplicate_documents_in_file": 0,
+        "bytes_per_character": 1.825,
+        "scan_seconds": 10.3
+      },
+      "validation": {
+        "path": "validation.txt",
+        "bytes": 1706558,
+        "size_mb": 1.71,
+        "documents": 728,
+        "characters": 935924,
+        "characters_mean_per_doc": 1285.6,
+        "characters_min_doc": 59,
+        "characters_max_doc": 21710,
+        "lines": 4305,
+        "words": 177913,
+        "persian_words": 174776,
+        "sentences": 6999,
+        "persian_letters": 719960,
+        "latin_letters": 0,
+        "digits": 8489,
+        "zwnj": 11438,
+        "persian_letter_share_of_chars": 0.7693,
+        "persian_letter_share_of_letters": 1.0,
+        "unique_documents": 728,
+        "exact_duplicate_documents_in_file": 0,
+        "bytes_per_character": 1.823,
+        "scan_seconds": 0.2
+      }
+    },
+    "totals": {
+      "documents": 36592,
+      "unique_documents": 36592,
+      "persian_characters": 34621181,
+      "characters": 44999973,
+      "words": 8493555,
+      "persian_words": 8332691,
+      "lines": 208641,
+      "sentences": 350224,
+      "size_bytes": 82107457,
+      "size_mb": 82.11,
+      "size_gib": 0.076,
+      "persian_letter_share_of_letters": 1.0,
+      "persian_letter_share_of_characters": 0.7694,
+      "zwnj_occurrences": 572953
+    },
+    "split": {
+      "train_documents": 35864,
+      "validation_documents": 728,
+      "train_characters": 44064049,
+      "validation_characters": 935924,
+      "train_share_of_characters": 0.9792,
+      "validation_share_of_characters": 0.0208,
+      "method": "deterministic SHA-1 bucket of the document id, applied after deduplication (so the two splits are disjoint)"
+    },
+    "source_distribution": {
+      "by_source": {
+        "wikipedia_fa": {
+          "documents": 26850,
+          "characters": 35298596,
+          "train_documents": 26312,
+          "validation_documents": 538,
+          "train_characters": 34577840,
+          "validation_characters": 720756,
+          "share_of_characters": 0.7844,
+          "name": "Persian Wikipedia — cleaned article dump (fa.wikipedia.org)",
+          "type": "encyclopedia / factual articles",
+          "license": "CC BY-SA 4.0"
+        },
+        "parsinlu_entailment": {
+          "documents": 4073,
+          "characters": 1125118,
+          "train_documents": 3992,
+          "validation_documents": 81,
+          "train_characters": 1103392,
+          "validation_characters": 21726,
+          "share_of_characters": 0.025,
+          "name": "ParsiNLU / FarsTail — textual entailment pairs",
+          "type": "questions and answers / reasoning pairs",
+          "license": "CC BY-NC-SA 4.0"
+        },
+        "persian_news": {
+          "documents": 1757,
+          "characters": 4499846,
+          "train_documents": 1722,
+          "validation_documents": 35,
+          "train_characters": 4386825,
+          "validation_characters": 113021,
+          "share_of_characters": 0.1,
+          "name": "Persian News Dataset (5 Iranian news agencies)",
+          "type": "news and general articles",
+          "license": "none declared"
+        },
+        "parsinlu_mc": {
+          "documents": 807,
+          "characters": 139406,
+          "train_documents": 795,
+          "validation_documents": 12,
+          "train_characters": 137108,
+          "validation_characters": 2298,
+          "share_of_characters": 0.0031,
+          "name": "ParsiNLU — multiple-choice questions (educational)",
+          "type": "educational questions and answers",
+          "license": "CC BY-NC-SA 4.0"
+        },
+        "ganjoor_classics": {
+          "documents": 485,
+          "characters": 1349768,
+          "train_documents": 473,
+          "validation_documents": 12,
+          "train_characters": 1317390,
+          "validation_characters": 32378,
+          "share_of_characters": 0.03,
+          "name": "Ganjoor — classical Persian literature (divans)",
+          "type": "literature and poetry",
+          "license": "GPL-3.0 (repository); the underlying works are public domain"
+        },
+        "peqa_dialogue": {
+          "documents": 791,
+          "characters": 1124702,
+          "train_documents": 777,
+          "validation_documents": 14,
+          "train_characters": 1105141,
+          "validation_characters": 19561,
+          "share_of_characters": 0.025,
+          "name": "PeQa — Persian chat/dialogue pairs",
+          "type": "everyday conversations and dialogue",
+          "license": "MIT"
+        },
+        "parsinlu_qa": {
+          "documents": 699,
+          "characters": 71480,
+          "train_documents": 684,
+          "validation_documents": 15,
+          "train_characters": 69748,
+          "validation_characters": 1732,
+          "share_of_characters": 0.0016,
+          "name": "ParsiNLU — reading comprehension question/answer pairs",
+          "type": "questions and answers",
+          "license": "CC BY-NC-SA 4.0"
+        },
+        "parsinlu_rc_passage": {
+          "documents": 808,
+          "characters": 491225,
+          "train_documents": 792,
+          "validation_documents": 16,
+          "train_characters": 482830,
+          "validation_characters": 8395,
+          "share_of_characters": 0.0109,
+          "name": "ParsiNLU — reading-comprehension passages (news prose)",
+          "type": "news and general articles",
+          "license": "CC BY-NC-SA 4.0 (annotations); passages © original publishers"
+        },
+        "persian_poetry": {
+          "documents": 322,
+          "characters": 899832,
+          "train_documents": 317,
+          "validation_documents": 5,
+          "train_characters": 883775,
+          "validation_characters": 16057,
+          "share_of_characters": 0.02,
+          "name": "Chronological Persian Poetry Dataset",
+          "type": "literature and poetry",
+          "license": "CC BY-SA 4.0"
+        }
+      },
+      "note": "document and character counts per source of the SHIPPED corpus come from the selection manifest written by build_dataset.py; they are consistent with the totals counted in the files (manifest_matches_files=True)"
+    },
+    "deduplication": {
+      "input_docs": 274860,
+      "exact_duplicates": 317,
+      "near_duplicates": 4521,
+      "empty": 0,
+      "output_docs": 270022
+    },
+    "collection_and_cleaning": {
+      "raw_documents_extracted": 925316,
+      "raw_characters_extracted": null,
+      "documents_after_quality_filters": 274860,
+      "characters_after_quality_filters": 538849962,
+      "documents_after_dedup": 270022,
+      "documents_shipped_after_budget": 36592,
+      "per_source_pipeline": [
+        {
+          "source": "ganjoor_classics",
+          "raw_docs": 2292,
+          "kept_after_quality": 2290,
+          "kept_chars": 6342366,
+          "dropped_by_reason": {
+            "too_short": 2
+          },
+          "seconds": 10.6
+        },
+        {
+          "source": "parsinlu_entailment",
+          "raw_docs": 12168,
+          "kept_after_quality": 11836,
+          "kept_chars": 3324316,
+          "dropped_by_reason": {
+            "too_short": 208,
+            "excessive_quotes": 101,
+            "no_sentence_end": 23
+          },
+          "seconds": 6.8
+        },
+        {
+          "source": "parsinlu_mc",
+          "raw_docs": 1271,
+          "kept_after_quality": 844,
+          "kept_chars": 144760,
+          "dropped_by_reason": {
+            "fragmented": 181,
+            "too_short": 105,
+            "no_sentence_end": 86,
+            "excessive_quotes": 29,
+            "repetitive_ngrams": 23,
+            "high_digit_ratio": 3
+          },
+          "seconds": 0.4
+        },
+        {
+          "source": "parsinlu_qa",
+          "raw_docs": 1170,
+          "kept_after_quality": 702,
+          "kept_chars": 71952,
+          "dropped_by_reason": {
+            "repetitive_ngrams": 364,
+            "too_short": 101,
+            "excessive_quotes": 2,
+            "high_digit_ratio": 1
+          },
+          "seconds": 0.2
+        },
+        {
+          "source": "parsinlu_rc_passage",
+          "raw_docs": 1170,
+          "kept_after_quality": 856,
+          "kept_chars": 520826,
+          "dropped_by_reason": {
+            "too_short": 298,
+            "too_few_sentences": 9,
+            "excessive_quotes": 5,
+            "bad_sentence_length": 2
+          },
+          "seconds": 1.2
+        },
+        {
+          "source": "peqa_dialogue",
+          "raw_docs": 3368,
+          "kept_after_quality": 3362,
+          "kept_chars": 4778181,
+          "dropped_by_reason": {
+            "repeated_lines": 5,
+            "no_sentence_end": 1
+          },
+          "seconds": 7.8
+        },
+        {
+          "source": "persian_news",
+          "raw_docs": 13455,
+          "kept_after_quality": 9789,
+          "kept_chars": 25251850,
+          "dropped_by_reason": {
+            "too_short": 3617,
+            "bad_sentence_length": 31,
+            "excessive_quotes": 8,
+            "no_sentence_end": 5,
+            "too_few_sentences": 3,
+            "fragmented": 1,
+            "repeated_lines": 1
+          },
+          "seconds": 51.7
+        },
+        {
+          "source": "persian_poetry",
+          "raw_docs": 14348,
+          "kept_after_quality": 14316,
+          "kept_chars": 41305942,
+          "dropped_by_reason": {
+            "too_short": 19,
+            "too_long": 9,
+            "excessive_quotes": 4
+          },
+          "seconds": 66.1
+        },
+        {
+          "source": "pn_summary_news",
+          "raw_docs": 11185,
+          "kept_after_quality": 0,
+          "kept_chars": 0,
+          "dropped_by_reason": {
+            "bad_sentence_length": 10753,
+            "too_short": 322,
+            "no_sentence_end": 99,
+            "too_few_sentences": 10,
+            "high_digit_ratio": 1
+          },
+          "seconds": 26.5
+        },
+        {
+          "source": "wikipedia_fa",
+          "raw_docs": 864889,
+          "kept_after_quality": 230865,
+          "kept_chars": 457109769,
+          "dropped_by_reason": {
+            "too_short": 621500,
+            "too_few_sentences": 7356,
+            "high_digit_ratio": 1521,
+            "bad_sentence_length": 1171,
+            "fragmented": 984,
+            "excessive_quotes": 591,
+            "no_sentence_end": 580,
+            "few_persian_letters": 131,
+            "too_long": 123,
+            "repeated_lines": 37,
+            "repetitive_ngrams": 30
+          },
+          "seconds": 1056.7
+        }
+      ],
+      "filters": {
+        "max_chars": 60000,
+        "min_persian_letter_ratio": 0.8,
+        "max_latin_ratio": 0.18,
+        "max_digit_ratio": 0.22,
+        "min_avg_sentence_len": 22,
+        "max_avg_sentence_len": 320,
+        "max_short_sentence_ratio": 0.45,
+        "max_pipe_ratio": 0.004,
+        "max_quote_ratio": 0.03,
+        "max_ngram_repeat_ratio": 0.12,
+        "max_compress_ratio": 6.0,
+        "max_dup_line_ratio": 0.3,
+        "check_sentence_shape": true,
+        "require_sentence_end": true
+      }
+    },
+    "tokens": {
+      "tokenizer": {
+        "type": "byte-level BPE",
+        "vocab_size": 32000,
+        "special_tokens": [
+          "<|endoftext|>"
+        ],
+        "file": "tokenizer/persian-bpe-32k.json",
+        "trained_on": "40,000,000 characters sampled from train.txt",
+        "note": "shipped as a convenience; the dataset is plain text and can be tokenized with any Persian vocabulary"
+      },
+      "train": {
+        "path": "train.txt",
+        "documents": 35864,
+        "characters": 44361809,
+        "tokens": 11114710,
+        "characters_per_token": 3.991,
+        "bytes_per_token": 7.234
+      },
+      "validation": {
+        "path": "validation.txt",
+        "documents": 728,
+        "characters": 941811,
+        "tokens": 236091,
+        "characters_per_token": 3.989,
+        "bytes_per_token": 7.228
+      },
+      "total": {
+        "tokens": 11350801,
+        "characters": 45303620,
+        "characters_per_token": 3.991
+      },
+      "method": "exact: encode_batch() over every document, no sampling",
+      "generated_at_utc": "2026-11-02T02:13:24Z"
+    },
+    "methodology": {
+      "count_units": "documents are separated by a line containing <|endoftext|>",
+      "characters": "Unicode code points, counted with len() on the UTF-8 text",
+      "words": "whitespace-separated tokens",
+      "persian_characters": "characters in the Persian/Arabic letter block (U+0621..U+06CC) actually used by Persian",
+      "verified_vs_estimated": "everything above is counted from the shipped files unless a field says otherwise"
+    }
+  },
+  "pipeline_report": {
+    "generated_at_utc": "2026-11-02T02:12:43Z",
+    "pipeline": {
+      "budget_chars": 45000000,
+      "val_fraction": 0.02,
+      "seed": "persian-gpt-100m-v1",
+      "doc_separator": "<|endoftext|>",
+      "normalization": "pipeline/persian_norm.py",
+      "filters": {
+        "max_chars": 60000,
+        "min_persian_letter_ratio": 0.8,
+        "max_latin_ratio": 0.18,
+        "max_digit_ratio": 0.22,
+        "min_avg_sentence_len": 22,
+        "max_avg_sentence_len": 320,
+        "max_short_sentence_ratio": 0.45,
+        "max_pipe_ratio": 0.004,
+        "max_quote_ratio": 0.03,
+        "max_ngram_repeat_ratio": 0.12,
+        "max_compress_ratio": 6.0,
+        "max_dup_line_ratio": 0.3,
+        "check_sentence_shape": true,
+        "require_sentence_end": true
+      }
+    },
+    "cleaning": [
+      {
+        "source": "ganjoor_classics",
+        "raw_docs": 2292,
+        "kept_after_quality": 2290,
+        "kept_chars": 6342366,
+        "dropped_by_reason": {
+          "too_short": 2
+        },
+        "seconds": 10.6
+      },
+      {
+        "source": "parsinlu_entailment",
+        "raw_docs": 12168,
+        "kept_after_quality": 11836,
+        "kept_chars": 3324316,
+        "dropped_by_reason": {
+          "too_short": 208,
+          "excessive_quotes": 101,
+          "no_sentence_end": 23
+        },
+        "seconds": 6.8
+      },
+      {
+        "source": "parsinlu_mc",
+        "raw_docs": 1271,
+        "kept_after_quality": 844,
+        "kept_chars": 144760,
+        "dropped_by_reason": {
+          "fragmented": 181,
+          "too_short": 105,
+          "no_sentence_end": 86,
+          "excessive_quotes": 29,
+          "repetitive_ngrams": 23,
+          "high_digit_ratio": 3
+        },
+        "seconds": 0.4
+      },
+      {
+        "source": "parsinlu_qa",
+        "raw_docs": 1170,
+        "kept_after_quality": 702,
+        "kept_chars": 71952,
+        "dropped_by_reason": {
+          "repetitive_ngrams": 364,
+          "too_short": 101,
+          "excessive_quotes": 2,
+          "high_digit_ratio": 1
+        },
+        "seconds": 0.2
+      },
+      {
+        "source": "parsinlu_rc_passage",
+        "raw_docs": 1170,
+        "kept_after_quality": 856,
+        "kept_chars": 520826,
+        "dropped_by_reason": {
+          "too_short": 298,
+          "too_few_sentences": 9,
+          "excessive_quotes": 5,
+          "bad_sentence_length": 2
+        },
+        "seconds": 1.2
+      },
+      {
+        "source": "peqa_dialogue",
+        "raw_docs": 3368,
+        "kept_after_quality": 3362,
+        "kept_chars": 4778181,
+        "dropped_by_reason": {
+          "repeated_lines": 5,
+          "no_sentence_end": 1
+        },
+        "seconds": 7.8
+      },
+      {
+        "source": "persian_news",
+        "raw_docs": 13455,
+        "kept_after_quality": 9789,
+        "kept_chars": 25251850,
+        "dropped_by_reason": {
+          "too_short": 3617,
+          "bad_sentence_length": 31,
+          "excessive_quotes": 8,
+          "no_sentence_end": 5,
+          "too_few_sentences": 3,
+          "fragmented": 1,
+          "repeated_lines": 1
+        },
+        "seconds": 51.7
+      },
+      {
+        "source": "persian_poetry",
+        "raw_docs": 14348,
+        "kept_after_quality": 14316,
+        "kept_chars": 41305942,
+        "dropped_by_reason": {
+          "too_short": 19,
+          "too_long": 9,
+          "excessive_quotes": 4
+        },
+        "seconds": 66.1
+      },
+      {
+        "source": "pn_summary_news",
+        "raw_docs": 11185,
+        "kept_after_quality": 0,
+        "kept_chars": 0,
+        "dropped_by_reason": {
+          "bad_sentence_length": 10753,
+          "too_short": 322,
+          "no_sentence_end": 99,
+          "too_few_sentences": 10,
+          "high_digit_ratio": 1
+        },
+        "seconds": 26.5
+      },
+      {
+        "source": "wikipedia_fa",
+        "raw_docs": 864889,
+        "kept_after_quality": 230865,
+        "kept_chars": 457109769,
+        "dropped_by_reason": {
+          "too_short": 621500,
+          "too_few_sentences": 7356,
+          "high_digit_ratio": 1521,
+          "bad_sentence_length": 1171,
+          "fragmented": 984,
+          "excessive_quotes": 591,
+          "no_sentence_end": 580,
+          "few_persian_letters": 131,
+          "too_long": 123,
+          "repeated_lines": 37,
+          "repetitive_ngrams": 30
+        },
+        "seconds": 1056.7
+      }
+    ],
+    "dedup": {
+      "input_docs": 274860,
+      "exact_duplicates": 317,
+      "near_duplicates": 4521,
+      "empty": 0,
+      "output_docs": 270022
+    },
+    "selection": {
+      "wikipedia_fa": {
+        "available_docs": 228145,
+        "available_chars": 455534129,
+        "cap_share": 0.65,
+        "quota_chars": 29250000,
+        "selected_docs": 26850,
+        "selected_chars": 35298596,
+        "sampling": "quality",
+        "length_band_sampling": {
+          "short": {
+            "documents": 7785,
+            "characters": 4387350,
+            "weight": 0.15
+          },
+          "medium": {
+            "documents": 5108,
+            "characters": 11699917,
+            "weight": 0.4
+          },
+          "long": {
+            "documents": 1939,
+            "characters": 10237345,
+            "weight": 0.35
+          },
+          "very_long": {
+            "documents": 213,
+            "characters": 2923119,
+            "weight": 0.1
+          }
+        },
+        "budget_overflow_fill": 6050865
+      },
+      "persian_poetry": {
+        "available_docs": 14069,
+        "available_chars": 40844887,
+        "cap_share": 0.02,
+        "quota_chars": 900000,
+        "selected_docs": 322,
+        "selected_chars": 899832,
+        "sampling": "hash",
+        "budget_overflow_fill": 0
+      },
+      "persian_news": {
+        "available_docs": 9439,
+        "available_chars": 24435115,
+        "cap_share": 0.1,
+        "quota_chars": 4500000,
+        "selected_docs": 1757,
+        "selected_chars": 4499846,
+        "sampling": "hash",
+        "budget_overflow_fill": 0
+      },
+      "ganjoor_classics": {
+        "available_docs": 2008,
+        "available_chars": 5627468,
+        "cap_share": 0.03,
+        "quota_chars": 1350000,
+        "selected_docs": 485,
+        "selected_chars": 1349768,
+        "sampling": "hash",
+        "budget_overflow_fill": 0
+      },
+      "parsinlu_entailment": {
+        "available_docs": 10685,
+        "available_chars": 2954450,
+        "cap_share": 0.025,
+        "quota_chars": 1125000,
+        "selected_docs": 4073,
+        "selected_chars": 1125118,
+        "sampling": "hash",
+        "budget_overflow_fill": 125
+      },
+      "parsinlu_rc_passage": {
+        "available_docs": 808,
+        "available_chars": 491225,
+        "cap_share": 0.02,
+        "quota_chars": 900000,
+        "selected_docs": 808,
+        "selected_chars": 491225,
+        "sampling": "hash"
+      },
+      "peqa_dialogue": {
+        "available_docs": 3362,
+        "available_chars": 4778181,
+        "cap_share": 0.025,
+        "quota_chars": 1125000,
+        "selected_docs": 791,
+        "selected_chars": 1124702,
+        "sampling": "hash",
+        "budget_overflow_fill": 0
+      },
+      "parsinlu_mc": {
+        "available_docs": 807,
+        "available_chars": 139406,
+        "cap_share": 0.006,
+        "quota_chars": 270000,
+        "selected_docs": 807,
+        "selected_chars": 139406,
+        "sampling": "hash"
+      },
+      "parsinlu_qa": {
+        "available_docs": 699,
+        "available_chars": 71480,
+        "cap_share": 0.004,
+        "quota_chars": 180000,
+        "selected_docs": 699,
+        "selected_chars": 71480,
+        "sampling": "hash"
+      }
+    },
+    "split": {
+      "train_docs": 35864,
+      "val_docs": 728
+    }
+  }
+}

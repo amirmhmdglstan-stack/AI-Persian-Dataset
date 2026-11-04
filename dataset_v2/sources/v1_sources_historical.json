@@ -1,0 +1,457 @@
+{
+  "dataset": "Persian Pretraining Corpus (GPT-100M)",
+  "generated_at_utc": "2026-11-02T02:12:59Z",
+  "collection_date": "2026-11-01",
+  "collector": "autonomous data-collection agent (Arena.ai Agent Mode)",
+  "language": "Persian (Farsi), standard Iranian Persian",
+  "number_of_sources": 10,
+  "access_scope": "Only public GitHub repositories were used. No website was crawled; no login-gated, paywalled or private material is included; no personal information is stored.",
+  "aggregate": {
+    "raw_documents_extracted": 925316,
+    "raw_characters_extracted": 736630689,
+    "documents_after_quality_filter": 274860,
+    "characters_after_quality_filter": 538849962,
+    "documents_in_dataset": 36592,
+    "characters_in_dataset": 44999973,
+    "deduplication": {
+      "input_docs": 274860,
+      "exact_duplicates": 317,
+      "near_duplicates": 4521,
+      "empty": 0,
+      "output_docs": 270022
+    }
+  },
+  "licensing_summary": {
+    "permissive_or_share_alike": [
+      "wikipedia_fa",
+      "ganjoor_classics",
+      "persian_poetry",
+      "peqa_dialogue"
+    ],
+    "non_commercial": [
+      "parsinlu_qa",
+      "parsinlu_mc",
+      "parsinlu_entailment",
+      "parsinlu_rc_passage"
+    ],
+    "publisher_copyright_research_only": [
+      "persian_news",
+      "pn_summary_news"
+    ],
+    "note": "The corpus mixes licenses. It is released for research and non-commercial use; commercial use requires removing the non-commercial and publisher-copyright sources (see README.txt)."
+  },
+  "sources": [
+    {
+      "id": "wikipedia_fa",
+      "name": "Persian Wikipedia — cleaned article dump (fa.wikipedia.org)",
+      "name_fa": "ویکی‌پدیای فارسی — نسخه پاک‌سازی‌شده",
+      "content_type": "encyclopedia / factual articles",
+      "topics": [
+        "science",
+        "history",
+        "geography",
+        "culture",
+        "technology",
+        "biography",
+        "society",
+        "religion",
+        "sport",
+        "art"
+      ],
+      "url": "https://github.com/hsmirzaie/fawiki",
+      "upstream": "fa.wikipedia.org dump dated 2021-02-01 (865k articles)",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "license_notes": "Text is Wikipedia content, licensed CC BY-SA 4.0. The GitHub repository only redistributes a cleaned dump and adds no license of its own; attribution must be given to Wikipedia and contributors, and share-alike applies to derived data.",
+      "copyright_holder": "Wikimedia Foundation / Wikipedia contributors",
+      "access_method": "git clone of a public repository (no live crawling)",
+      "commercial_use": "allowed with attribution (share-alike)",
+      "language_variety": "standard Iranian Persian, encyclopedic register",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 864889,
+        "raw_characters_extracted": 621656144,
+        "documents_after_quality_filter": 230865,
+        "characters_after_quality_filter": 457109769,
+        "documents_in_dataset": 26850,
+        "characters_in_dataset": 35298596,
+        "sampling": "quality",
+        "budget_cap_share": 0.65
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 621500,
+        "too_few_sentences": 7356,
+        "high_digit_ratio": 1521,
+        "bad_sentence_length": 1171,
+        "fragmented": 984,
+        "excessive_quotes": 591,
+        "no_sentence_end": 580,
+        "few_persian_letters": 131,
+        "too_long": 123,
+        "repeated_lines": 37,
+        "repetitive_ngrams": 30
+      },
+      "status": "included"
+    },
+    {
+      "id": "parsinlu_qa",
+      "name": "ParsiNLU — reading comprehension question/answer pairs",
+      "name_fa": "پارسی‌نلو — پرسش و پاسخ درک مطلب",
+      "content_type": "questions and answers",
+      "topics": [
+        "news",
+        "general knowledge"
+      ],
+      "url": "https://github.com/persiannlp/parsinlu",
+      "upstream": "ParsiNLU (LREC 2020 / TACL) release",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_notes": "Non-commercial. Questions were written by native-speaker annotators; passages come from Persian news sites and remain the property of their publishers.",
+      "copyright_holder": "ParsiNLU authors; passages © original publishers",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not allowed (NC)",
+      "language_variety": "standard Persian, concise questions",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 1170,
+        "raw_characters_extracted": 97956,
+        "documents_after_quality_filter": 702,
+        "characters_after_quality_filter": 71952,
+        "documents_in_dataset": 699,
+        "characters_in_dataset": 71480,
+        "sampling": "hash",
+        "budget_cap_share": 0.004
+      },
+      "cleaning_dropped_by_reason": {
+        "repetitive_ngrams": 364,
+        "too_short": 101,
+        "excessive_quotes": 2,
+        "high_digit_ratio": 1
+      },
+      "status": "included"
+    },
+    {
+      "id": "parsinlu_mc",
+      "name": "ParsiNLU — multiple-choice questions (educational)",
+      "name_fa": "پارسی‌نلو — پرسش‌های چندگزینه‌ای",
+      "content_type": "educational questions and answers",
+      "topics": [
+        "math and logic",
+        "science",
+        "general knowledge"
+      ],
+      "url": "https://github.com/persiannlp/parsinlu",
+      "upstream": "ParsiNLU multiple-choice split",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_notes": "Non-commercial. Questions originate from Persian educational blogs and Q&A sites; answer options were added by annotators.",
+      "copyright_holder": "ParsiNLU authors",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not allowed (NC)",
+      "language_variety": "standard Persian, school-level register",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 1271,
+        "raw_characters_extracted": 217425,
+        "documents_after_quality_filter": 844,
+        "characters_after_quality_filter": 144760,
+        "documents_in_dataset": 807,
+        "characters_in_dataset": 139406,
+        "sampling": "hash",
+        "budget_cap_share": 0.006
+      },
+      "cleaning_dropped_by_reason": {
+        "fragmented": 181,
+        "too_short": 105,
+        "no_sentence_end": 86,
+        "excessive_quotes": 29,
+        "repetitive_ngrams": 23,
+        "high_digit_ratio": 3
+      },
+      "status": "included"
+    },
+    {
+      "id": "parsinlu_entailment",
+      "name": "ParsiNLU / FarsTail — textual entailment pairs",
+      "name_fa": "پارسی‌نلو و فارس‌تیل — زوج‌های استلزام متنی",
+      "content_type": "questions and answers / reasoning pairs",
+      "topics": [
+        "science",
+        "news",
+        "daily life",
+        "general knowledge"
+      ],
+      "url": "https://github.com/persiannlp/parsinlu",
+      "upstream": "ParsiNLU merge of the FarsTail and ParsiNLU entailment sets (the machine-translated test split is excluded)",
+      "license": "CC BY-NC-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_notes": "Non-commercial.",
+      "copyright_holder": "ParsiNLU and FarsTail authors",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not allowed (NC)",
+      "language_variety": "standard Persian",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 12168,
+        "raw_characters_extracted": 3471516,
+        "documents_after_quality_filter": 11836,
+        "characters_after_quality_filter": 3324316,
+        "documents_in_dataset": 4073,
+        "characters_in_dataset": 1125118,
+        "sampling": "hash",
+        "budget_cap_share": 0.025
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 208,
+        "excessive_quotes": 101,
+        "no_sentence_end": 23
+      },
+      "status": "included"
+    },
+    {
+      "id": "parsinlu_rc_passage",
+      "name": "ParsiNLU — reading-comprehension passages (news prose)",
+      "name_fa": "پارسی‌نلو — متن‌های درک مطلب",
+      "content_type": "news and general articles",
+      "topics": [
+        "news",
+        "politics",
+        "society",
+        "international"
+      ],
+      "url": "https://github.com/persiannlp/parsinlu",
+      "upstream": "passages underlying the ParsiNLU reading-comprehension split",
+      "license": "CC BY-NC-SA 4.0 (annotations); passages © original publishers",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_notes": "Passages were taken from Persian news websites and are reproduced here only for research use.",
+      "copyright_holder": "original news publishers",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not allowed (NC)",
+      "language_variety": "standard Persian, journalistic register",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 1170,
+        "raw_characters_extracted": 593776,
+        "documents_after_quality_filter": 856,
+        "characters_after_quality_filter": 520826,
+        "documents_in_dataset": 808,
+        "characters_in_dataset": 491225,
+        "sampling": "hash",
+        "budget_cap_share": 0.02
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 298,
+        "too_few_sentences": 9,
+        "excessive_quotes": 5,
+        "bad_sentence_length": 2
+      },
+      "status": "included"
+    },
+    {
+      "id": "peqa_dialogue",
+      "name": "PeQa — Persian chat/dialogue pairs",
+      "name_fa": "پکا — جفت‌های گفتگوی فارسی",
+      "content_type": "everyday conversations and dialogue",
+      "topics": [
+        "daily life",
+        "religion",
+        "sport",
+        "politics",
+        "humour"
+      ],
+      "url": "https://github.com/ZahraArshia/PeQa",
+      "upstream": "public Telegram channel conversations collected by the PeQa authors",
+      "license": "MIT",
+      "license_url": "https://opensource.org/licenses/MIT",
+      "license_notes": "Repository content is MIT. The conversations are public messages; user handles were stripped before release upstream. Informal (colloquial) Persian — a small share of this corpus.",
+      "copyright_holder": "PeQa authors / original message authors",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "allowed (MIT) for the repository content",
+      "language_variety": "colloquial Tehrani Persian, chat register",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 3368,
+        "raw_characters_extracted": 4982021,
+        "documents_after_quality_filter": 3362,
+        "characters_after_quality_filter": 4778181,
+        "documents_in_dataset": 791,
+        "characters_in_dataset": 1124702,
+        "sampling": "hash",
+        "budget_cap_share": 0.025
+      },
+      "cleaning_dropped_by_reason": {
+        "repeated_lines": 5,
+        "no_sentence_end": 1
+      },
+      "status": "included"
+    },
+    {
+      "id": "ganjoor_classics",
+      "name": "Ganjoor — classical Persian literature (divans)",
+      "name_fa": "گنجور — ادبیات کلاسیک فارسی",
+      "content_type": "literature and poetry",
+      "topics": [
+        "poetry",
+        "mysticism",
+        "ethics",
+        "epic",
+        "storytelling"
+      ],
+      "url": "https://github.com/ganjoor/ganjoor-tex",
+      "upstream": "Ganjoor classical texts (Rumi, Hafez, Saadi, Attar, Ferdowsi, Khayyam, Nezami, Sanaee, Babaafzal, Baba Taher, Shah Nematollah ...)",
+      "license": "GPL-3.0 (repository); the underlying works are public domain",
+      "license_url": "https://www.gnu.org/licenses/gpl-3.0.html",
+      "license_notes": "The works themselves are centuries old and in the public domain. The repository's typesetting/data files are GPL-3.0.",
+      "copyright_holder": "public domain (works) / Ganjoor (compilation)",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "allowed for the public-domain works",
+      "language_variety": "classical Persian verse",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 2292,
+        "raw_characters_extracted": 6379315,
+        "documents_after_quality_filter": 2290,
+        "characters_after_quality_filter": 6342366,
+        "documents_in_dataset": 485,
+        "characters_in_dataset": 1349768,
+        "sampling": "hash",
+        "budget_cap_share": 0.03
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 2
+      },
+      "status": "included"
+    },
+    {
+      "id": "persian_poetry",
+      "name": "Chronological Persian Poetry Dataset",
+      "name_fa": "مجموعه شعر فارسی بر پایه سده",
+      "content_type": "literature and poetry",
+      "topics": [
+        "poetry",
+        "classical literature"
+      ],
+      "url": "https://github.com/aghasemi/ChronologicalPersianPoetryDataset",
+      "upstream": "classical Persian poems labelled by poet and century",
+      "license": "CC BY-SA 4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "license_notes": "Underlying poems are public domain; the compilation is CC BY-SA 4.0.",
+      "copyright_holder": "public domain (works) / dataset authors (compilation)",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "allowed with attribution (share-alike)",
+      "language_variety": "classical Persian verse",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 14348,
+        "raw_characters_extracted": 46647137,
+        "documents_after_quality_filter": 14316,
+        "characters_after_quality_filter": 41305942,
+        "documents_in_dataset": 322,
+        "characters_in_dataset": 899832,
+        "sampling": "hash",
+        "budget_cap_share": 0.02
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 19,
+        "too_long": 9,
+        "excessive_quotes": 4
+      },
+      "status": "included"
+    },
+    {
+      "id": "persian_news",
+      "name": "Persian News Dataset (5 Iranian news agencies)",
+      "name_fa": "دیتاست اخبار فارسی",
+      "content_type": "news and general articles",
+      "topics": [
+        "politics",
+        "sport",
+        "economy",
+        "society",
+        "culture",
+        "international"
+      ],
+      "url": "https://github.com/milad-4274/persian_news",
+      "upstream": "13.5k news items (title + lead) from Iranian agencies",
+      "license": "none declared",
+      "license_url": "",
+      "license_notes": "The repository ships no license file, and the article text is copyright of the original news agencies. Included for non-commercial research/education only; remove this source (see README) if you need a purely permissive corpus.",
+      "copyright_holder": "original news agencies",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not granted",
+      "language_variety": "standard Persian, journalistic register",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 13455,
+        "raw_characters_extracted": 33589891,
+        "documents_after_quality_filter": 9789,
+        "characters_after_quality_filter": 25251850,
+        "documents_in_dataset": 1757,
+        "characters_in_dataset": 4499846,
+        "sampling": "hash",
+        "budget_cap_share": 0.1
+      },
+      "cleaning_dropped_by_reason": {
+        "too_short": 3617,
+        "bad_sentence_length": 31,
+        "excessive_quotes": 8,
+        "no_sentence_end": 5,
+        "too_few_sentences": 3,
+        "fragmented": 1,
+        "repeated_lines": 1
+      },
+      "status": "included"
+    },
+    {
+      "id": "pn_summary_news",
+      "name": "pn-summary — Iranian news articles with human summaries",
+      "name_fa": "پی‌ان‌سامری — اخبار فارسی",
+      "content_type": "news and general articles",
+      "topics": [
+        "news",
+        "economy",
+        "energy",
+        "city",
+        "sport",
+        "culture"
+      ],
+      "url": "https://github.com/hooshvare/pn-summary",
+      "upstream": "news articles published by Iranian agencies (ISNA, IRNA, SHANA, IMNA, YJC ...) with human-written summaries",
+      "license": "MIT (repository); article text © the publishers",
+      "license_url": "https://opensource.org/licenses/MIT",
+      "license_notes": "The dataset packaging/code is MIT. The news articles remain the property of their publishers and are included for non-commercial research only.",
+      "copyright_holder": "original news publishers",
+      "access_method": "git clone of a public repository",
+      "commercial_use": "not granted for the article text",
+      "language_variety": "standard Persian, journalistic register",
+      "quality_outcome": "REJECTED by the quality gate: the upstream release has all sentence punctuation stripped (0 of 11,185 articles contain a period, question mark or exclamation mark), so the text is unusable as sentence-level training data. It contributes 0 documents to the shipped corpus; the source is documented here for transparency.",
+      "collected_at": "2026-11-01",
+      "collection_method": "downloaded from a public GitHub repository; no live websites were crawled, no robots.txt rules were circumvented, no access control bypassed, and no personal data was collected",
+      "counts": {
+        "raw_documents_extracted": 11185,
+        "raw_characters_extracted": 18995508,
+        "documents_after_quality_filter": 0,
+        "characters_after_quality_filter": 0,
+        "documents_in_dataset": 0,
+        "characters_in_dataset": 0
+      },
+      "cleaning_dropped_by_reason": {
+        "bad_sentence_length": 10753,
+        "too_short": 322,
+        "no_sentence_end": 99,
+        "too_few_sentences": 10,
+        "high_digit_ratio": 1
+      },
+      "status": "rejected_by_quality_gate"
+    }
+  ]
+}

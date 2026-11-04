@@ -7,13 +7,11 @@ REM ===========================================================================
 setlocal
 set "PY=D:\GPT\venv\Scripts\python.exe"
 set "REPO=D:\GPT\dataset\repo_v2_review"
-set "BRANCH=arena/b2bcd196-ai-persian-dataset"
 set "CONFIG=%REPO%\dataset_v2\configs\dataset_config.json"
 set "META=%REPO%\dataset_v2\sources\source_metadata.json"
 set "TOK=%REPO%\dataset_v2\tokenizer\persian-bpe-32k.json"
 
 echo Repository: %REPO%
-echo Branch:     %BRANCH%
 echo Python:     %PY%
 echo.
 
@@ -29,19 +27,18 @@ if not exist "%REPO%\dataset_v2\configs\dataset_config.json" goto :missing_v2
 cd /d "%REPO%"
 if errorlevel 1 goto :fail
 
-REM Verify the fixed session branch. This launcher NEVER performs automatic
+REM Verify the repository. This launcher NEVER performs automatic
 REM remote updates or branch switching; V1's branch is never touched.
 set "CURRENT_BRANCH="
 for /f "delims=" %%B in ('git rev-parse --abbrev-ref HEAD 2^>nul') do set "CURRENT_BRANCH=%%B"
 if not defined CURRENT_BRANCH goto :not_git
-if /I not "%CURRENT_BRANCH%"=="%BRANCH%" goto :wrong_branch
 
 REM Check tracked changes before any Git operation (there are none in this
 REM launcher). Generated report files and the smoke workdir are excluded.
 set "DIRTY="
 for /f "delims=" %%L in ('git status --porcelain --untracked-files=no -- . ":(exclude)dataset_v2/reports" ":(exclude)dataset_v2/.smoke_work" 2^>nul') do set "DIRTY=1"
 if defined DIRTY goto :dirty_tree
-echo Git guard: branch OK; tracked source/config tree clean. Automatic remote updates and branch switching are DISABLED.
+echo Git guard: branch %CURRENT_BRANCH%; tracked source/config tree clean. Automatic remote updates and branch switching are DISABLED.
 echo Update the V2 repository manually before running; V1's branch is never switched.
 echo.
 
@@ -117,11 +114,6 @@ goto :fail
 
 :not_git
 echo ERROR: %REPO% is not a Git working tree or git is unavailable.
-goto :fail
-
-:wrong_branch
-echo ERROR: current branch is "%CURRENT_BRANCH%", expected "%BRANCH%".
-echo This launcher will not switch branches. Check out the correct V2 branch manually.
 goto :fail
 
 :dirty_tree
