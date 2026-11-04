@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-"""Disk-backed exact + near deduplication for Persian Dataset V2.
+"""Disk-backed exact deduplication and approximate near-match indexing.
 
-* Exact duplicates: BLAKE2b hash of an aggressively normalized text.
+* Exact duplicates: BLAKE2b hash of the original extracted text, scoped by profile.
 * Near duplicates: deterministic one-permutation MinHash (32 bins) over 5-word
   shingles, with 8 LSH bands stored in SQLite.  Candidate lists are capped so
   RAM stays bounded even for hundreds of millions of documents.
-* Every duplicate receives the survivor's ``cluster_id``.  The splitter assigns
-  splits by cluster, so near duplicates cannot leak between train/val/test.
+* Near matches are retained and can be assigned a common cluster for splitting.
+  LSH is approximate and does not establish absence of cross-split leakage.
 
-This is an approximation: MinHash/LSH can miss some near duplicates and can
-occasionally over-merge.  Reported counts are measured by this implementation,
-not a claim of perfect duplicate removal.
+MinHash/LSH can miss matches and group distinct texts; it is a review and
+split-clustering aid, not a claim of perfect duplicate detection.
 """
 from __future__ import annotations
 
@@ -164,8 +163,10 @@ class SQLiteCorpusIndex:
                 equal += 1
         return round(equal / max(1, comparable), 4)
 
-    def exact_hash(self, text: str) -> bytes:
-        return hashlib.blake2b(dedup_key(text).encode("utf-8"), digest_size=24,
+    def exact_hash(self, text: str, profile: str = "") -> bytes:
+        # Length-prefix the profile so A/B rights are never silently merged.
+        payload = len(profile.encode("utf-8")).to_bytes(4, "big") + profile.encode("utf-8") + dedup_key(text).encode("utf-8")
+        return hashlib.blake2b(payload, digest_size=24,
                                person=b"persian-exac"[:16]).digest()
 
     # ------------------------------ lookups ------------------------------- #
@@ -235,13 +236,13 @@ class SQLiteCorpusIndex:
                  license_: str, domain: str, shard: str, offset: int,
                  byte_len: int, chars: int, quality: float, exact_hash: bytes,
                  signature: bytes, meta: dict | None = None,
-                 categories: Iterable[str] = ()) -> None:
+                 categories: Iterable[str] = (), cluster_id: str | None = None) -> None:
         self.conn.execute(
             "INSERT OR REPLACE INTO docs(doc_id,source_id,profile,license,domain,shard,offset,"
             "byte_len,chars,status,quality,exact_hash,signature,cluster_id,split,selected,meta) "
             "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0,?)",
             (doc_id, source_id, profile, license_, domain, shard, offset, byte_len,
-             chars, "kept", quality, exact_hash, signature, doc_id, None,
+             chars, "kept", quality, exact_hash, signature, cluster_id or doc_id, None,
              json.dumps(meta or {}, ensure_ascii=False, sort_keys=True)))
         self.conn.execute("INSERT OR IGNORE INTO exact(hash,doc_id) VALUES(?,?)",
                           (exact_hash, doc_id))

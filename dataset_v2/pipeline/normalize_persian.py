@@ -448,11 +448,8 @@ def detect_language(text: str, stats: dict, config: dict | None = None,
 
 
 def dedup_key(text: str) -> str:
-    """Aggressively normalized form for exact duplicate detection."""
-    t = text.lower()
-    t = t.translate(str.maketrans(PERSIAN_DIGITS, "0123456789"))
-    t = re.sub(r"[\s\u200c\u200d،؛.,!؟?:;\"'«»\(\)\[\]\{\}\-–—…]+", "", t)
-    return t
+    """Lossless identity key. Punctuation, whitespace and ZWNJ are significant."""
+    return text
 
 
 def words_for_shingles(text: str) -> list[str]:

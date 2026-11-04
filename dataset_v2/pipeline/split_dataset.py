@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Deterministic, cluster-consistent train/validation/test assignment.
 
-Splitting happens AFTER global exact/near deduplication and AFTER balancing.
-Every member of a duplicate cluster shares a ``cluster_id`` and is assigned to
-the SAME split, so near duplicates cannot leak between train/validation/test.
+Splitting happens AFTER exact deduplication, approximate near-match clustering,
+and balancing. Members of an identified cluster share one split. LSH can miss
+matches or fail to connect overlapping clusters; this is not proof that all near
+matches are isolated across train/validation/test.
 
 Clusters are ordered by a seeded BLAKE2b hash within each source and assigned
 to meet per-source character quotas without large overshoot.  A post-pass adds

@@ -45,6 +45,18 @@ class TestDeduplication(unittest.TestCase):
         different = BASE.replace("زبان فارسی", "زبان پارسی") + " جمله\u200cای تازه افزوده شد."
         self.assertEqual(self.index.exact_duplicate_of(self.index.exact_hash(different)), None)
 
+    def test_exact_identity_preserves_distinctions_and_separates_profiles(self):
+        original = 'می\u200cرود، این ۱۲ است!'
+        for variant in ('میرود، این ۱۲ است!', 'می\u200cرود این ۱۲ است!',
+                        'می\u200cرود، این 12 است!', 'می\u200cرود،  این ۱۲ است!'):
+            with self.subTest(variant=variant):
+                self.assertNotEqual(self.index.exact_hash(original, 'A'),
+                                    self.index.exact_hash(variant, 'A'))
+        self.assertNotEqual(self.index.exact_hash(original, 'A'),
+                            self.index.exact_hash(original, 'B'))
+        self.assertEqual(self.index.exact_hash(original, 'A'),
+                         self.index.exact_hash(original, 'A'))
+
     def test_near_duplicate_detection_and_cluster(self):
         _, _, n = self._add("doc1", BASE)
         self.assertGreaterEqual(n, 8)

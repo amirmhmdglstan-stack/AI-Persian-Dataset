@@ -1,8 +1,10 @@
 # Persian Dataset V2 — Scalable, Licence-Aware Pretraining Pipeline
 
-> Consolidation note: branch names and test results below describe the original repair session, not this integration. See the root [consolidation report](../CONSOLIDATION_REPORT.md) for current status and critical deduplication and licensing caveats. Windows launchers now accept the current Git branch without switching it.
+> Consolidation note: branch names, test results, and deduplication behaviour in the historical repair narrative below describe the original repair session, not this integration. See the root [consolidation report](../CONSOLIDATION_REPORT.md) for current status and licensing caveats. Windows launchers now accept the current Git branch without switching it.
+>
+> **Current deduplication:** only identical extracted text within the same rights profile is removed; near matches are retained, recorded for review, and heuristically assigned to a common split cluster. This is not proof of near-duplicate isolation: LSH can miss matches or fail to join overlapping clusters. `duplicate_sources.jsonl` records the contributing metadata of selected exact duplicates, and `documents.jsonl` records a workdir-relative extracted file, line and raw-text SHA-256. Keep the extracted inputs securely if reproducibility is needed; they can contain PII or restricted material. Normalization can still erase distinctions and quality filters can reject material. The verifier can flag identical normalized outputs even when raw inputs differ. Rebuild old work indexes with `--force`; do not resume pre-change checkpoints.
 
-**Goal:** build the largest practical, diverse, legally documented **Persian-only** corpus for a GPT trained from random initialization. V2 fixes V1's Wikipedia dominance, adds three data profiles, three splits, global disk-backed deduplication, Persian-aware normalization, PII/quality gates, measured statistics, a memory-bounded tokenizer comparison and a Windows 11 / Python 3.12 execution path. The agent machine is Linux; Windows 11 / Python 3.12 execution is NOT fully verified here.
+**Goal:** build the largest practical, diverse, legally documented **Persian-only** corpus for a GPT trained from random initialization. V2 fixes V1's Wikipedia dominance, adds three data profiles, three splits, disk-backed exact deduplication and near-match clustering, Persian-aware normalization, PII/quality gates, measured statistics, a memory-bounded tokenizer comparison and a Windows 11 / Python 3.12 execution path. The agent machine is Linux; Windows 11 / Python 3.12 execution is NOT fully verified here.
 
 **This repository does NOT contain the expanded corpus.** It contains the pipeline, configuration, source/licence metadata, tests and small verification reports. The user's PC performs the full download, processing, verification and a memory-bounded tokenizer comparison; full-corpus tokenization is not claimed here.
 
@@ -46,11 +48,11 @@ download_sources.py   resumable HTTP Range downloads, manifest SHA-256+size iden
 extract_sources.py    MediaWiki XML bz2, Tatoeba pes .tsv.bz2, CSV/TSV/JSONL/txt/tar/Parquet/7z
 normalize_persian.py  NFKC, Arabic→Persian, ZWNJ, Latin measurement, PII detection
 filter_quality.py     explainable language/structure/repetition/boilerplate/quality gate
-deduplicate.py        SQLite exact hash + 32-bin MinHash/8-band LSH, bounded candidates
+deduplicate.py        raw-text exact hash + 32-bin MinHash/8-band LSH review candidates
 split_dataset.py      deterministic 97/2/1, cluster-consistent, source-stratified
 build_corpus.py       orchestrates all stages, sharded JSONL, checkpoints, audit samples
 compute_statistics.py measured final-file stats, exact V1 32K token counts, checksums
-verify_dataset.py     independent re-scan, split leakage, V1 integrity, checksums
+verify_dataset.py     re-scan, identified-cluster consistency, V1 integrity, checksums
 compare_tokenizers.py capped 8M-char streaming BPE comparison, measured peak RSS
 ```
 
@@ -69,6 +71,8 @@ profile_A/train.txt
 profile_A/validation.txt
 profile_A/test.txt
 profile_A/documents.jsonl       # per-document provenance
+profile_A/duplicate_sources.jsonl # source/license metadata for selected exact duplicates
+near_match_review.jsonl          # candidate IDs, similarity, source, selection and split; no text
 checksums.json                  # SHA-256 of final files + index
 profile_C_quarantine_manifest_only/quarantine_manifest.json
 reports/quality_report.json

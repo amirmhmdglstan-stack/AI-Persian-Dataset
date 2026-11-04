@@ -175,6 +175,57 @@ class RepairTests(unittest.TestCase):
         with patch.object(sys, 'argv', argv):
             BC.main()
 
+    def test_exact_and_near_candidates_preserve_variants_and_duplicate_provenance(self):
+        import sqlite3
+        extracted = self.root / 'extracted/A'
+        extracted.mkdir(parents=True)
+        text = paragraph(0, 9)
+        # Subtle punctuation and wording differences must not be discarded.
+        variant = text.replace('،', '؛', 1) if '،' in text else text + ' جمله دیگری است.'
+        variant2 = text + ' این جمله تازه نیز برای آزمایش اضافه شده است.'
+        docs = [make_record('smoke_news', 0, text, 'news'),
+                make_record('smoke_news', 1, variant, 'news'),
+                make_record('smoke_news', 2, variant2, 'news')]
+        (extracted / 'smoke_news.jsonl').write_text(
+            ''.join(json.dumps(d, ensure_ascii=False) + '\n' for d in docs), encoding='utf-8')
+        duplicate = make_record('smoke_other', 0, text, 'news')
+        duplicate['meta']['attribution'] = 'different contributor'
+        (extracted / 'smoke_other.jsonl').write_text(
+            json.dumps(duplicate, ensure_ascii=False) + '\n', encoding='utf-8')
+        self.build(['--force'])
+        manifest = [json.loads(s) for s in (self.out / 'profile_A/documents.jsonl').read_text(encoding='utf-8').splitlines()]
+        duplicates = [json.loads(s) for s in (self.out / 'profile_A/duplicate_sources.jsonl').read_text(encoding='utf-8').splitlines()]
+        self.assertEqual(len(manifest), 3)
+        self.assertEqual(len(duplicates), 1)
+        self.assertEqual(duplicates[0]['source_id'], 'smoke_other')
+        self.assertEqual(duplicates[0]['meta']['attribution'], 'different contributor')
+        self.assertEqual(duplicates[0]['meta']['extracted_record']['line'], 1)
+        self.assertIn(duplicates[0]['representative_doc_id'], {r['doc_id'] for r in manifest})
+        candidates = [json.loads(s) for s in (self.out / 'near_match_review.jsonl').read_text(encoding='utf-8').splitlines()]
+        self.assertGreater(len(candidates), 0)
+        self.assertTrue(all('similarity' in candidate and 'text' not in candidate and
+                            'excerpt' not in candidate for candidate in candidates))
+        with sqlite3.connect(self.work / 'corpus_index.sqlite3') as conn:
+            self.assertEqual(conn.execute("SELECT COUNT(*) FROM docs WHERE status='near_duplicate'").fetchone()[0], 0)
+            self.assertGreater(conn.execute("SELECT COUNT(*) FROM audit WHERE reason='near_match_retained'").fetchone()[0], 0)
+            self.assertEqual(conn.execute("SELECT COUNT(DISTINCT split) FROM docs WHERE status='kept'").fetchone()[0], 1)
+        import verify_dataset as verify
+        verify_out = self.root / 'verify.json'
+        argv = ['verify', '--config', str(CONFIG), '--workdir', str(self.work),
+                '--outdir', str(self.out), '--reports-dir', str(self.reports),
+                '--scope', 'small_sample', '--out', str(verify_out)]
+        with patch.object(sys, 'argv', argv):
+            verify.main()
+        checks = json.loads(verify_out.read_text())['checks']
+        self.assertEqual(next(c for c in checks if c['check'] == 'duplicate_provenance_matches:A')['status'], 'PASS')
+        duplicates[0]['source_id'] = 'tampered'
+        (self.out / 'profile_A/duplicate_sources.jsonl').write_text(
+            json.dumps(duplicates[0], ensure_ascii=False) + '\n', encoding='utf-8')
+        with patch.object(sys, 'argv', argv), self.assertRaises(SystemExit):
+            verify.main()
+        checks = json.loads(verify_out.read_text())['checks']
+        self.assertEqual(next(c for c in checks if c['check'] == 'duplicate_provenance_matches:A')['status'], 'FAIL')
+
     def test_transactional_resume_after_stale_external_checkpoint(self):
         extracted = self.root / 'extracted/A'
         extracted.mkdir(parents=True)

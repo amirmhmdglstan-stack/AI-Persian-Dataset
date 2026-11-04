@@ -217,7 +217,7 @@ def main() -> None:
     add("unique_documents_measured", unique_docs == sum(doc_counts.values()),
         {"unique": unique_docs, "total_documents": sum(doc_counts.values())})
 
-    # Duplicate-cluster leakage (near duplicates share a cluster_id and split).
+    # Check known clusters only; LSH can miss similar pairs or fail to union clusters.
     index_path = workdir / "corpus_index.sqlite3"
     leakage = []
     if index_path.exists():
@@ -225,7 +225,7 @@ def main() -> None:
         add("no_duplicate_cluster_leakage_across_splits", not leakage, leakage[:5])
     else:
         add("no_duplicate_cluster_leakage_across_splits", False,
-            "corpus_index.sqlite3 missing; cannot verify near-duplicate leakage")
+            "corpus_index.sqlite3 missing; cannot verify identified cluster consistency")
 
     # Provenance manifest counts and license/domain distribution.
     manifest_counts = {}
@@ -252,6 +252,41 @@ def main() -> None:
                        if k.startswith(f"profile_{profile}/"))
         add(f"provenance_manifest_matches:{profile}", n == expected,
             {"manifest_rows": n, "final_documents": expected})
+        # Duplicate provenance is separate to keep manifest rows memory-bounded.
+        # Compare its cardinality and identities to the authoritative work index.
+        duplicate_path = outdir / f"profile_{profile}" / "duplicate_sources.jsonl"
+        if not index_path.exists() or not duplicate_path.exists():
+            add(f"duplicate_provenance_matches:{profile}", False,
+                "missing corpus index or duplicate_sources.jsonl")
+        else:
+            with sqlite3.connect(str(index_path)) as conn:
+                conn.execute("PRAGMA temp_store=FILE")
+                conn.execute("CREATE TEMP TABLE seen_duplicate_ids (doc_id TEXT PRIMARY KEY)")
+                expected_dup = conn.execute(
+                    "SELECT COUNT(*) FROM docs d JOIN docs r ON r.doc_id=d.cluster_id "
+                    "WHERE d.status='exact_duplicate' AND d.profile=? "
+                    "AND r.status='kept' AND r.selected=1 AND r.split IS NOT NULL", (profile,)).fetchone()[0]
+                count = bad = 0
+                with duplicate_path.open(encoding="utf-8") as dup_f:
+                    for line in dup_f:
+                        try:
+                            d = json.loads(line)
+                            row = conn.execute(
+                                "SELECT d.source_id,d.profile,d.license,d.domain,d.meta,d.cluster_id "
+                                "FROM docs d JOIN docs r ON r.doc_id=d.cluster_id "
+                                "WHERE d.doc_id=? AND d.status='exact_duplicate' AND d.profile=? "
+                                "AND r.status='kept' AND r.selected=1 AND r.split IS NOT NULL",
+                                (d['doc_id'], profile)).fetchone()
+                            if (not row or [d[k] for k in ('source_id','profile','license','domain')] != list(row[:4])
+                                    or d['meta'] != json.loads(row[4] or '{}')
+                                    or d['representative_doc_id'] != row[5]):
+                                bad += 1
+                            conn.execute("INSERT INTO seen_duplicate_ids VALUES (?)", (d['doc_id'],))
+                            count += 1
+                        except (ValueError, KeyError, TypeError, sqlite3.IntegrityError):
+                            bad += 1
+                add(f"duplicate_provenance_matches:{profile}", count == expected_dup and bad == 0,
+                    {"manifest_rows": count, "expected": expected_dup, "invalid": bad})
     add("license_distribution_recorded", bool(license_dist), dict(license_dist))
     add("domain_distribution_recorded", bool(domain_dist), dict(domain_dist))
     add("source_distribution_recorded", bool(source_dist), dict(source_dist))

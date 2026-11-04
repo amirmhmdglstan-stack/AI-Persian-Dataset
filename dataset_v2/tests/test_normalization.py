@@ -19,7 +19,7 @@ class TestNormalization(unittest.TestCase):
         self.assertNotIn("\u064a", r.text)
         self.assertNotIn("\u0643", r.text)
         self.assertGreaterEqual(r.stats["zwnj_after"], 2)
-        self.assertEqual(dedup_key("سلام، دنیا!"), dedup_key("سلام دنیا"))
+        self.assertNotEqual(dedup_key("سلام، دنیا!"), dedup_key("سلام دنیا"))
 
     def test_latin_technical_terms_preserved_and_measured(self):
         text = ("زبان برنامه\u200cنویسی Python در این متن فارسی معرفی می\u200cشود و "

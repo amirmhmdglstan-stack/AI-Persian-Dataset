@@ -428,11 +428,64 @@ def write_final_outputs(index: SQLiteCorpusIndex, outdir: Path, profiles: list[s
             "bytes": (pdir / "documents.jsonl").stat().st_size,
             "sha256": sha256_file(pdir / "documents.jsonl"),
         }
+        # Keep the complete source/license metadata for every exact duplicate
+        # whose representative survived selection. Stream it separately so one
+        # popular document cannot produce an unbounded in-memory manifest row.
+        duplicate_tmp = pdir / "duplicate_sources.jsonl.part"
+        duplicate_count = 0
+        with open(duplicate_tmp, "w", encoding="utf-8", newline="\n") as dup_f:
+            for duplicate in index.conn.execute(
+                "SELECT d.doc_id, d.source_id, d.profile, d.license, d.domain, d.meta, "
+                "d.cluster_id AS representative_doc_id FROM docs d "
+                "JOIN docs r ON r.doc_id=d.cluster_id "
+                "WHERE d.status='exact_duplicate' AND d.profile=? "
+                "AND r.status='kept' AND r.selected=1 AND r.split IS NOT NULL "
+                "ORDER BY d.doc_id", (profile,)):
+                record = dict(duplicate)
+                record["meta"] = json.loads(record["meta"] or "{}")
+                dup_f.write(json.dumps(record, ensure_ascii=False, sort_keys=True,
+                                       separators=(",", ":")) + "\n")
+                duplicate_count += 1
+            dup_f.flush()
+            os.fsync(dup_f.fileno())
+        duplicate_path = pdir / "duplicate_sources.jsonl"
+        os.replace(duplicate_tmp, duplicate_path)
+        result["files"][f"profile_{profile}/duplicate_sources.jsonl"] = {
+            "bytes": duplicate_path.stat().st_size, "sha256": sha256_file(duplicate_path),
+            "records": duplicate_count,
+        }
         result["profiles"][profile] = {
             "directory": str(pdir), "documents_by_split": dict(counts),
-            "characters_by_split": dict(chars),
+            "characters_by_split": dict(chars), "duplicate_source_records": duplicate_count,
         }
         logger.info("profile %s: %s", profile, dict(counts))
+
+    # Export review candidates without raw text or PII-bearing excerpts. The
+    # work index contains the full audit and the extracted inputs remain the
+    # source of the original text; selection status makes cap decisions visible.
+    review_tmp = outdir / "near_match_review.jsonl.part"
+    review_count = 0
+    with open(review_tmp, "w", encoding="utf-8", newline="\n") as review_f:
+        for row in index.conn.execute(
+            "SELECT a.doc_id, a.paired_doc_id, a.meta, d.source_id, d.profile, "
+            "d.selected, d.split, p.source_id AS paired_source_id, "
+            "p.profile AS paired_profile, p.selected AS paired_selected, "
+            "p.split AS paired_split FROM audit a JOIN docs d ON d.doc_id=a.doc_id "
+            "JOIN docs p ON p.doc_id=a.paired_doc_id "
+            "WHERE a.reason='near_match_retained' ORDER BY a.id"):
+            record = dict(row)
+            record["similarity"] = json.loads(record.pop("meta") or "{}").get("similarity")
+            review_f.write(json.dumps(record, ensure_ascii=False, sort_keys=True,
+                                      separators=(",", ":")) + "\n")
+            review_count += 1
+        review_f.flush()
+        os.fsync(review_f.fileno())
+    review_path = outdir / "near_match_review.jsonl"
+    os.replace(review_tmp, review_path)
+    result["files"]["near_match_review.jsonl"] = {
+        "bytes": review_path.stat().st_size, "sha256": sha256_file(review_path),
+        "records": review_count,
+    }
 
     # Quarantine manifest only: NO text from PROFILE C is written.
     qdir = outdir / "profile_C_quarantine_manifest_only"
@@ -500,7 +553,7 @@ def main() -> None:
             old = outdir / dirname
             if old.exists():
                 shutil.rmtree(old)
-        for name in ("checksums.json",):
+        for name in ("checksums.json", "near_match_review.jsonl", "near_match_review.jsonl.part"):
             (outdir / name).unlink(missing_ok=True)
         for name in ("build_report.json", "quality_report.json", "pipeline_benchmark.json"):
             (reports_dir / name).unlink(missing_ok=True)
@@ -545,7 +598,7 @@ def main() -> None:
     relevant_cfg = {k: v for k, v in cfg.items()
                     if k not in ("checkpoint_every_docs", "log_every_docs", "min_free_gb",
                                  "workdir", "outdir")}
-    fingerprint_data = {"inputs": [(str(p.resolve()), sha256_file(p)) for p in files],
+    fingerprint_data = {"dedup_algorithm": "raw-exact-profile-near-retained-v1", "inputs": [(str(p.resolve()), sha256_file(p)) for p in files],
                         "config": relevant_cfg, "metadata": json.loads(meta_path.read_text(encoding="utf-8")),
                         "policy": policy, "profiles": sorted(profiles),
                         "only_sources": sorted(args.only_sources or [])}
@@ -687,6 +740,9 @@ def main() -> None:
                     "quality_features": decision.features,
                     "language_score": lang.score,
                     "language_reason": lang.reason,
+                    "extracted_record": {"file": str(path.relative_to(extracted_root)),
+                                         "line": line_no,
+                                         "text_sha256": hashlib.sha256(raw_text.encode("utf-8")).hexdigest()},
                 })
                 meta.setdefault("attribution", src.get("copyright_holder", ""))
                 excerpt = redact_excerpt(raw_text or norm.text,
@@ -705,7 +761,7 @@ def main() -> None:
                     if not lang.is_persian:
                         language_reasons[lang.reason] += 1
                 else:
-                    h = index.exact_hash(norm.text)
+                    h = index.exact_hash(raw_text, src["profile"])
                     exact_of = index.exact_duplicate_of(h)
                     if exact_of:
                         index.add_duplicate(
@@ -719,37 +775,35 @@ def main() -> None:
                     else:
                         sig, n_shingles = index.make_signature(norm.text, seed)
                         near_of, sim, _ = index.near_duplicate_of(sig, n_shingles)
+                        # Similarity is a review signal, not evidence that text may be
+                        # discarded. Keep the record and co-locate a detected match.
+                        cluster_id = None
                         if near_of:
-                            index.add_duplicate(
-                                doc_id=doc_id, source_id=source_id, profile=src["profile"],
-                                license_=src["license_content"], domain=src.get("domain", "default"),
-                                status="near_duplicate", cluster_id=near_of,
-                                quality=decision.score, excerpt=excerpt,
-                                paired_doc_id=near_of, similarity=sim, meta=meta)
-                            stats["near_duplicates"] += 1
-                            by_source[source_id]["near_duplicates"] += 1
-                        else:
-                            shard, offset, byte_len = writer.write({"doc_id": doc_id, "text": norm.text})
-                            index.add_kept(
-                                doc_id=doc_id, source_id=source_id, profile=src["profile"],
-                                license_=src["license_content"], domain=src.get("domain", "default"),
-                                shard=shard, offset=offset, byte_len=byte_len,
-                                chars=len(norm.text), quality=decision.score,
-                                exact_hash=h, signature=sig, meta=meta,
-                                categories=audit_category(decision, src, "kept"))
-                            stats["documents_accepted"] += 1
-                            stats["normalized_characters"] += len(norm.text)
-                            stats["persian_letters"] += norm.stats.get("persian_letters", 0)
-                            stats["latin_letters"] += norm.stats.get("latin_letters", 0)
-                            stats["latin_words"] += norm.stats.get("latin_words", 0)
-                            stats["persian_words"] += norm.stats.get("persian_words", 0)
-                            stats["persian_digits"] += norm.stats.get("persian_digits", 0)
-                            stats["latin_digits"] += norm.stats.get("latin_digits", 0)
-                            stats["zwnj"] += norm.stats.get("zwnj_after", 0)
-                            stats["quality_score_sum"] += decision.score
-                            stats["cleaning_removed_chars"] += norm.stats.get("removed_chars", 0)
-                            by_source[source_id]["accepted"] += 1
-                            by_source[source_id]["characters"] += len(norm.text)
+                            cluster_id = index.conn.execute(
+                                "SELECT cluster_id FROM docs WHERE doc_id=?", (near_of,)).fetchone()[0]
+                            index.record_audit(doc_id, "near_duplicate_example", "near_match_retained",
+                                               excerpt, near_of, {"similarity": sim}, source_id=source_id)
+                        shard, offset, byte_len = writer.write({"doc_id": doc_id, "text": norm.text})
+                        index.add_kept(
+                            doc_id=doc_id, source_id=source_id, profile=src["profile"],
+                            license_=src["license_content"], domain=src.get("domain", "default"),
+                            shard=shard, offset=offset, byte_len=byte_len,
+                            chars=len(norm.text), quality=decision.score,
+                            exact_hash=h, signature=sig, meta=meta, cluster_id=cluster_id,
+                            categories=audit_category(decision, src, "kept"))
+                        stats["documents_accepted"] += 1
+                        stats["normalized_characters"] += len(norm.text)
+                        stats["persian_letters"] += norm.stats.get("persian_letters", 0)
+                        stats["latin_letters"] += norm.stats.get("latin_letters", 0)
+                        stats["latin_words"] += norm.stats.get("latin_words", 0)
+                        stats["persian_words"] += norm.stats.get("persian_words", 0)
+                        stats["persian_digits"] += norm.stats.get("persian_digits", 0)
+                        stats["latin_digits"] += norm.stats.get("latin_digits", 0)
+                        stats["zwnj"] += norm.stats.get("zwnj_after", 0)
+                        stats["quality_score_sum"] += decision.score
+                        stats["cleaning_removed_chars"] += norm.stats.get("removed_chars", 0)
+                        by_source[source_id]["accepted"] += 1
+                        by_source[source_id]["characters"] += len(norm.text)
                 if processed_docs % log_every == 0:
                     logger.info("progress: %s docs seen, %s accepted", f"{processed_docs:,}",
                                 f"{stats['documents_accepted']:,}")
@@ -822,7 +876,7 @@ def main() -> None:
         "manual_audit": audit_report,
         "limitations": [
             "Automated quality scores are surface-form heuristics; they do not establish semantic correctness.",
-            "MinHash/LSH near deduplication is approximate; undetected duplicates may remain.",
+            "Near matches are retained; approximate LSH clustering can miss or incompletely connect similar texts and does not prove split isolation.",
             "Language detection uses script ratios and function words, not a trained language classifier.",
             "All statistics labelled small_sample are NOT full-corpus results.",
         ],
