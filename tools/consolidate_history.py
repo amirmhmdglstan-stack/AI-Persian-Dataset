@@ -66,10 +66,35 @@ def read_entry(entry, archive):
     if loc.startswith('historical-blobs.zip!'):
         data = archive.read(loc.split('!', 1)[1])
     else:
-        data = (ROOT / loc).read_bytes()
+        target = (ROOT / loc).resolve()
+        if not target.is_relative_to(ROOT.resolve()):
+            raise ValueError('Unsafe content location')
+        data = target.read_bytes()
+    validate_entry(entry, data)
+    return data
+
+
+def validate_entry(entry, data):
     if len(data) != entry['bytes'] or sha(data) != entry['sha256']:
         raise ValueError('Content mismatch: ' + entry['path'])
-    return data
+    if 'git_blob' in entry:
+        header = f'blob {len(data)}'.encode('ascii') + bytes([0])
+        if hashlib.sha1(header + data).hexdigest() != entry['git_blob']:
+            raise ValueError('Git object mismatch: ' + entry['path'])
+
+
+def verify(manifest, archive):
+    # Check every revision's metadata, not just the first entry for each digest.
+    # Process one unique content at a time to avoid holding the corpus in RAM.
+    groups = {}
+    for entry in manifest['files']:
+        groups.setdefault(entry['location'], []).append(entry)
+    for entries in groups.values():
+        data = read_entry(entries[0], archive)
+        for entry in entries[1:]:
+            validate_entry(entry, data)
+    print(f'Verified {len(manifest["files"])} file revisions / '
+          f'{len({e["sha256"] for e in manifest["files"]})} unique contents')
 
 
 def reconcile(manifest, archive, output):
@@ -143,12 +168,7 @@ def main():
     manifest = json.loads((PROV / 'history_manifest.json').read_text(encoding='utf-8'))
     with zipfile.ZipFile(PROV / 'historical-blobs.zip') as archive:
         if args.action == 'verify':
-            seen = set()
-            for entry in manifest['files']:
-                if entry['sha256'] not in seen:
-                    read_entry(entry, archive)
-                    seen.add(entry['sha256'])
-            print(f'Verified {len(manifest["files"])} file revisions / {len(seen)} unique contents')
+            verify(manifest, archive)
         elif args.action == 'restore':
             if not args.commit or args.output is None:
                 parser.error('restore requires --commit and --output (a new directory)')

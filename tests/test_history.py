@@ -46,6 +46,24 @@ class HistoryTests(unittest.TestCase):
             self.assertEqual(repeated['historical_split'], 'validation')
             self.assertTrue(all(r['rights_status'].startswith('unresolved') for r in rows))
 
+    def test_every_revision_metadata_is_verified(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'blobs.zip'
+            data = b'original file'
+            digest = history.sha(data)
+            entry = dict(path='a', bytes=len(data), sha256=digest,
+                         location='historical-blobs.zip!blobs/' + digest)
+            with zipfile.ZipFile(path, 'w') as archive:
+                archive.writestr('blobs/' + digest, data)
+            with zipfile.ZipFile(path) as archive:
+                history.verify({'files': [entry, dict(entry)]}, archive)
+                with self.assertRaises(ValueError):
+                    history.verify({'files': [entry, dict(entry, bytes=0)]}, archive)
+                with self.assertRaises(ValueError):
+                    history.read_entry(dict(entry, git_blob='0' * 40), archive)
+                with self.assertRaises(ValueError):
+                    history.read_entry(dict(entry, location='../outside-repository'), archive)
+
     def test_manifest_covers_every_pinned_head(self):
         manifest = json.loads((history.PROV / 'history_manifest.json').read_text())
         commits = {e['commit'] for e in manifest['files']}

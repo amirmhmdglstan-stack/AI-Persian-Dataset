@@ -58,14 +58,14 @@ The maintained V2 pipeline keeps source policy, profile separation, licensing ma
 
 Linux, Python 3.11.2, tokenizers 0.23.3:
 
-- All 446 historical file revisions / 183 unique contents verified against SHA-256 and length.
+- All 446 historical file revisions / 183 unique contents verified against SHA-256, byte length and Git blob identity.
 - Historical corpus union generated successfully: counts above and deterministic gzip checksum in its summary.
-- New consolidation tests: exact deduplication, variants/ZWNJ retention, origin retention, validation precedence, deterministic repeated output, tampering detection, head coverage, restoration bytes and overwrite refusal.
+- New consolidation tests: **3 passed**, covering per-revision metadata/Git-object tampering, unsafe content locations, exact deduplication, variants/ZWNJ retention, origin retention, validation precedence, deterministic repeated output, tampering detection, head coverage, restoration bytes and overwrite refusal.
 - Maintained V2 suite: **88 tests, passed; one optional pyarrow test skipped** (87 executed).
 - Requirements check: passed; tokenizer has 32,000 entries and single-token document delimiter ID 0.
 - Disposable synthetic integration run: **passed**, 54 inputs, 36 outputs, 2,576 content tokens, zero verification failures. No historical report files were overwritten.
 - Compile checks and whitespace checks passed.
-- Added GitHub Actions workflow for integrity checks, both test suites, requirements and disposable synthetic integration. Remote CI outcome is reported by GitHub, not assumed here.
+- Added GitHub Actions workflow for integrity checks, both test suites, actual historical corpus reconstruction/count comparison, requirements and disposable synthetic integration. Remote CI outcome is reported by GitHub, not assumed here.
 
 ## Remaining production limitations
 

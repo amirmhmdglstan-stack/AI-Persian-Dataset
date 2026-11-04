@@ -13,7 +13,7 @@
 python tools/consolidate_history.py verify
 ```
 
-This checks SHA-256 and length of all 183 distinct contents against the manifest. Checksums establish integrity, not licensing or semantic correctness.
+This checks SHA-256, byte length and original Git blob identity for every one of the 446 file revisions, including repeated references to the 183 distinct contents. Checksums establish integrity, not licensing or semantic correctness.
 
 ## Recover any original snapshot
 
